@@ -138,7 +138,7 @@ Pod::Spec.new do |s|
   s.public_header_files = 'ios/*.h'
   s.dependency 'AFNetworking', '~> 3.1.0'
   s.dependency 'ZipArchive', '~> 1.4.0'
-  #s.dependency 'React','~> 0.11.0'
+  s.dependency 'React','~> 0.47.2'
 
   s.subspec 'diff' do |diff|
       diff.source_files = 'ios/diff/*'
