@@ -1,0 +1,13 @@
+.vscode
+demo/android/.name
+demo/android/local.properties
+demo/android/.idea
+demo/ios/Pods
+demo/ios/Podfile.lock
+demo/deploy
+demo/yarn.lock
+android/miaow.iml
+demo/package-lock.json
+android/.idea
+android/android.iml
+android/local.properties

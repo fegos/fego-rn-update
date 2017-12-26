@@ -1,0 +1,5 @@
+rootProject.name = 'hotUpdate'
+
+include ':app', ':fego'
+
+project(':fego').projectDir = new File(rootProject.projectDir, '../../android')
