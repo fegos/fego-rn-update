@@ -49,7 +49,7 @@
 
 
 - (void)loadRnController {
-  NIPRnController *controller = [[NIPRnManager managerWithBundleUrl:@"https://git.ms.netease.com/nsip-core/miaow-rn-hotUpdate/raw/develop/increment/ios/increment" noHotUpdate:NO noJsServer:NO] loadControllerWithModel:@"hotUpdate"];
+  NIPRnController *controller = [[NIPRnManager managerWithBundleUrl:@"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/increment" noHotUpdate:NO noJsServer:NO] loadControllerWithModel:@"hotUpdate"];
 //  [NIPRnManager sharedManager].fontNames = @[@"nsip"];
 //  controller.appProperties = @{@"productFlavor": @"ec"};
   

@@ -11,7 +11,7 @@
 
 @implementation NIPModules
 
-RCT_EXPORT_MODULE(MiaowHotUpdate)
+RCT_EXPORT_MODULE(FegoRnUpdate)
 
 RCT_EXPORT_METHOD(hotReload) {
   [[NIPRnManager sharedManager] requestRCTAssetsBehind];

@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   NSIP HotReload component
                    DESC
 
-  s.homepage     = "https://git.ms.netease.com/nsip-core/miaow-rn-hotUpdate"
+  s.homepage     = "https://github.com/fegos/fego-rn-update.git"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -80,7 +80,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://git.ms.netease.com/nsip-core/miaow-rn-hotUpdate", :tag => "iosHotReload#{s.version}" }
+  s.source       = { :git => "https://github.com/fegos/fego-rn-update.git", :tag => "update#{s.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

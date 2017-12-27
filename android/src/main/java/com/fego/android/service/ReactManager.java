@@ -53,13 +53,13 @@ public class ReactManager {
     // 用来标记本地rn_sdk的版本号
     public static String SDK_VERSION = "1.0";
     // 用来标记本地rn资源版本号
-    private static String BUNDLE_VERSION = "BUNDLE_VERSION_MIAOW";
+    private static String BUNDLE_VERSION = "BUNDLE_VERSION";
     // 用来标记apk的versioncode
-    private static String APP_VERSIONCODE = "APP_VERSIONCODE_MIAOW";
+    private static String APP_VERSIONCODE = "APP_VERSIONCODE";
     // 用来存储下载的最新的rn资源路径
-    private static String NEW_BUNDLE_PATH = "NEW_BUNDLE_PATH_MIAOW";
+    private static String NEW_BUNDLE_PATH = "NEW_BUNDLE_PATH";
     // 用来记录最新的rn资源版本号
-    private static String NEW_BUNDLE_VERSION = "NEW_BUNDLE_VERSION_MIAOW";
+    private static String NEW_BUNDLE_VERSION = "NEW_BUNDLE_VERSION";
     // 热更新rn资源下载路径
     private String sourceUrl = "";
 

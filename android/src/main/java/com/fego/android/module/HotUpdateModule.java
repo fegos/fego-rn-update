@@ -18,7 +18,7 @@ public class HotUpdateModule extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-        return "MiaowHotUpdate";
+        return "FegoRnUpdate";
     }
 
     @ReactMethod
