@@ -2,7 +2,6 @@
 	"name": "fego-rn-update",
 	"version": "0.0.1",
 	"description": "fego-rn官方热更新方案",
-	"homepage": "http://fe.hhtcex.com",
 	"keywords": [
 		"fego",
 		"react",
@@ -16,9 +15,10 @@
 	"bugs": {
 		"url": "http://github.com/fegos/fego-rn-update/issues"
 	},
-	"files": [],
 	"license": "MIT",
-	"dependencies": {},
-	"devDependencies": {},
-	"scripts": {}
+	"dependencies": {
+		"react": "16.0.0-alpha.12",
+		"react-native": "0.47.2",
+		"zip-local": "^0.3.4"
+	}
 }

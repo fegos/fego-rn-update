@@ -6,7 +6,7 @@ demo/ios/Pods
 demo/ios/Podfile.lock
 demo/deploy
 demo/yarn.lock
-android/miaow.iml
+android/fego.iml
 demo/package-lock.json
 android/.idea
 android/android.iml

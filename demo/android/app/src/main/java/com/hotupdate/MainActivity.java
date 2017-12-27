@@ -21,7 +21,7 @@ public class MainActivity extends ReactActivity {
 
     @Override
     public String getModuleName() {
-        return "hotUpdate";
+        return "FegoRnUpdate";
     }
 
     @Override
@@ -37,7 +37,7 @@ public class MainActivity extends ReactActivity {
             // 设置加载的文件名
             ReactManager.getInstance().setBundleName("index.jsbundle");
             // 设置热更新路径
-            ReactManager.getInstance().setSourceUrl("");
+            ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/develp/demo/increment/android/increment/");
             List<ReactPackage> reactPackages = new ArrayList<>();
             // 添加额外的package
             reactPackages.add(new HotUpdatePackage());

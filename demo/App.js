@@ -13,7 +13,7 @@ import {
 	NativeModules,
 	TouchableHighlight
 } from 'react-native';
-let MiaoHotReload = NativeModules.MiaowHotUpdate;
+let FegoRNUpdate = NativeModules.FegoRnUpdate;
 
 const instructions = Platform.select({
 	ios: 'Press Cmd+R to reload,\n' +
@@ -34,7 +34,7 @@ export default class App extends Component {
 				<TouchableHighlight
 					underlayColor="transparent"
 					onPress={() => {
-						MiaoHotReload.hotReload();
+						FegoRNUpdate.hotReload();
 					}}>
 					<Text style={styles.btnText}>热更新测试</Text>
 				</TouchableHighlight>
