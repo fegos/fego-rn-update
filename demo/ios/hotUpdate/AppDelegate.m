@@ -49,7 +49,7 @@
 
 
 - (void)loadRnController {
-  NIPRnController *controller = [[NIPRnManager managerWithBundleUrl:@"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/increment" noHotUpdate:NO noJsServer:NO] loadControllerWithModel:@"hotUpdate"];
+  NIPRnController *controller = [[NIPRnManager managerWithBundleUrl:@"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/increment" noHotUpdate:NO noJsServer:YES] loadControllerWithModel:@"hotUpdate"];
 //  [NIPRnManager sharedManager].fontNames = @[@"nsip"];
 //  controller.appProperties = @{@"productFlavor": @"ec"};
   

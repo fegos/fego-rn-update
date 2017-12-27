@@ -14,10 +14,12 @@ Pod::Spec.new do |s|
   #  can feel like a chore to fill in it's definitely to your advantage. The
   #  summary should be tweet-length, and the description more in depth.
   #
-
-  s.name         = "NIPHotReload"
-  s.version      = "0.0.5"
-  s.summary      = "NSIP HotReload"
+require "json"
+package = JSON.parse(File.read(File.join(__dir__, "package.json")))
+version = package['version']
+  s.name         = "FegoRnUpdate"
+  s.version      = version
+  s.summary      = "Update"
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -25,7 +27,7 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-  NSIP HotReload component
+  Update component
                    DESC
 
   s.homepage     = "https://github.com/fegos/fego-rn-update.git"
