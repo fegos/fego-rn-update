@@ -34,6 +34,7 @@
 │   ├── ios                 # ios工程
 │   ├── pkg.sh              # 主打包脚本文件
 │   └── pkgCmd              # 辅助脚本文件夹
+├── increment               # 包生成目录
 ├── index.js                # js源码
 ├── ios                     # ios源码
 ├── package.json            # 项目描述文件
