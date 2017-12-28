@@ -1,13 +1,19 @@
 .vscode
-demo/android/.name
-demo/android/local.properties
-demo/android/.idea
-demo/ios/Pods
-demo/ios/Podfile.lock
-demo/deploy
-demo/yarn.lock
-android/fego.iml
-demo/package-lock.json
-android/.idea
-android/android.iml
-android/local.properties
+
+# android
+local.properties
+.idea
+deploy
+*.iml
+build
+.gradle
+
+# ios
+Pods
+Podfile.lock
+xcuserdata
+
+# js
+node_modules
+yarn.lock
+

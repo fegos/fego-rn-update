@@ -1,5 +1,4 @@
-android/.idea
-android/android.iml
-android/local.properties
-android/fego.iml
 demo/
+.vscode
+android/build/
+android/fego.iml

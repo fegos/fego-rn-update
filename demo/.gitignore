@@ -1,8 +1,0 @@
-.vscode
-.name
-local.properties
-node_modules/
-.idea
-ios/Pods
-ios/Podfile.lock
-deploy/
