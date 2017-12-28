@@ -211,7 +211,7 @@ sh pkg.sh platform  // 其中platform为android/ios
 6. js端调用
 
 ```
-import {} from 'fego-rn-update'
+import FegoRNUpdate from 'fego-rn-update'
 
 class App extends Component {
 	render() {
