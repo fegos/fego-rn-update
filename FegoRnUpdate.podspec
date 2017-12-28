@@ -141,6 +141,7 @@ version = package['version']
   s.dependency 'AFNetworking', '~> 3.1.0'
   s.dependency 'ZipArchive', '~> 1.4.0'
   s.dependency 'React'
+
   s.subspec 'diff' do |diff|
       diff.source_files = 'ios/diff/*'
       diff.public_header_files = 'ios/diff/*.h'
