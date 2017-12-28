@@ -13,7 +13,7 @@ import {
 	NativeModules,
 	TouchableHighlight
 } from 'react-native';
-let FegoRNUpdate = NativeModules.FegoRnUpdate;
+import FegoRNUpdate from 'fego-rn-update'
 
 const instructions = Platform.select({
 	ios: 'Press Cmd+R to reload,\n' +
