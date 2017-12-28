@@ -27,7 +27,7 @@ version = package['version']
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-  Update component
+  react-native hotreload comonpent
                    DESC
 
   s.homepage     = "https://github.com/fegos/fego-rn-update.git"
