@@ -20,10 +20,9 @@
 #define JSBUNDLE @"jsbundle"
 
 /**
- *rctversion解析版本号,升级此版本号将会强制下载最新的包,
- *策略是当本地数据的sdkversion != 客户端的sdkversion,自动设置本地数据localDataVersion=0
+ rctversion解析版本号,升级此版本号将会强制下载最新的包,
+ 策略是当本地数据的sdkversion != 客户端的sdkversion,自动设置本地数据localDataVersion=0
  */
-// APP Info
 #pragma mark- APP Info
 #define APP_VERSION [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
 #define APP_BUILD [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]

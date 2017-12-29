@@ -25,6 +25,11 @@
 
 @implementation NIPRnController
 
+/**
+ 初始化函数
+
+ @return obj
+ */
 - (id)init
 {
     self = [super init];
@@ -35,6 +40,13 @@
     return self;
 }
 
+/**
+ 初始化函数
+
+ @param bundleName bundleName
+ @param moduleName moduleName
+ @return obj
+ */
 - (id)initWithBundleName:(NSString *)bundleName moduleName:(NSString *)moduleName
 {
     self = [super init];
@@ -77,10 +89,12 @@
     }
 }
 
+///**
+// 加载本地资源文件
 
-/**
- *  加载本地资源文件
- */
+// @param bundleName bundleName
+// @param moduleName moduleName
+// */
 - (void)loadWithBundleName:(NSString *)bundleName moduleName:(NSString *)moduleName
 {
 

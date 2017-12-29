@@ -19,19 +19,26 @@
 //- (void)updateAssets;
 
 /**
- *根据业务指定的bundle，加载对应的module
+ 根据业务指定的bundle，加载对应的module
+
+ @param bundleName bundleName
+ @param moduleName moduleName
+ @return obj
  */
 - (id)initWithBundleName:(NSString *)bundleName moduleName:(NSString *)moduleName;
 
+/**
+ rn的根视图
+ */
 @property (nonatomic, strong) RCTRootView *rctRootView;
 
 /**
- *  业务请求时可能需要的参数
+ 业务请求时可能需要的参数
  */
 @property (nonatomic, copy, readwrite) NSDictionary *appProperties;
 
 /**
- *  rn内嵌的导航条视图
+ rn内嵌的导航条视图
  */
 @property (nonatomic,strong) RCTNavigator *navigator;
 
