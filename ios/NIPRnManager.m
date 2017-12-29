@@ -99,8 +99,12 @@
         RCTBridge *bridge = [[RCTBridge alloc] initWithBundleURL:bundelPath
                                                   moduleProvider:nil
                                                    launchOptions:nil];
-        for (NSString *bundelName in bundleNames) {
-            [self.bundleDic setObject:bridge forKey:bundelName];
+        if (bundleNames.count) {
+            for (NSString *bundelName in bundleNames) {
+                [self.bundleDic setObject:bridge forKey:bundelName];
+            }
+        } else {
+            [self.bundleDic setObject:bridge forKey:@"index"];
         }
     }
 }
