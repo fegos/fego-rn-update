@@ -8,7 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "NIPRnDefines.h"
+
+/**
+ 资源下载成功回调
+ */
 typedef void (^CFRCTUpdateAssetsSuccesBlock)();
+/**
+ 资源下载失败回调
+ */
 typedef void (^CFRCTUpdateAssetsFailBlock)();
 
 //! 用来检测当前的rn脚本是否需要升级的管理类
