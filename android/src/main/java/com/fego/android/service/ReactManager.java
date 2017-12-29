@@ -48,46 +48,85 @@ import retrofit2.Response;
 public class ReactManager {
 
     private final static String TAG = "REACT_MANAGER";
-    // 用来决定rn是否读取线上的资源
+    /**
+     * 用来决定rn是否读取线上的资源
+     */
     private static Boolean USE_LOCAL = false;
-    // 用来标记本地rn_sdk的版本号
+    /**
+     * The constant SDK_VERSION.
+     * 用来标记本地rn_sdk的版本号
+     */
     public static String SDK_VERSION = "1.0";
-    // 用来标记本地rn资源版本号
+    /**
+     * 用来标记本地rn资源版本号
+     */
     private static String BUNDLE_VERSION = "BUNDLE_VERSION";
-    // 用来标记apk的versioncode
+    /**
+     * 用来标记apk的versioncode
+     */
     private static String APP_VERSIONCODE = "APP_VERSIONCODE";
-    // 用来存储下载的最新的rn资源路径
+    /**
+     * 用来存储下载的最新的rn资源路径
+     */
     private static String NEW_BUNDLE_PATH = "NEW_BUNDLE_PATH";
-    // 用来记录最新的rn资源版本号
+    /**
+     * 用来记录最新的rn资源版本号
+     */
     private static String NEW_BUNDLE_VERSION = "NEW_BUNDLE_VERSION";
-    // 热更新rn资源下载路径
+    /**
+     *  热更新rn资源下载路径
+     */
     private String sourceUrl = "";
-
-    private Application application = null;
-    private ReactInstanceManager rnInstanceManager;
-    // 记录本地rn资源包版本号
+    /**
+     * 记录本地rn资源包版本号
+     */
     private String localDataVersion = "0";
-    // rn资源的本地存储路径
+    /**
+     * rn资源的本地存储路径
+     */
     private String sourceDir = null;
-    // 启动文件名
+    /**
+     * 启动文件名
+     */
     private String jsMainModuleName = "index";
-    // rn bundle文件名
+    /**
+     * rn bundle文件名
+     */
     private String bundleName = "index.bundle";
-    // 用于请求配置文件
+    /**
+     * 用于请求配置文件
+     */
     private Call<ResponseBody> configCall;
-    // 用于请求rn资源文件
+    /**
+     * 用于请求rn资源文件
+     */
     private Call<ResponseBody> bundleCall;
-    private Activity currentActivity;
-    // 用来临时记录增量还是全量
+    /**
+     * 用来临时记录增量还是全量
+     */
     private String type = null;
+    private Application application = null;
+    private Activity currentActivity;
+    private ReactInstanceManager rnInstanceManager;
 
-    // 用于通知有新的资源包
+    /**
+     * The enum Np react manager task.
+     * 用于通知有新的资源包
+     */
     public enum NPReactManagerTask {
+        /**
+         * Get new react version source np react manager task.
+         */
         GetNewReactVersionSource
     }
 
     private static ReactManager instance = null;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static ReactManager getInstance() {
         if (instance == null) {
             instance = new ReactManager();
@@ -100,15 +139,22 @@ public class ReactManager {
 
     }
 
+    /**
+     * Gets rn instance manager.
+     *
+     * @return the rn instance manager
+     */
     public ReactInstanceManager getRnInstanceManager() {
         return rnInstanceManager;
     }
 
     /**
      * 启动application时需要初始化reactInstance
-     * @param application application
+     *
+     * @param <T>           the type parameter
+     * @param application   application
      * @param reactPackages reactPackages
-     * @param useDevelop 是否开发模式
+     * @param useDevelop    是否开发模式
      */
     public <T extends ReactPackage> void init(Application application, List<T> reactPackages, boolean useDevelop) {
 
@@ -227,6 +273,7 @@ public class ReactManager {
 
     /**
      * 下载rn配置文件后,在本地读取配置文件来决定是否下载线上的rn资源包
+     *
      * @param configDetail 配置文件内容
      */
     private void checkRNConfigFile(String configDetail) {
@@ -262,6 +309,7 @@ public class ReactManager {
 
     /**
      * 根据获取的远程的当前sdk版本的资源迭代版本号,下载指定的资源
+     *
      * @param remoteDataVersion 远程sdk版本号
      */
     private void loadRNSource(final String remoteDataVersion) {
@@ -331,6 +379,7 @@ public class ReactManager {
 
     /**
      * 重新加载指定目录的rn的bundle资源
+     *
      * @param rnDir rnbundle路径
      */
     private void onJSBundleLoadedFromServer(String rnDir) {
@@ -361,6 +410,7 @@ public class ReactManager {
     /******************************tools*******************************/
     /**
      * 获取指定bundle文件内容
+     *
      * @param patPath bundle文件路径
      * @param isAssets 是否为assets下
      * @return string
@@ -387,6 +437,7 @@ public class ReactManager {
 
     /**
      * 增量包和旧包合并
+     *
      * @param patchStr 增量包内容
      * @param bundle 旧bundle包内容
      * @param rnDir 更新后的bundle路径
@@ -410,6 +461,7 @@ public class ReactManager {
 
     /**
      * 读取assets配置文件，删除需要删除的文件
+     *
      * @param configDetail 配置文件内容
      * @param rnDir 删除初始路径
      */
@@ -448,6 +500,7 @@ public class ReactManager {
 
     /**
      * 获取当前activity
+     *
      * @return Activity 当前activity
      */
     public Activity getCurrentActivity() {
@@ -456,6 +509,7 @@ public class ReactManager {
 
     /**
      * 设置当前activity
+     *
      * @param currentActivity 当前activity
      */
     public void setCurrentActivity(Activity currentActivity) {
@@ -464,6 +518,7 @@ public class ReactManager {
 
     /**
      * 设置资源请求路径
+     *
      * @param sourceUrl 请求路径
      */
     public void setSourceUrl(String sourceUrl) {
@@ -472,6 +527,7 @@ public class ReactManager {
 
     /**
      * 获取入口文件名称
+     *
      * @return String 文件名称
      */
     public String getJsMainModuleName() {
@@ -480,6 +536,7 @@ public class ReactManager {
 
     /**
      * 设置启动文件名称
+     *
      * @param jsMainModuleName 启动文件名称
      */
     public void setJsMainModuleName(String jsMainModuleName) {
@@ -488,6 +545,7 @@ public class ReactManager {
 
     /**
      * 获取bundle名字
+     *
      * @return String bundle名字
      */
     public String getBundleName() {
@@ -496,6 +554,7 @@ public class ReactManager {
 
     /**
      * 设置bundle名字
+     *
      * @param bundleName bundle名字
      */
     public void setBundleName(String bundleName) {
@@ -504,10 +563,11 @@ public class ReactManager {
 
     /**
      * 获取ReactRootView
+     *
      * @param moduleName moudule名
-     * @param context Context
-     * @param bundle Bundle参数
-     * @return ReactRootView
+     * @param context    Context
+     * @param bundle     Bundle参数
+     * @return ReactRootView react view by module name
      */
     public ReactRootView getReactViewByModuleName(String moduleName, Context context, Bundle bundle) {
         ReactRootView rnRootView = new ReactRootView(context);
@@ -521,6 +581,7 @@ public class ReactManager {
 
     /**
      * 是否有最新的rn资源版本
+     *
      * @return boolean true为有，false为没有
      */
     public boolean hasNewVersion() {
@@ -530,6 +591,7 @@ public class ReactManager {
 
     /**
      * 获取app版本，包含当前的rn资源版本号
+     *
      * @return String 包含rn资源版本号的的版本号
      */
     public String getReactVersion() {

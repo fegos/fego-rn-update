@@ -12,9 +12,14 @@ import java.util.List;
 /**
  * Created by sxiaoxia on 2017/12/7.
  */
-
 public class HotUpdatePackage implements ReactPackage {
 
+    /**
+     * Create native modules list.
+     *
+     * @param reactContext the react context
+     * @return the list
+     */
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> list = new ArrayList<>();
@@ -22,6 +27,12 @@ public class HotUpdatePackage implements ReactPackage {
         return list;
     }
 
+    /**
+     * Create view managers list.
+     *
+     * @param reactContext the react context
+     * @return the list
+     */
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         List<ViewManager> list = new ArrayList<>();

@@ -11,14 +11,14 @@ import java.io.OutputStream;
  * assets相关操作
  * Created by wangxiang on 2017/9/18.
  */
-
 public class AssetUtil {
 
     /**
      * 将assets下文件夹拷贝到指定目录
-     * @param assetManager assetManager
+     *
+     * @param assetManager  assetManager
      * @param fromAssetPath assets下路径
-     * @param toPath 要拷贝到路径
+     * @param toPath        要拷贝到路径
      * @return boolean true为成功，false为失败
      */
     public static boolean copyAssetFolder(AssetManager assetManager, String fromAssetPath, String toPath) {
@@ -44,9 +44,10 @@ public class AssetUtil {
 
     /**
      * 将assets下文件拷贝到指定目录
-     * @param assetManager assetManager
+     *
+     * @param assetManager  assetManager
      * @param fromAssetPath assets下路径
-     * @param toPath 要拷贝到路径
+     * @param toPath        要拷贝到路径
      * @return boolean true为成功，false为失败
      */
     public static boolean copyAsset(AssetManager assetManager, String fromAssetPath, String toPath) {
@@ -73,7 +74,8 @@ public class AssetUtil {
 
     /**
      * 文件拷贝
-     * @param in InputStream
+     *
+     * @param in  InputStream
      * @param out OutputStream
      */
     public static void copyFile(InputStream in, OutputStream out) {

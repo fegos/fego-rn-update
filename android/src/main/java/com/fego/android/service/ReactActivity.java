@@ -28,23 +28,35 @@ public abstract class ReactActivity extends FragmentActivity implements DefaultH
     private ReactInstanceManager mReactInstanceManager;
     private OnVersionUpdateListener listener;
 
+    /**
+     * Gets listener.
+     *
+     * @return the listener
+     */
     public OnVersionUpdateListener getListener() {
         return listener;
     }
 
+    /**
+     * Sets listener.
+     *
+     * @param listener the listener
+     */
     public void setListener(OnVersionUpdateListener listener) {
         this.listener = listener;
     }
 
     /**
      * module名字
-     * @return module名字
+     *
+     * @return module名字 module name
      */
     public abstract String getModuleName();
 
     /**
      * 是否为开发状态
-     * @return 是，则返回true，否则返回false
+     *
+     * @return 是 ，则返回true，否则返回false
      */
     public abstract boolean isDevelopStatus();
 
@@ -53,6 +65,11 @@ public abstract class ReactActivity extends FragmentActivity implements DefaultH
      */
     public abstract void initReactManager();
 
+    /**
+     * On create.
+     *
+     * @param savedInstanceState the saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,11 +105,17 @@ public abstract class ReactActivity extends FragmentActivity implements DefaultH
         dialog.show();
     }
 
+    /**
+     * Invoke default on back pressed.
+     */
     @Override
     public void invokeDefaultOnBackPressed() {
         super.onBackPressed();
     }
 
+    /**
+     * On pause.
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -103,6 +126,9 @@ public abstract class ReactActivity extends FragmentActivity implements DefaultH
         }
     }
 
+    /**
+     * On resume.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -115,6 +141,9 @@ public abstract class ReactActivity extends FragmentActivity implements DefaultH
         }
     }
 
+    /**
+     * On destroy.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -129,6 +158,9 @@ public abstract class ReactActivity extends FragmentActivity implements DefaultH
         System.gc();
     }
 
+    /**
+     * On back pressed.
+     */
     @Override
     public void onBackPressed() {
         if (mReactInstanceManager != null) {
@@ -138,6 +170,13 @@ public abstract class ReactActivity extends FragmentActivity implements DefaultH
         }
     }
 
+    /**
+     * On key up boolean.
+     *
+     * @param keyCode the key code
+     * @param event   the event
+     * @return the boolean
+     */
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU && mReactInstanceManager != null) {
@@ -147,6 +186,11 @@ public abstract class ReactActivity extends FragmentActivity implements DefaultH
         return super.onKeyUp(keyCode, event);
     }
 
+    /**
+     * On event main thread.
+     *
+     * @param task the task
+     */
     @Subscribe
     public void onEventMainThread(ReactManager.NPReactManagerTask task) {
         if (task == ReactManager.NPReactManagerTask.GetNewReactVersionSource) {
@@ -181,6 +225,13 @@ public abstract class ReactActivity extends FragmentActivity implements DefaultH
         dialog.show();
     }
 
+    /**
+     * On activity result.
+     *
+     * @param requestCode the request code
+     * @param resultCode  the result code
+     * @param data        the data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (mReactInstanceManager != null) {
@@ -198,6 +249,11 @@ public abstract class ReactActivity extends FragmentActivity implements DefaultH
         }
     }
 
+    /**
+     * On new intent.
+     *
+     * @param intent the intent
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         if (mReactInstanceManager != null) {
@@ -237,8 +293,13 @@ public abstract class ReactActivity extends FragmentActivity implements DefaultH
         }
     }
 
-    // rn bundle版本更新监听
+    /**
+     * The interface On version update listener.
+     */
     public interface OnVersionUpdateListener {
+        /**
+         * On version update.
+         */
         void onVersionUpdate();
     }
 }

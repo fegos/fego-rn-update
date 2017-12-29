@@ -11,10 +11,21 @@ import android.preference.PreferenceManager;
  */
 public class ReactPreference {
 
+    /**
+     * The Prefs.
+     */
     protected SharedPreferences prefs;
+    /**
+     * The M use apply.
+     */
     protected boolean mUseApply;
     private static ReactPreference instance;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static ReactPreference getInstance() {
         if (instance == null) {
             synchronized (ReactPreference.class) {
@@ -26,11 +37,22 @@ public class ReactPreference {
         return instance;
     }
 
+    /**
+     * Sets context.
+     *
+     * @param context the context
+     */
     public void setContext(Context context) {
         mUseApply = Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD;
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
+    /**
+     * Save.
+     *
+     * @param key   the key
+     * @param value the value
+     */
     public void save(String key, String value) {
         if (prefs != null) {
             SharedPreferences.Editor editor = prefs.edit();
@@ -43,6 +65,12 @@ public class ReactPreference {
         }
     }
 
+    /**
+     * Gets int.
+     *
+     * @param key the key
+     * @return the int
+     */
     public int getInt(String key) {
         if (prefs != null) {
             return prefs.getInt(key, 0);
@@ -51,6 +79,12 @@ public class ReactPreference {
         }
     }
 
+    /**
+     * Save int.
+     *
+     * @param key   the key
+     * @param value the value
+     */
     public void saveInt(String key, int value) {
         if (prefs != null) {
             SharedPreferences.Editor editor = prefs.edit();
@@ -63,6 +97,12 @@ public class ReactPreference {
         }
     }
 
+    /**
+     * Gets string.
+     *
+     * @param key the key
+     * @return the string
+     */
     public String getString(String key) {
         if (prefs != null) {
             return prefs.getString(key, "");
@@ -71,6 +111,11 @@ public class ReactPreference {
         }
     }
 
+    /**
+     * Delete.
+     *
+     * @param key the key
+     */
     public void delete(String key) {
         if (prefs != null) {
             SharedPreferences.Editor editor = prefs.edit();

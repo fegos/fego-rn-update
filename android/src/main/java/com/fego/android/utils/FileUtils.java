@@ -17,11 +17,11 @@ import okhttp3.ResponseBody;
  * 文件处理
  * Created by sxiaoxia on 2017/12/6.
  */
-
 public class FileUtils {
 
     /**
      * 删除文件或者目录
+     *
      * @param file File
      * @return boolean true为删除成功，false为删除失败
      */
@@ -44,6 +44,7 @@ public class FileUtils {
 
     /**
      * 读文件
+     *
      * @param fileName 要读的文件
      * @return byte[] 文件内容
      */
@@ -64,7 +65,8 @@ public class FileUtils {
 
     /**
      * 写文件
-     * @param data 要写入的内容
+     *
+     * @param data         要写入的内容
      * @param fileFullName 写入的文件
      */
     public static void writeFile(byte[] data, String fileFullName) {
@@ -82,7 +84,8 @@ public class FileUtils {
     /**
      * 解压缩功能.
      * 将zipFile文件解压到folderPath目录下.
-     * @param zipFile zip文件
+     *
+     * @param zipFile    zip文件
      * @param folderPath 解压的目标路径
      */
     public static void upZipFile(File zipFile, String folderPath) {
@@ -148,6 +151,7 @@ public class FileUtils {
 
     /**
      * 删除某路径下的文件
+     *
      * @param filePath 文件路径
      */
     public static void deleteFile(String filePath) {
@@ -159,6 +163,7 @@ public class FileUtils {
 
     /**
      * 将下载后的文件写入到磁盘的函数
+     *
      * @param body 请求返回body
      * @param file 下载的文件
      * @return boolean true为写入成功，false为写入失败
