@@ -155,7 +155,37 @@ public class MainActivity extends ReactActivity {
 }
 ```
 ### IOS
+1. pod库引入热更新库，Podfile中添加：
+```
+pod 'FegoRnUpdate'
+```
+2. 工程目录下执行pod命令: 
+```
+pod update
+```
+3. AppDelegate中添加热更新代码
+```
+#import "NIPRnManager.h"
 
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+	/**
+ 	@param bundleUrl 服务器存放bundle的地址
+ 	@param noHotUpdate 用来标记只使用工程自带的rn包，不支持热更新 default:NO
+	@param noJsServer 不通过本地启动的server来获取bundle，直接使用离线包 default:NO
+ 	@param moduleName 默认main bundle的指定模块
+	*/
+	NIPRnController *controller = [[NIPRnManager managerWithBundleUrl:@"bundle下载路径" noHotUpdate:NO noJsServer:YES] loadControllerWithModel:@"moduleName"];
+
+	#pragma clang diagnostic push
+	#pragma clang diagnostic ignored "-Wincompatible-pointer-types"
+  	self.window.rootViewController = controller;
+	#pragma clang diagnostic pop
+
+  	return YES;
+}
+```
 
 # 使用
 
@@ -207,7 +237,7 @@ sh pkg.sh platform  // 其中platform为android/ios
 
 `android`：在MainActivity中修改
 
-`ios`：
+`ios`：在AppDelegate中修改
 
 **注意**：android和ios需要统一启动文件名称，均为index.js，否则需要修改全量打包脚本；bundle名字也需要两端统一为index.jsbundle，否则需要修改增量更新打包脚本
 
