@@ -71,37 +71,37 @@
 							<li>整体目录结构</li>
 							</ul>
 							<pre><code>
-		├── FegoRnUpdate.podspec    # ios pod库的描述文件
-		├── android                 # android原生源码
-		├── demo                    # demo示例
-		│   ├── App.js              # js主代码
-		│   ├── android             # android工程
-		│   ├── increment           # 增量包、全量包存储路径
-		│   ├── index.js            # js入口文件
-		│   ├── ios                 # ios工程
-		│   ├── pkg.sh              # 主打包脚本文件
-		│   └── pkgCmd              # 辅助脚本文件夹
-		├── increment               # 包生成目录
-		├── index.js                # js源码
-		├── ios                     # ios源码
-		├── package.json            # 项目描述文件
-		├── pkg.sh                  # 打包文件
-		└── pkgCmd                  # 辅助脚本文件夹</code></pre>
+	├── FegoRnUpdate.podspec    # ios pod库的描述文件
+	├── android                 # android原生源码
+	├── demo                    # demo示例
+	│   ├── App.js              # js主代码
+	│   ├── android             # android工程
+	│   ├── increment           # 增量包、全量包存储路径
+	│   ├── index.js            # js入口文件
+	│   ├── ios                 # ios工程
+	│   ├── pkg.sh              # 主打包脚本文件
+	│   └── pkgCmd              # 辅助脚本文件夹
+	├── increment               # 包生成目录
+	├── index.js                # js源码
+	├── ios                     # ios源码
+	├── package.json            # 项目描述文件
+	├── pkg.sh                  # 打包文件
+	└── pkgCmd                  # 辅助脚本文件夹</code></pre>
 							<ul>
 							<li>打包脚本目录</li>
 							</ul>
 							<pre><code>
-		├── pkg.sh                  # 整体打包文件，包含全量打包和增量打包，主执行脚本文件
-		└── pkgCmd                  # 辅助脚本文件夹
-			├── config.js           # 配置文件，主要配置生成包的存储位置
-			├── incre               # bundle和assets增量生成脚本
-			│   ├── assets.js       # 资源assets增量生成脚本
-			│   └── jsbundle.js     # bundle增量生成脚本
-			├── incregen.js         # 增量包生成脚本
-			├── pack.sh             # 全量包打包脚本
-			└── third               # 依赖的第三方脚本
-				├── diff_match_patch_uncompressed.js    # 文件差异生成脚本
-				└── file_list.js    # 列出目录下所有的文件</code></pre>
+	├── pkg.sh                  # 整体打包文件，包含全量打包和增量打包，主执行脚本文件
+	└── pkgCmd                  # 辅助脚本文件夹
+		├── config.js           # 配置文件，主要配置生成包的存储位置
+		├── incre               # bundle和assets增量生成脚本
+		│   ├── assets.js       # 资源assets增量生成脚本
+		│   └── jsbundle.js     # bundle增量生成脚本
+		├── incregen.js         # 增量包生成脚本
+		├── pack.sh             # 全量包打包脚本
+		└── third               # 依赖的第三方脚本
+			├── diff_match_patch_uncompressed.js    # 文件差异生成脚本
+			└── file_list.js    # 列出目录下所有的文件</code></pre>
 							<h1 id="安装">安装</h1>
 							<pre><code>$ npm install fego-rn-update --save</code></pre>
 							<h2 id="手动安装">手动安装</h2>
@@ -222,18 +222,18 @@ public class MainActivity extends ReactActivity {
 							<li><p>在想要生成包的地方创建包存储目录</p></li>
 							</ol>
 							<p>存储目录可以参考<code>node_modules/fego-rn-update/</code>下的<code>increment文件夹</code></p>
-							<pre><code>.
-		├── React-Native 热更新目录
-		├── android             # 存放android生成的包
-		│   ├── all             # 存放全量包
-		│   │   └── README.md   
-		│   └── increment       # 存放增量包
-		│       └── README.md
-		└── ios                 # 存放ios生成的包
-			├── all             # 存放全量包
-			│   └── README.md
-			└── increment       # 存放增量包
-				└── README.md</code></pre>
+							<pre><code>
+	├── React-Native 热更新目录
+	├── android             # 存放android生成的包
+	│   ├── all             # 存放全量包
+	│   │   └── README.md   
+	│   └── increment       # 存放增量包
+	│       └── README.md
+	└── ios                 # 存放ios生成的包
+		├── all             # 存放全量包
+		│   └── README.md
+		└── increment       # 存放增量包
+			└── README.md</code></pre>
 							<ol start="3" type="1">
 							<li>修改配置文件<code>config.js</code>中的<code>path</code>和<code>sdk</code></li>
 							</ol>
