@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/NIPRnManager.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/NIPRnManager</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+            
+			
+			<NodeRef refid="3"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/NIPRnManager/sharedManager</TokenIdentifier>
+			<Abstract type="html">获取单例</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)sharedManager</Declaration>
+			
+			<ReturnValue><Abstract type="html">obj</Abstract></ReturnValue>
+			<Anchor>//api/name/sharedManager</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/NIPRnManager/managerWithBundleUrl:noHotUpdate:noJsServer:</TokenIdentifier>
+			<Abstract type="html">获取Manager</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)managerWithBundleUrl:(NSString *)bundleUrl noHotUpdate:(BOOL)noHotUpdate noJsServer:(BOOL)noJsServer</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>bundleUrl</Name>
+					<Abstract type="html">服务器存放bundle的地址</Abstract>
+				</Parameter><Parameter>
+					<Name>noHotUpdate</Name>
+					<Abstract type="html">用来标记只使用工程自带的rn包，不支持热更新 default:NO</Abstract>
+				</Parameter><Parameter>
+					<Name>noJsServer</Name>
+					<Abstract type="html">不通过本地启动的server来获取bundle，直接使用离线包 default:NO</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">obj</Abstract></ReturnValue>
+			<Anchor>//api/name/managerWithBundleUrl:noHotUpdate:noJsServer:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnManager/getBridgeByBundleName:</TokenIdentifier>
+			<Abstract type="html">oc与js联通的桥，在manager初始化的时候就生成</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>- (RCTBridge *)getBridgeByBundleName:(NSString *)bundleName</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>bundleName</Name>
+					<Abstract type="html">bundleName</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">RCTBridge</Abstract></ReturnValue>
+			<Anchor>//api/name/getBridgeByBundleName:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnManager/loadBundleUnderDocument</TokenIdentifier>
+			<Abstract type="html">热更新完成后，加载存放在Document目录下的被更新的bundle文件</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>- (void)loadBundleUnderDocument</Declaration>
+			
+			
+			<Anchor>//api/name/loadBundleUnderDocument</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnManager/initBridgeBundle</TokenIdentifier>
+			<Abstract type="html">首次启动后根据当前app 存放在Document目录和App自带的jsbundle文件初始化所有业务的bundle</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>- (void)initBridgeBundle</Declaration>
+			
+			
+			<Anchor>//api/name/initBridgeBundle</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnManager/loadControllerWithModel:</TokenIdentifier>
+			<Abstract type="html">加载默认main bundle的指定模块</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>- (NIPRnController *)loadControllerWithModel:(NSString *)moduleName</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>moduleName</Name>
+					<Abstract type="html">moduleName</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">NIPRnController</Abstract></ReturnValue>
+			<Anchor>//api/name/loadControllerWithModel:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnManager/loadWithBundleName:moduleName:</TokenIdentifier>
+			<Abstract type="html">通过bundle和module加载</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>- (NIPRnController *)loadWithBundleName:(NSString *)bundleName moduleName:(NSString *)moduleName</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>bundleName</Name>
+					<Abstract type="html">bundleName</Abstract>
+				</Parameter><Parameter>
+					<Name>moduleName</Name>
+					<Abstract type="html">moduleName</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">NIPRnController</Abstract></ReturnValue>
+			<Anchor>//api/name/loadWithBundleName:moduleName:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnManager/requestRCTAssetsBehind</TokenIdentifier>
+			<Abstract type="html">后台静默下载rn资源包</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>- (void)requestRCTAssetsBehind</Declaration>
+			
+			
+			<Anchor>//api/name/requestRCTAssetsBehind</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnManager/setNoHotUpdate:</TokenIdentifier>
+			<Abstract type="html">是否支持热更新</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign) BOOL noHotUpdate</Declaration>
+			
+			
+			<Anchor>//api/name/noHotUpdate</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnManager/noHotUpdate</TokenIdentifier>
+			<Abstract type="html">是否支持热更新</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign) BOOL noHotUpdate</Declaration>
+			
+			
+			<Anchor>//api/name/noHotUpdate</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/NIPRnManager/noHotUpdate</TokenIdentifier>
+			<Abstract type="html">是否支持热更新</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign) BOOL noHotUpdate</Declaration>
+			
+			
+			<Anchor>//api/name/noHotUpdate</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnManager/setNoJsServer:</TokenIdentifier>
+			<Abstract type="html">是否不使用jsServer</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign) BOOL noJsServer</Declaration>
+			
+			
+			<Anchor>//api/name/noJsServer</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnManager/noJsServer</TokenIdentifier>
+			<Abstract type="html">是否不使用jsServer</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign) BOOL noJsServer</Declaration>
+			
+			
+			<Anchor>//api/name/noJsServer</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/NIPRnManager/noJsServer</TokenIdentifier>
+			<Abstract type="html">是否不使用jsServer</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, assign) BOOL noJsServer</Declaration>
+			
+			
+			<Anchor>//api/name/noJsServer</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnManager/setBundleUrl:</TokenIdentifier>
+			<Abstract type="html">bundle的url</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, copy) NSString *bundleUrl</Declaration>
+			
+			
+			<Anchor>//api/name/bundleUrl</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnManager/bundleUrl</TokenIdentifier>
+			<Abstract type="html">bundle的url</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, copy) NSString *bundleUrl</Declaration>
+			
+			
+			<Anchor>//api/name/bundleUrl</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/NIPRnManager/bundleUrl</TokenIdentifier>
+			<Abstract type="html">bundle的url</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, copy) NSString *bundleUrl</Declaration>
+			
+			
+			<Anchor>//api/name/bundleUrl</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnManager/setFontNames:</TokenIdentifier>
+			<Abstract type="html">字体名字</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, copy) NSArray *fontNames</Declaration>
+			
+			
+			<Anchor>//api/name/fontNames</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnManager/fontNames</TokenIdentifier>
+			<Abstract type="html">字体名字</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, copy) NSArray *fontNames</Declaration>
+			
+			
+			<Anchor>//api/name/fontNames</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/NIPRnManager/fontNames</TokenIdentifier>
+			<Abstract type="html">字体名字</Abstract>
+			<DeclaredIn>NIPRnManager.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, copy) NSArray *fontNames</Declaration>
+			
+			
+			<Anchor>//api/name/fontNames</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

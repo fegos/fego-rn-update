@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/NIPRnHotReloadHelper.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/NIPRnHotReloadHelper</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>NIPRnHotReloadHelper.h</DeclaredIn>
+            
+			
+			<NodeRef refid="2"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/NIPRnHotReloadHelper/fileNameListOfType:fromDirPath:</TokenIdentifier>
+			<Abstract type="html">文件系统私有方法，获取bundle文件</Abstract>
+			<DeclaredIn>NIPRnHotReloadHelper.h</DeclaredIn>
+			
+			<Declaration>+ (NSArray *)fileNameListOfType:(NSString *)type fromDirPath:(NSString *)dirPath</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>type</Name>
+					<Abstract type="html">文件类型</Abstract>
+				</Parameter><Parameter>
+					<Name>dirPath</Name>
+					<Abstract type="html">文件路径</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">NSArray</Abstract></ReturnValue>
+			<Anchor>//api/name/fileNameListOfType:fromDirPath:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/NIPRnHotReloadHelper/copyFile:toPath:</TokenIdentifier>
+			<Abstract type="html">拷贝文件到某个路径</Abstract>
+			<DeclaredIn>NIPRnHotReloadHelper.h</DeclaredIn>
+			
+			<Declaration>+ (BOOL)copyFile:(NSString *)filePath toPath:(NSString *)toPath</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>filePath</Name>
+					<Abstract type="html">文件路径</Abstract>
+				</Parameter><Parameter>
+					<Name>toPath</Name>
+					<Abstract type="html">目标路径</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">BOOL</Abstract></ReturnValue>
+			<Anchor>//api/name/copyFile:toPath:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/NIPRnHotReloadHelper/copyFolderFrom:to:</TokenIdentifier>
+			<Abstract type="html">拷贝文件夹至某个路径</Abstract>
+			<DeclaredIn>NIPRnHotReloadHelper.h</DeclaredIn>
+			
+			<Declaration>+ (BOOL)copyFolderFrom:(NSString *)sourcePath to:(NSString *)destinationPath</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>sourcePath</Name>
+					<Abstract type="html">原文件夹路径</Abstract>
+				</Parameter><Parameter>
+					<Name>destinationPath</Name>
+					<Abstract type="html">目标路径</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">BOOL</Abstract></ReturnValue>
+			<Anchor>//api/name/copyFolderFrom:to:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/NIPRnHotReloadHelper/removeFileAtPath:</TokenIdentifier>
+			<Abstract type="html">移除文件</Abstract>
+			<DeclaredIn>NIPRnHotReloadHelper.h</DeclaredIn>
+			
+			<Declaration>+ (BOOL)removeFileAtPath:(NSString *)filePath</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>filePath</Name>
+					<Abstract type="html">目标文件路径</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">BOOL</Abstract></ReturnValue>
+			<Anchor>//api/name/removeFileAtPath:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/NIPRnHotReloadHelper/removeFolder:</TokenIdentifier>
+			<Abstract type="html">移除文件夹</Abstract>
+			<DeclaredIn>NIPRnHotReloadHelper.h</DeclaredIn>
+			
+			<Declaration>+ (BOOL)removeFolder:(NSString *)folderPath</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>folderPath</Name>
+					<Abstract type="html">文件夹路径</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">BOOL</Abstract></ReturnValue>
+			<Anchor>//api/name/removeFolder:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/NIPRnHotReloadHelper/fileExistAtPath:</TokenIdentifier>
+			<Abstract type="html">文件是否存在</Abstract>
+			<DeclaredIn>NIPRnHotReloadHelper.h</DeclaredIn>
+			
+			<Declaration>+ (BOOL)fileExistAtPath:(NSString *)filePath</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>filePath</Name>
+					<Abstract type="html">文件路径</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">BOOL</Abstract></ReturnValue>
+			<Anchor>//api/name/fileExistAtPath:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/NIPRnHotReloadHelper/folderExistAtPath:</TokenIdentifier>
+			<Abstract type="html">目录是否存在</Abstract>
+			<DeclaredIn>NIPRnHotReloadHelper.h</DeclaredIn>
+			
+			<Declaration>+ (BOOL)folderExistAtPath:(NSString *)folderPath</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>folderPath</Name>
+					<Abstract type="html">目录的路径</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">BOOL</Abstract></ReturnValue>
+			<Anchor>//api/name/folderExistAtPath:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnHotReloadHelper/topViewControllerWithRootViewController:</TokenIdentifier>
+			<Abstract type="html">获取当前VC</Abstract>
+			<DeclaredIn>NIPRnHotReloadHelper.h</DeclaredIn>
+			
+			<Declaration>- (UIViewController *)topViewControllerWithRootViewController:(UIViewController *)rootViewController</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>rootViewController</Name>
+					<Abstract type="html">当前的rootViewController</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">UIViewController</Abstract></ReturnValue>
+			<Anchor>//api/name/topViewControllerWithRootViewController:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/NIPRnHotReloadHelper/registerIconFontsByNames:</TokenIdentifier>
+			<Abstract type="html">注册字体文件</Abstract>
+			<DeclaredIn>NIPRnHotReloadHelper.h</DeclaredIn>
+			
+			<Declaration>+ (void)registerIconFontsByNames:(NSArray *)names</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>names</Name>
+					<Abstract type="html">字体文件名数组</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/registerIconFontsByNames:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

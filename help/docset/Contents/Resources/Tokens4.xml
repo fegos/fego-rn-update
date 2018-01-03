@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/NIPRnUpdateService.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/NIPRnUpdateService</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>NIPRnUpdateService.h</DeclaredIn>
+            
+			
+			<NodeRef refid="4"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/NIPRnUpdateService/sharedService</TokenIdentifier>
+			<Abstract type="html">获取单例</Abstract>
+			<DeclaredIn>NIPRnUpdateService.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)sharedService</Declaration>
+			
+			<ReturnValue><Abstract type="html">obj</Abstract></ReturnValue>
+			<Anchor>//api/name/sharedService</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnUpdateService/setRequestUrl:</TokenIdentifier>
+			<Abstract type="html">请求远程服务的url，用来确定是否升级本地的rn资源包</Abstract>
+			<DeclaredIn>NIPRnUpdateService.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSString *requestUrl</Declaration>
+			
+			
+			<Anchor>//api/name/requestUrl</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnUpdateService/requestUrl</TokenIdentifier>
+			<Abstract type="html">请求远程服务的url，用来确定是否升级本地的rn资源包</Abstract>
+			<DeclaredIn>NIPRnUpdateService.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSString *requestUrl</Declaration>
+			
+			
+			<Anchor>//api/name/requestUrl</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/NIPRnUpdateService/requestUrl</TokenIdentifier>
+			<Abstract type="html">请求远程服务的url，用来确定是否升级本地的rn资源包</Abstract>
+			<DeclaredIn>NIPRnUpdateService.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSString *requestUrl</Declaration>
+			
+			
+			<Anchor>//api/name/requestUrl</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnUpdateService/requestRCTAssetsBehind</TokenIdentifier>
+			<Abstract type="html">静默后台下载rn资源</Abstract>
+			<DeclaredIn>NIPRnUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (void)requestRCTAssetsBehind</Declaration>
+			
+			
+			<Anchor>//api/name/requestRCTAssetsBehind</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnUpdateService/requestRCTAssets:failBlock:</TokenIdentifier>
+			<Abstract type="html">执行远程请求,请参数含有本地sdkversion、localDataVersion
+如果服务器的serverVersion==localVersion，则不抛回数据，否则返回服务器上的新包</Abstract>
+			<DeclaredIn>NIPRnUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (void)requestRCTAssets:(CFRCTUpdateAssetsSuccesBlock)successBlock failBlock:(CFRCTUpdateAssetsFailBlock)failBlock</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>successBlock</Name>
+					<Abstract type="html">successBlock</Abstract>
+				</Parameter><Parameter>
+					<Name>failBlock</Name>
+					<Abstract type="html">failBlock</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/requestRCTAssets:failBlock:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

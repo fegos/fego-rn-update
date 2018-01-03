@@ -1,0 +1,4 @@
+Documentation set was installed to Xcode!
+
+Path: /Users/zramals/Library/Developer/Shared/Documentation/DocSets/com.lede.NSIP.fego-rn-update.docset
+Time: 2018-01-03 06:24:03 +0000

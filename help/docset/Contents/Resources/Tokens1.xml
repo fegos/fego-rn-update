@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/NIPRnController.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/NIPRnController</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>NIPRnController.h</DeclaredIn>
+            
+			
+			<NodeRef refid="1"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnController/initWithBundleName:moduleName:</TokenIdentifier>
+			<Abstract type="html">根据业务指定的bundle，加载对应的module</Abstract>
+			<DeclaredIn>NIPRnController.h</DeclaredIn>
+			
+			<Declaration>- (id)initWithBundleName:(NSString *)bundleName moduleName:(NSString *)moduleName</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>bundleName</Name>
+					<Abstract type="html">bundleName</Abstract>
+				</Parameter><Parameter>
+					<Name>moduleName</Name>
+					<Abstract type="html">moduleName</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">obj</Abstract></ReturnValue>
+			<Anchor>//api/name/initWithBundleName:moduleName:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnController/setRctRootView:</TokenIdentifier>
+			<Abstract type="html">rn的根视图</Abstract>
+			<DeclaredIn>NIPRnController.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) RCTRootView *rctRootView</Declaration>
+			
+			
+			<Anchor>//api/name/rctRootView</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnController/rctRootView</TokenIdentifier>
+			<Abstract type="html">rn的根视图</Abstract>
+			<DeclaredIn>NIPRnController.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) RCTRootView *rctRootView</Declaration>
+			
+			
+			<Anchor>//api/name/rctRootView</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/NIPRnController/rctRootView</TokenIdentifier>
+			<Abstract type="html">rn的根视图</Abstract>
+			<DeclaredIn>NIPRnController.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) RCTRootView *rctRootView</Declaration>
+			
+			
+			<Anchor>//api/name/rctRootView</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnController/setAppProperties:</TokenIdentifier>
+			<Abstract type="html">业务请求时可能需要的参数</Abstract>
+			<DeclaredIn>NIPRnController.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, copy, readwrite) NSDictionary *appProperties</Declaration>
+			
+			
+			<Anchor>//api/name/appProperties</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnController/appProperties</TokenIdentifier>
+			<Abstract type="html">业务请求时可能需要的参数</Abstract>
+			<DeclaredIn>NIPRnController.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, copy, readwrite) NSDictionary *appProperties</Declaration>
+			
+			
+			<Anchor>//api/name/appProperties</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/NIPRnController/appProperties</TokenIdentifier>
+			<Abstract type="html">业务请求时可能需要的参数</Abstract>
+			<DeclaredIn>NIPRnController.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, copy, readwrite) NSDictionary *appProperties</Declaration>
+			
+			
+			<Anchor>//api/name/appProperties</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnController/setNavigator:</TokenIdentifier>
+			<Abstract type="html">rn内嵌的导航条视图</Abstract>
+			<DeclaredIn>NIPRnController.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) RCTNavigator *navigator</Declaration>
+			
+			
+			<Anchor>//api/name/navigator</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/NIPRnController/navigator</TokenIdentifier>
+			<Abstract type="html">rn内嵌的导航条视图</Abstract>
+			<DeclaredIn>NIPRnController.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) RCTNavigator *navigator</Declaration>
+			
+			
+			<Anchor>//api/name/navigator</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/NIPRnController/navigator</TokenIdentifier>
+			<Abstract type="html">rn内嵌的导航条视图</Abstract>
+			<DeclaredIn>NIPRnController.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) RCTNavigator *navigator</Declaration>
+			
+			
+			<Anchor>//api/name/navigator</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

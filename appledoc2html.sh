@@ -14,8 +14,8 @@
 #    exit 1
 #fi
 
-companyName="NSIP";
-companyID="com.lede.NSIP";
+companyName="fego";
+companyID="fego";
 companyURL="http://fe.hhtcex.com";
 os="iphoneos";
 projectPath="./ios";
