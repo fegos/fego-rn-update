@@ -19,7 +19,7 @@ companyID="fego";
 companyURL="http://fe.hhtcex.com";
 os="iphoneos";
 projectPath="./ios";
-outputPath="./help";
+outputPath="./help/ios";
 target="fego-rn-update";
 #os="macosx";
 
