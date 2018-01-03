@@ -50,7 +50,11 @@
 @end
 
 @implementation NIPRnUpdateService
-
+/**
+ 获取单例
+ 
+ @return obj
+ */
 + (instancetype)sharedService
 {
     static NIPRnUpdateService *instance = nil;

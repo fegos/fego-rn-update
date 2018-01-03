@@ -30,11 +30,24 @@
 
 @implementation NIPRnManager
 
+/**
+ 获取单例
+ 
+ @return obj
+ */
 + (instancetype)sharedManager
 {
     return [self managerWithBundleUrl:nil noHotUpdate:NO noJsServer:NO];
 }
 
+/**
+ 获取Manager
+ 
+ @param bundleUrl 服务器存放bundle的地址
+ @param noHotUpdate 用来标记只使用工程自带的rn包，不支持热更新 default:NO
+ @param noJsServer 不通过本地启动的server来获取bundle，直接使用离线包 default:NO
+ @return obj
+ */
 + (instancetype)managerWithBundleUrl:(NSString *)bundleUrl noHotUpdate:(BOOL)noHotUpdate noJsServer:(BOOL)noJsServer
 {
     static dispatch_once_t predicate;
@@ -66,6 +79,12 @@
 }
 
 #pragma mark 根据业务获取bundle
+/**
+ oc与js联通的桥，在manager初始化的时候就生成
+ 
+ @param bundleName bundleName
+ @return RCTBridge
+ */
 - (RCTBridge *)getBridgeByBundleName:(NSString *)bundleName
 {
     return [self.bundleDic objectForKey:bundleName];
@@ -84,6 +103,11 @@
     [self loadBundleByNames:bundelArray];
 }
 
+/**
+ 通过name获取bundle
+
+ @param bundleNames bundle名字
+ */
 - (void)loadBundleByNames:(NSArray *)bundleNames
 {
     if (self.noJsServer) {
@@ -109,6 +133,9 @@
     }
 }
 
+/**
+ 热更新完成后，加载存放在Document目录下的被更新的bundle文件
+ */
 - (void)loadBundleUnderDocument
 {
     NSArray *dirPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -133,6 +160,11 @@
 
 #pragma mark 目录处理
 
+/**
+ 获取所有bundle
+
+ @return bundle数组
+ */
 - (NSArray *)getAllBundles
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -191,18 +223,32 @@
 }
 
 #pragma mark 加载rn controller
-
+/**
+ 加载默认main bundle的指定模块
+ 
+ @param moduleName moduleName
+ @return NIPRnController
+ */
 - (NIPRnController *)loadControllerWithModel:(NSString *)moduleName
 {
     return [self loadWithBundleName:@"index" moduleName:moduleName];
 }
-
+/**
+ 通过bundle和module加载
+ 
+ @param bundleName bundleName
+ @param moduleName moduleName
+ @return NIPRnController
+ */
 - (NIPRnController *)loadWithBundleName:(NSString *)bundleName moduleName:(NSString *)moduleName
 {
     NIPRnController *controller = [[NIPRnController alloc] initWithBundleName:bundleName moduleName:moduleName];
     return controller;
 }
 
+/**
+ 后台静默下载rn资源包
+ */
 - (void)requestRCTAssetsBehind
 {
     [[NIPRnUpdateService sharedService] requestRCTAssetsBehind];
