@@ -51,5 +51,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>SERVER_IP</key>
+	<string>10.235.2.8</string>
 </dict>
 </plist>

@@ -275,7 +275,7 @@
 		AFB0102C1FDA917D00E10C87 /* libZipArchive.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libZipArchive.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0C8305B1FDFB714002E1E9F /* NIPModules.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NIPModules.h; sourceTree = "<group>"; };
 		B0C8305C1FDFB714002E1E9F /* NIPModules.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NIPModules.m; sourceTree = "<group>"; };
-		B0C830621FDFC1C0002E1E9F /* index.jsbundle.meta */ = {isa = PBXFileReference; lastKnownFileType = file; path = index.jsbundle.meta; sourceTree = "<group>"; };
+		B0C830621FDFC1C0002E1E9F /* index.jsbundle.meta */ = {isa = PBXFileReference; lastKnownFileType = text; path = index.jsbundle.meta; sourceTree = "<group>"; };
 		B0C830631FDFC1C0002E1E9F /* index.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = index.jsbundle; sourceTree = "<group>"; };
 		B5D2947A3E97F49948E4C0AC /* Pods-hotUpdateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hotUpdateTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-hotUpdateTests/Pods-hotUpdateTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FDE7E326F5FCC292F60A4615 /* Pods-hotUpdate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hotUpdate.debug.xcconfig"; path = "Pods/Target Support Files/Pods-hotUpdate/Pods-hotUpdate.debug.xcconfig"; sourceTree = "<group>"; };
@@ -567,6 +567,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "hotUpdate" */;
 			buildPhases = (
+				B02EB8D41FFC79C900307CC3 /* Set IP */,
 				0195797E13EF1DF3E65932E8 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
@@ -594,7 +595,11 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 2R2STMG33A;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 2R2STMG33A;
 					};
 				};
 			};
@@ -987,6 +992,20 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-hotUpdateTests/Pods-hotUpdateTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		B02EB8D41FFC79C900307CC3 /* Set IP */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Set IP";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "INFOPLIST=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\necho \"writing to $INFOPLIST\"\nPLISTCMD=\"Add :SERVER_IP string $(ifconfig | grep 'inet 10.' | head -1 | cut -d \" \" -f 2)\"\necho -n \"$INFOPLIST\" | xargs -0 /usr/libexec/PlistBuddy -c \"$PLISTCMD\" || true\nPLISTCMD=\"Set :SERVER_IP $(ifconfig | grep 'inet 10.' | head -1 | cut -d \" \" -f 2)\"\necho -n \"$INFOPLIST\" | xargs -0 /usr/libexec/PlistBuddy -c \"$PLISTCMD\" || true\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1036,6 +1055,7 @@
 			baseConfigurationReference = B5D2947A3E97F49948E4C0AC /* Pods-hotUpdateTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 2R2STMG33A;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1058,6 +1078,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = 2R2STMG33A;
 				INFOPLIST_FILE = hotUpdateTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1077,7 +1098,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 2R2STMG33A;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/PrefixHeader.pch";
 				INFOPLIST_FILE = hotUpdate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1106,7 +1127,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 2R2STMG33A;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/PrefixHeader.pch";
 				INFOPLIST_FILE = hotUpdate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
