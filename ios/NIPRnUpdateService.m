@@ -205,7 +205,7 @@
         //                if ([self.localDataVersion isEqualToString:@"0"] || ![self.localDataVersion isEqualToString:self.remoteDataVersion]) {
         if ([self.localDataVersion isEqualToString:remoteLowDataVersion]) {
           //                    [self downLoadRCTData:remoteDataVersion zip:remoteDataZip];
-          [self downLoadRCTData:self.remoteDataVersion withZip:@"rn" andWholeString:wholeStr];
+          [self downLoadRCTZip:@"rn" withWholeString:wholeStr];
           needDownload = YES;
           break;
         }
@@ -253,7 +253,7 @@
 /**
  *  执行请求并下载数据
  */
-- (void)downLoadRCTData:(NSString*)remoteDataVersion withZip:(NSString *)zipName andWholeString:(NSString *)wholeStr
+- (void)downLoadRCTZip:(NSString *)zipName withWholeString:(NSString *)wholeStr
 {
   __weak __typeof(self) weakSelf = self;
   //    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@.zip?version=%@&sdk=%@", RCT_SERVER_TEST_URL, zipName,self.localDataVersion, self.localSDKVersion]];
@@ -280,7 +280,7 @@
                                               NSLog(@"热更新zip地址：%@", actualPath);
                                               //                [weakSelf removeOldDataFiles];
                                               //                [weakSelf writeDataFromPath:actualPath];
-                                              [[NSUserDefaults standardUserDefaults] setObject:remoteDataVersion forKey:RN_DATA_VERSION];
+                                              [[NSUserDefaults standardUserDefaults] setObject:self.remoteDataVersion forKey:RN_DATA_VERSION];
                                               [[NSUserDefaults standardUserDefaults] setObject:NIP_RN_SDK_VERSION forKey:RN_SDK_VERSION];
                                               [self alertIfUpdateRnZipWithFilePath:actualPath];
                                               
