@@ -2,10 +2,11 @@
 
 + fego-rn 官方热更新方案
 
-
 # 项目介绍
 
-+ 基于React Native的增量更新库，提供android和ios两端的支持
++ 基于React Native的热更新库
++ 提供android和ios两端的支持
++ 支持增量更新，配置简单，部署方便，一键打包
 
 # 支持平台
 

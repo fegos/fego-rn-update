@@ -5,72 +5,85 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
-	<head>
-		<title>fego-rn-update</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
-		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
-	</head>
-	<body class="landing">
 
-		<!-- Page Wrapper -->
-			<div id="page-wrapper">
+<head>
+	<title>fego-rn-update</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+	<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+</head>
 
-				<!-- Header -->
-					
+<body class="landing">
 
-				<!-- Banner -->
-					<section id="banner">
-						<div class="inner">
-							<h2>fego-rn-update</h2>
-							<pre><p>React Native 热更新解决方案
+	<!-- Page Wrapper -->
+	<div id="page-wrapper">
+
+		<!-- Header -->
+
+
+		<!-- Banner -->
+		<section id="banner">
+			<div class="inner">
+				<h2>fego-rn-update</h2>
+				<pre><p>React Native 热更新解决方案
 提供android和ios两端的支持
+支持增量更新，配置简单，部署方便，一键打包
 <a href="http://fe.hhtcex.com/">NSIP大前端团队</a>出品</p></pre>
-							<ul class="actions">
-								<li><a href="https://github.com/fegos/fego-rn-update" class="button special">download</a></li>
-							</ul>
-							<!-- <ul class="actions">
+				<ul class="actions">
+					<li>
+						<a href="https://github.com/fegos/fego-rn-update" class="button special">download</a>
+					</li>
+				</ul>
+				<!-- <ul class="actions">
 								<li><a href="ios/html/index.html" class="button special">iOS</a></li>
 							</ul>
 							<ul class="actions">
 								<li><a href="android/index.html" class="button special">Android</a></li>
 							</ul> -->
-						</div>
-						<a href="#one" class="more scrolly">查看更多</a>
-					</section>
+			</div>
+			<a href="#one" class="more scrolly">查看更多</a>
+		</section>
 
-					<!-- One -->
-					<section id="one" class="wrapper style4">
-						<div class="inner">
-							<!-- <header class="major">
+		<!-- One -->
+		<section id="one" class="wrapper style4">
+			<div class="inner">
+				<!-- <header class="major">
 								<h2>fego-rn-update</h2>
 								<p>fego-rn 官方热更新方案<br />
 								基于React Native的增量更新库，提供android和ios两端的支持</p>
 							</header> -->
-							<!-- <div class="inner"> -->
-							<h1 id="支持平台">支持平台</h1>
-							<ul>
-							<li><p>Android</p></li>
-							<li><p>iOS</p></li>
-							</ul>
-							<h1 id="设计原则">设计原则</h1>
-							<ul>
-							<li>ios和android两端使用同一套脚本</li>
-							<li>打全量包和增量包只需要执行一个脚本即可</li>
-							</ul>
-							<h1 id="API文档">API文档</h1>
-							<ul>
-							<li><a href="ios/html/index.html">iOS</a></li>
-							<li><a href="android/index.html">Android</a></li>
-							</ul>
-							<h1 id="目录结构">目录结构</h1>
-							<ul>
-							<li>整体目录结构</li>
-							</ul>
-							<pre><code>
+				<!-- <div class="inner"> -->
+				<h1 id="支持平台">支持平台</h1>
+				<ul>
+					<li>
+						<p>Android</p>
+					</li>
+					<li>
+						<p>iOS</p>
+					</li>
+				</ul>
+				<h1 id="设计原则">设计原则</h1>
+				<ul>
+					<li>ios和android两端使用同一套脚本</li>
+					<li>打全量包和增量包只需要执行一个脚本即可</li>
+				</ul>
+				<h1 id="API文档">API文档</h1>
+				<ul>
+					<li>
+						<a href="ios/html/index.html">iOS</a>
+					</li>
+					<li>
+						<a href="android/index.html">Android</a>
+					</li>
+				</ul>
+				<h1 id="目录结构">目录结构</h1>
+				<ul>
+					<li>整体目录结构</li>
+				</ul>
+				<pre><code>
 	├── FegoRnUpdate.podspec    # ios pod库的描述文件
 	├── android                 # android原生源码
 	├── demo                    # demo示例
@@ -87,10 +100,10 @@
 	├── package.json            # 项目描述文件
 	├── pkg.sh                  # 打包文件
 	└── pkgCmd                  # 辅助脚本文件夹</code></pre>
-							<ul>
-							<li>打包脚本目录</li>
-							</ul>
-							<pre><code>
+				<ul>
+					<li>打包脚本目录</li>
+				</ul>
+				<pre><code>
 	├── pkg.sh                  # 整体打包文件，包含全量打包和增量打包，主执行脚本文件
 	└── pkgCmd                  # 辅助脚本文件夹
 		├── config.js           # 配置文件，主要配置生成包的存储位置
@@ -102,44 +115,57 @@
 		└── third               # 依赖的第三方脚本
 			├── diff_match_patch_uncompressed.js    # 文件差异生成脚本
 			└── file_list.js    # 列出目录下所有的文件</code></pre>
-							<h1 id="安装">安装</h1>
-							<pre><code>$ npm install fego-rn-update --save</code></pre>
-							<h2 id="手动安装">手动安装</h2>
-							<h3 id="android">Android</h3>
-							<ol type="1">
-							<li>把下面几行添加到 <code>android/build.gradle</code></li>
-							</ol>
-							<pre><code>include &#39;:fego&#39;
+				<h1 id="安装">安装</h1>
+				<pre><code>$ npm install fego-rn-update --save</code></pre>
+				<h2 id="手动安装">手动安装</h2>
+				<h3 id="android">Android</h3>
+				<ol type="1">
+					<li>把下面几行添加到
+						<code>android/build.gradle</code>
+					</li>
+				</ol>
+				<pre><code>include &#39;:fego&#39;
 project(&#39;:fego&#39;).projectDir = new File(rootProject.projectDir, &#39;../node_modules/fego-rn-update/android&#39;)</code></pre>
-							<ol start="2" type="1">
-							<li>在<code>android/build.gradle</code>中更新build工具版本为<code>2.2+</code></li>
-							</ol>
-							<pre><code>buildscript {
+				<ol start="2" type="1">
+					<li>在
+						<code>android/build.gradle</code>中更新build工具版本为
+						<code>2.2+</code>
+					</li>
+				</ol>
+				<pre><code>buildscript {
 	...
 	dependencies {
 		classpath &#39;com.android.tools.build:gradle:2.2.3&#39;
 	}
 }
 							</code></pre>
-							<ol start="3" type="1">
-							<li>在<code>android/gradle/wrapper/gradle-wrapper.properties</code>中更新gradle版本为<code>2.14.1以上</code></li>
-							</ol>
-							<pre><code>...
+				<ol start="3" type="1">
+					<li>在
+						<code>android/gradle/wrapper/gradle-wrapper.properties</code>中更新gradle版本为
+						<code>2.14.1以上</code>
+					</li>
+				</ol>
+				<pre><code>...
 distributionUrl=https\://services.gradle.org/distributions/gradle-3.3-all.zip</code></pre>
-							<ol start="4" type="1">
-							<li>在<code>android/app/build.gradle</code>添加依赖</li>
-							</ol>
-							<pre><code>dependencies {
+				<ol start="4" type="1">
+					<li>在
+						<code>android/app/build.gradle</code>添加依赖</li>
+				</ol>
+				<pre><code>dependencies {
 	compile project(&#39;:fego&#39;)
 }</code></pre>
-							<ol start="5" type="1">
-							<li>在<code>AndroidManifest.xml</code>中添加依赖</li>
-							</ol>
-							<pre><code>&lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;</code></pre>
-							<ol start="6" type="1">
-							<li>使<code>MainActivity</code>依赖fego-rn-update提供的<code>ReactActivity</code></li>
-							</ol>
-							<pre><code>// add these imports
+				<ol start="5" type="1">
+					<li>在
+						<code>AndroidManifest.xml</code>中添加依赖</li>
+				</ol>
+				<pre><code>&lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;</code></pre>
+				<ol start="6" type="1">
+					<li>使
+						<code>MainActivity</code>依赖fego-rn-update提供的
+						<code>ReactActivity</code>
+					</li>
+				</ol>
+				<pre><code>// add these imports
 import com.fego.android.service.HotUpdatePackage;
 import com.fego.android.service.ReactActivity;
 import com.fego.android.service.ReactManager;
@@ -184,19 +210,19 @@ public class MainActivity extends ReactActivity {
 		super.onResume();
 	}
 }</code></pre>
-							<h3 id="ios">IOS</h3>
-							<ol type="1">
-							<li>pod库引入热更新库，Podfile中添加：</li>
-							</ol>
-							<pre><code>pod &#39;FegoRnUpdate&#39;</code></pre>
-							<ol start="2" type="1">
-							<li>工程目录下执行pod命令:</li>
-							</ol>
-							<pre><code>pod update</code></pre>
-							<ol start="3" type="1">
-							<li>AppDelegate中添加热更新代码</li>
-							</ol>
-							<pre><code>#import &quot;NIPRnManager.h&quot;
+				<h3 id="ios">IOS</h3>
+				<ol type="1">
+					<li>pod库引入热更新库，Podfile中添加：</li>
+				</ol>
+				<pre><code>pod &#39;FegoRnUpdate&#39;</code></pre>
+				<ol start="2" type="1">
+					<li>工程目录下执行pod命令:</li>
+				</ol>
+				<pre><code>pod update</code></pre>
+				<ol start="3" type="1">
+					<li>AppDelegate中添加热更新代码</li>
+				</ol>
+				<pre><code>#import &quot;NIPRnManager.h&quot;
 							
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -216,13 +242,24 @@ public class MainActivity extends ReactActivity {
 
 	return YES;
 }</code></pre>
-							<h1 id="使用">使用</h1>
-							<ol type="1">
-							<li><p>将<code>node_modules/fego-rn-update/</code>下<code>pkdCmd文件夹</code>和<code>pkg.sh</code>文件拷贝到与<code>node_modules同级目录</code>下</p></li>
-							<li><p>在想要生成包的地方创建包存储目录</p></li>
-							</ol>
-							<p>存储目录可以参考<code>node_modules/fego-rn-update/</code>下的<code>increment文件夹</code></p>
-							<pre><code>
+				<h1 id="使用">使用</h1>
+				<ol type="1">
+					<li>
+						<p>将
+							<code>node_modules/fego-rn-update/</code>下
+							<code>pkdCmd文件夹</code>和
+							<code>pkg.sh</code>文件拷贝到与
+							<code>node_modules同级目录</code>下</p>
+					</li>
+					<li>
+						<p>在想要生成包的地方创建包存储目录</p>
+					</li>
+				</ol>
+				<p>存储目录可以参考
+					<code>node_modules/fego-rn-update/</code>下的
+					<code>increment文件夹</code>
+				</p>
+				<pre><code>
 	├── React-Native 热更新目录
 	├── android             # 存放android生成的包
 	│   ├── all             # 存放全量包
@@ -234,10 +271,14 @@ public class MainActivity extends ReactActivity {
 		│   └── README.md
 		└── increment       # 存放增量包
 			└── README.md</code></pre>
-							<ol start="3" type="1">
-							<li>修改配置文件<code>config.js</code>中的<code>path</code>和<code>sdk</code></li>
-							</ol>
-							<pre><code>// 写个用户名跟路径对应的字典，这个方便一个工程多个人维护使用，支持mac
+				<ol start="3" type="1">
+					<li>修改配置文件
+						<code>config.js</code>中的
+						<code>path</code>和
+						<code>sdk</code>
+					</li>
+				</ol>
+				<pre><code>// 写个用户名跟路径对应的字典，这个方便一个工程多个人维护使用，支持mac
 let map = {
 }
 // 获取系统信息
@@ -249,21 +290,34 @@ module.exports = {
 	path: map[username],//在此处可以直接更改为自己要生成包的位置，即第二步中的最外层目录
 	sdkVer: &#39;1.0&#39;//需跟apk版本保持一致
 }</code></pre>
-							<ol start="4" type="1">
-							<li>在<code>node_modules同级目录</code>下执行脚本<code>pkg.sh</code></li>
-							</ol>
-							<pre><code>sh pkg.sh platform  // 其中platform为android/ios</code></pre>
-							<p><strong>注意</strong>：首次运行，因为只生成一个包，故会提示没有新包，并需要在android和ios两个工程中均放置一份包，android放在<code>android/app/src/main/assets/rn/</code>下，ios放于<code>ios/项目名/rn/</code>下；之后在同一sdk下继续运行该脚本时，会进行增量包生成。</p>
-							<ol start="5" type="1">
-							<li>在原生修改启动文件名字为<code>index.js</code>，bundle名字为<code>index.jsbundle</code>，请求地址为<code>config请求地址</code></li>
-							</ol>
-							<p><code>android</code>：在MainActivity中修改</p>
-							<p><code>ios</code>：在AppDelegate中修改</p>
-							<p><strong>注意</strong>：android和ios需要统一启动文件名称，均为index.js，否则需要修改全量打包脚本；bundle名字也需要两端统一为index.jsbundle，否则需要修改增量更新打包脚本</p>
-							<ol start="6" type="1">
-							<li>js端调用</li>
-							</ol>
-							<pre><code>import FegoRNUpdate from &#39;fego-rn-update&#39;
+				<ol start="4" type="1">
+					<li>在
+						<code>node_modules同级目录</code>下执行脚本
+						<code>pkg.sh</code>
+					</li>
+				</ol>
+				<pre><code>sh pkg.sh platform  // 其中platform为android/ios</code></pre>
+				<p>
+					<strong>注意</strong>：首次运行，因为只生成一个包，故会提示没有新包，并需要在android和ios两个工程中均放置一份包，android放在
+					<code>android/app/src/main/assets/rn/</code>下，ios放于
+					<code>ios/项目名/rn/</code>下；之后在同一sdk下继续运行该脚本时，会进行增量包生成。</p>
+				<ol start="5" type="1">
+					<li>在原生修改启动文件名字为
+						<code>index.js</code>，bundle名字为
+						<code>index.jsbundle</code>，请求地址为
+						<code>config请求地址</code>
+					</li>
+				</ol>
+				<p>
+					<code>android</code>：在MainActivity中修改</p>
+				<p>
+					<code>ios</code>：在AppDelegate中修改</p>
+				<p>
+					<strong>注意</strong>：android和ios需要统一启动文件名称，均为index.js，否则需要修改全量打包脚本；bundle名字也需要两端统一为index.jsbundle，否则需要修改增量更新打包脚本</p>
+				<ol start="6" type="1">
+					<li>js端调用</li>
+				</ol>
+				<pre><code>import FegoRNUpdate from &#39;fego-rn-update&#39;
 							
 class App extends Component {
 	render() {
@@ -294,34 +348,50 @@ const styles = StyleSheet.create({
 	}
 });
 							</code></pre>
-							<h1 id="欢迎贡献">欢迎贡献</h1>
-							<p>有任何疑问或问题欢迎在 <a href="https://github.com/fegos/fego-rn-update/issues">github issues</a>里提问</p>
-							<!-- </div> -->
-						</div>
-					</section>
-
-				<!-- Footer -->
-					<footer id="footer">
-						<ul class="icons">
-							<li><a href="https://github.com/fegos/fego-rn-update" class="icon fa-github"><span class="label">Twitter</span></a></li>
-							<li><a href="http://fe.hhtcex.com/" class="icon fa-home"><span class="label">Facebook</span></a></li>
-							<li><a href="https://github.com/fegos/fego-rn-update/issues" class="icon fa-question"><span class="label"></span></a></li>
-						</ul>
-						<ul class="copyright">
-							<li>Copyright © <a href="http://fe.hhtcex.com/">NSIP大前端团队</a></li>
-						</ul>
-					</footer>
-
+				<h1 id="欢迎贡献">欢迎贡献</h1>
+				<p>有任何疑问或问题欢迎在
+					<a href="https://github.com/fegos/fego-rn-update/issues">github issues</a>里提问</p>
+				<!-- </div> -->
 			</div>
+		</section>
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/skel.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="assets/js/main.js"></script>
+		<!-- Footer -->
+		<footer id="footer">
+			<ul class="icons">
+				<li>
+					<a href="https://github.com/fegos/fego-rn-update" class="icon fa-github">
+						<span class="label">Twitter</span>
+					</a>
+				</li>
+				<li>
+					<a href="http://fe.hhtcex.com/" class="icon fa-home">
+						<span class="label">Facebook</span>
+					</a>
+				</li>
+				<li>
+					<a href="https://github.com/fegos/fego-rn-update/issues" class="icon fa-question">
+						<span class="label"></span>
+					</a>
+				</li>
+			</ul>
+			<ul class="copyright">
+				<li>Copyright ©
+					<a href="http://fe.hhtcex.com/">NSIP大前端团队</a>
+				</li>
+			</ul>
+		</footer>
 
-	</body>
+	</div>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/jquery.scrollex.min.js"></script>
+	<script src="assets/js/jquery.scrolly.min.js"></script>
+	<script src="assets/js/skel.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+	<script src="assets/js/main.js"></script>
+
+</body>
+
 </html>
