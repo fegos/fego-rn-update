@@ -13,6 +13,12 @@
 
 + ios
 
+# API文档
+
+[iOS](https://fegos.github.io/fego-rn-update/ios/html/index.html)
+
+[Android](https://fegos.github.io/fego-rn-update/android/index.html)
+
 # 设计原则
 
 + ios和android两端使用同一套脚本
