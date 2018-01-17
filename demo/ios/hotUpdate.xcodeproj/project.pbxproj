@@ -14,6 +14,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2613080089230965D560DDA8 /* libPods-hotUpdateTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 044BAAE5B14AF38688CC245D /* libPods-hotUpdateTests.a */; };
 		60DAC0356F29E5D1643176D4 /* libPods-hotUpdate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B84E6176BC2CCAEE113B4C /* libPods-hotUpdate.a */; };
+		B05FBC9B200F5E5400FDEDDC /* ip.txt in Resources */ = {isa = PBXBuildFile; fileRef = B05FBC9A200F5E5400FDEDDC /* ip.txt */; };
 		B0C8305D1FDFB714002E1E9F /* NIPModules.m in Sources */ = {isa = PBXBuildFile; fileRef = B0C8305C1FDFB714002E1E9F /* NIPModules.m */; };
 		B0C830641FDFC1C0002E1E9F /* index.jsbundle.meta in Resources */ = {isa = PBXBuildFile; fileRef = B0C830621FDFC1C0002E1E9F /* index.jsbundle.meta */; };
 		B0C830651FDFC1C0002E1E9F /* index.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = B0C830631FDFC1C0002E1E9F /* index.jsbundle */; };
@@ -47,6 +48,7 @@
 		AFB010281FDA916E00E10C87 /* libAFNetworking.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libAFNetworking.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFB0102A1FDA917600E10C87 /* libNIPCommonUtilities.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libNIPCommonUtilities.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFB0102C1FDA917D00E10C87 /* libZipArchive.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libZipArchive.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B05FBC9A200F5E5400FDEDDC /* ip.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ip.txt; sourceTree = "<group>"; };
 		B0C8305B1FDFB714002E1E9F /* NIPModules.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NIPModules.h; sourceTree = "<group>"; };
 		B0C8305C1FDFB714002E1E9F /* NIPModules.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NIPModules.m; sourceTree = "<group>"; };
 		B0C830621FDFC1C0002E1E9F /* index.jsbundle.meta */ = {isa = PBXFileReference; lastKnownFileType = text; path = index.jsbundle.meta; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				B05FBC9A200F5E5400FDEDDC /* ip.txt */,
 				13B07FAE1A68108700A75B9A /* hotUpdate */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* hotUpdateTests */,
@@ -278,6 +281,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B05FBC9B200F5E5400FDEDDC /* ip.txt in Resources */,
 				B0C830641FDFC1C0002E1E9F /* index.jsbundle.meta in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
@@ -396,7 +400,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "INFOPLIST=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\necho \"writing to $INFOPLIST\"\nPLISTCMD=\"Add :SERVER_IP string $(ifconfig | grep 'inet 10.' | head -1 | cut -d \" \" -f 2)\"\necho -n \"$INFOPLIST\" | xargs -0 /usr/libexec/PlistBuddy -c \"$PLISTCMD\" || true\nPLISTCMD=\"Set :SERVER_IP $(ifconfig | grep 'inet 10.' | head -1 | cut -d \" \" -f 2)\"\necho -n \"$INFOPLIST\" | xargs -0 /usr/libexec/PlistBuddy -c \"$PLISTCMD\" || true\n";
+			shellScript = "ip=$(ifconfig | grep 'inet 10.' | head -1 | cut -d \" \" -f 2)\necho $ip\nsed -i \"\" '1 c\\'$'\\n'$ip$'\\n' ip.txt";
 		};
 /* End PBXShellScriptBuildPhase section */
 

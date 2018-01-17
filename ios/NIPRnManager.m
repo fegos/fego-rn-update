@@ -14,8 +14,10 @@
 
 #if __has_include(<React/RCTAssert.h>)
 #import <React/RCTBridge.h>
+#import <React/RCTBundleURLProvider.h>
 #else
 #import "RCTBridge.h"
+#import "RCTBundleURLProvider.h"
 #endif
 
 @interface NIPRnManager ()
@@ -58,12 +60,6 @@
         manager.noJsServer = noJsServer;
         if (hotreload_notEmptyString(bundleUrl)) {
             manager.bundleUrl = bundleUrl;
-        } else {
-#ifdef TEST_VERSION
-            manager.bundleUrl = @"https://git.ms.netease.com/nsip_android/ftp/raw/master/rn_nsip_exchange_ios_source";
-#else
-            manager.bundleUrl =  @"https://img.hhtcex.com/product/api/client/resources/ios";
-#endif
         }
 
         [manager initBridgeBundle];
@@ -119,7 +115,8 @@
             [self.bundleDic setObject:bridge forKey:bundelName];
         }
     } else {
-        NSURL *bundelPath = [self getJsLocationPath:@"index"];
+//        NSURL *bundelPath = [self getJsLocationPath:@"index"];
+        NSURL *bundelPath = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:@"index"];
         RCTBridge *bridge = [[RCTBridge alloc] initWithBundleURL:bundelPath
                                                   moduleProvider:nil
                                                    launchOptions:nil];
@@ -270,7 +267,8 @@
 #if TARGET_OS_SIMULATOR
     serverIP = @"localhost";
 #else
-    serverIP = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"SERVER_IP"];
+//    serverIP = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"SERVER_IP"];
+    
 #endif
     return serverIP;
 }
@@ -278,7 +276,7 @@
 - (NSURL *)getJsLocationPath:(NSString *)bundleName
 {
     NSURL *jsCodeLocation = nil;
-    if (self.noJsServer) {
+//    if (self.noJsServer) {
         if (self.noHotUpdate) {
             jsCodeLocation = [[NSBundle mainBundle] URLForResource:bundleName withExtension:JSBUNDLE];
         } else {
@@ -294,11 +292,11 @@
                 jsCodeLocation = [[NSBundle mainBundle] URLForResource:bundleName withExtension:JSBUNDLE];
             }
         }
-    } else {
-        NSString *serverIP = [self getJsServerIP];
-        NSString *jsCodeUrlString = [NSString stringWithFormat:@"http://%@:8081/%@.bundle?platform=ios&dev=true", serverIP, bundleName];
-        jsCodeLocation = [NSURL URLWithString:jsCodeUrlString];
-    }
+//    } else {
+//        NSString *serverIP = [self getJsServerIP];
+//        NSString *jsCodeUrlString = [NSString stringWithFormat:@"http://%@:8081/%@.bundle?platform=ios&dev=true", serverIP, bundleName];
+//        jsCodeLocation = [NSURL URLWithString:jsCodeUrlString];
+//    }
     return jsCodeLocation;
 }
 
