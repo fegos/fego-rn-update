@@ -30,6 +30,8 @@ dependencies {
     compile rootProject.ext.dependencies.rn
     compile rootProject.ext.dependencies.support_v7
     testCompile 'junit:junit:4.12'
+    testCompile "org.robolectric:robolectric:3.6.1"
+    testCompile "org.mockito:mockito-core:1.+"
 
     provided rootProject.ext.dependencies.retrofit
     provided rootProject.ext.dependencies.retrofit_gson

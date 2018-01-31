@@ -92,7 +92,7 @@ public class ReactManager {
     /**
      * rn bundle文件名
      */
-    private String bundleName = "index.bundle";
+    private String bundleName = "index.jsbundle";
     /**
      * 用于请求配置文件
      */
@@ -133,7 +133,6 @@ public class ReactManager {
         }
         return instance;
     }
-
 
     private ReactManager() {
 

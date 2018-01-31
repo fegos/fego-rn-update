@@ -112,53 +112,28 @@ dependencies {
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 
-6. 使`MainActivity`依赖fego-rn-update提供的`ReactActivity`
+6. 生成`ReactRootView`时，需要使用ReactManager中生成的`RnInstanceManager`，设置相应的参数如下：
 
 ```
-// add these imports
-import com.fego.android.service.HotUpdatePackage;
-import com.fego.android.service.ReactActivity;
-import com.fego.android.service.ReactManager;
-
-public class MainActivity extends ReactActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // 启动后台热更新操作
-        // ReactManager.getInstance().loadBundleBehind();
-    }
-
-    @Override
-    public String getModuleName() {
-        return "hotUpdate";
-    }
-
-    @Override
-    public boolean isDevelopStatus() {
-        return BuildConfig.DEBUG;
-    }
-
-    @Override
-    public void initReactManager() {
+if (mReactRootView == null) {
+    mReactRootView = new ReactRootView(this);
+    if (mReactInstanceManager == null) {
         if (ReactManager.getInstance().getRnInstanceManager() == null) {
             // 设置react native启动文件的名称
             ReactManager.getInstance().setJsMainModuleName("index");
-            // 设置加载的bundle文件名
+            // 设置加载的文件名
             ReactManager.getInstance().setBundleName("index.jsbundle");
             // 设置热更新路径
-            ReactManager.getInstance().setSourceUrl("你的下载路径");
+            ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/increment/");
             List<ReactPackage> reactPackages = new ArrayList<>();
             // 添加额外的package
             reactPackages.add(new HotUpdatePackage());
             ReactManager.getInstance().init(getApplication(), reactPackages, BuildConfig.DEBUG);
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
+        mReactInstanceManager = ReactManager.getInstance().getRnInstanceManager();
+	}
+    mReactRootView.startReactApplication(mReactInstanceManager, "hotUpdate", null);
+    setContentView(mReactRootView);
 }
 ```
 ### IOS

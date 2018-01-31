@@ -55,7 +55,7 @@ public class ReactService {
                         Request request = requestBuilder.build();
                         Response response = chain.proceed(request);
                         long elapsedTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
-                        Log.d(TAG, "请求耗时" + String.valueOf(elapsedTime) + "ms");
+//                        Log.d(TAG, "请求耗时" + String.valueOf(elapsedTime) + "ms");
                         return response;
                     }
 
