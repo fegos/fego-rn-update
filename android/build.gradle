@@ -3,7 +3,7 @@ apply plugin: 'maven'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    buildToolsVersion '26.0.3'
 
     defaultConfig {
         minSdkVersion 16
@@ -26,13 +26,11 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
-    compile "com.facebook.react:react-native:0.47.2"
+    compile 'com.facebook.react:react-native:0.47.2'
     testCompile 'junit:junit:4.12'
-    testCompile "org.robolectric:robolectric:3.6.1"
-    testCompile "org.mockito:mockito-core:1.+"
-
-    provided "com.squareup.retrofit2:retrofit:2.1.0"
-    provided "com.squareup.retrofit2:converter-gson:2.0.0"
-    provided "org.greenrobot:eventbus:3.0.0"
+    testCompile 'org.robolectric:robolectric:3.6.1'
+    testCompile 'org.mockito:mockito-core:1.+'
+    provided 'com.squareup.retrofit2:retrofit:2.1.0'
+    provided 'com.squareup.retrofit2:converter-gson:2.0.0'
+    provided 'org.greenrobot:eventbus:3.0.0'
 }
