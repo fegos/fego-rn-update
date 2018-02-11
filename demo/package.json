@@ -7,7 +7,7 @@
 		"test": "jest"
 	},
 	"dependencies": {
-		"fego-rn-update": "0.0.2",
+		"fego-rn-update": "file:../",
 		"react": "16.0.0-alpha.12",
 		"react-native": "0.47.2",
 		"zip-local": "^0.3.4"

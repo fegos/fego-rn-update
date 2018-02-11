@@ -11,11 +11,11 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.facebook.react.JSCConfig;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactInstanceManagerBuilder;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.ReactRootView;
+import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.common.LifecycleState;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.react.views.text.ReactFontManager;
@@ -74,7 +74,7 @@ public class ReactManager {
      */
     private static String NEW_BUNDLE_VERSION = "NEW_BUNDLE_VERSION";
     /**
-     *  热更新rn资源下载路径
+     * 热更新rn资源下载路径
      */
     private String sourceUrl = "";
     /**
@@ -92,7 +92,7 @@ public class ReactManager {
     /**
      * rn bundle文件名
      */
-    private String bundleName = "index.jsbundle";
+    private String bundleName = "index.bundle";
     /**
      * 用于请求配置文件
      */
@@ -105,10 +105,6 @@ public class ReactManager {
      * 用来临时记录增量还是全量
      */
     private String type = null;
-    /**
-     * 用来临时记录zip包的md5值
-     */
-    private String md5Value = "";
     private Application application = null;
     private Activity currentActivity;
     private ReactInstanceManager rnInstanceManager;
@@ -137,6 +133,7 @@ public class ReactManager {
         }
         return instance;
     }
+
 
     private ReactManager() {
 
@@ -187,9 +184,25 @@ public class ReactManager {
 
             //rn manager初始化，仅使用位于沙盒目录下的bundle资源
             ReactInstanceManagerBuilder builder = ReactInstanceManager.builder()
-                    .setApplication(application)
-                    .setJSMainModuleName(jsMainModuleName)
-                    .addPackage(new MainReactPackage())
+                    .setApplication(application);
+
+            Class<?> clazz = builder.getClass();
+            Method method = null;
+            try {
+                method = clazz.getMethod("setJSMainModuleName");
+            } catch (Exception ex) {
+                try {
+                    method = clazz.getMethod("setJSMainModulePath");
+
+                } catch (Exception ex0) {
+
+                }
+            }
+            if (method != null) {
+                method.invoke(builder, jsMainModuleName);
+            }
+
+            builder.addPackage(new MainReactPackage())
                     .setUseDeveloperSupport(useDevelop)
                     .setInitialLifecycleState(LifecycleState.BEFORE_CREATE);
 
@@ -242,7 +255,7 @@ public class ReactManager {
         //获取本地rn资源的sdk版本号、资源数据迭代版本号
         localDataVersion = ReactPreference.getInstance().getString(BUNDLE_VERSION);
 
-        if(this.localDataVersion.equals("")) {
+        if (this.localDataVersion.equals("")) {
             this.localDataVersion = "0";
         }
         //请求远程的rn资源最新的配置文件,获取rn最新的对应sdk的数据迭代版本号
@@ -292,7 +305,6 @@ public class ReactManager {
                         continue;
                     }
                     type = infos[3];
-                    md5Value = infos[4];
                     if (remoteSdkVersion.equals(SDK_VERSION)) {
                         //如果新版本字典存在,说明是已下载还没有使用的资源,如果跟线上的版本号相同也不必要下载了
                         String needUpdateVersion = ReactPreference.getInstance().getString(NEW_BUNDLE_VERSION);
@@ -319,7 +331,7 @@ public class ReactManager {
     private void loadRNSource(final String remoteDataVersion) {
         ReactService service = new ReactService();
         final String rnZipName = "rn_" + SDK_VERSION + "_" + remoteDataVersion + "_" + localDataVersion + "_" + type + ".zip";
-        String rnSourceUrl = sourceUrl + SDK_VERSION + "/" + remoteDataVersion +  "/" + rnZipName;
+        String rnSourceUrl = sourceUrl + SDK_VERSION + "/" + remoteDataVersion + "/" + rnZipName;
         bundleCall = service.downloadFile(rnSourceUrl, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -328,12 +340,9 @@ public class ReactManager {
                     File file = new File(downloadFilePath);
                     boolean writtenToDisk = FileUtils.writeResponseBodyToDisk(response.body(), file);
                     if (writtenToDisk) {
-                        String tmpValue = FileUtils.getMd5ByFile(file);
-                        if (tmpValue.equals(md5Value)) {
-                            ReactPreference.getInstance().save(NEW_BUNDLE_PATH, downloadFilePath);
-                            ReactPreference.getInstance().save(NEW_BUNDLE_VERSION, remoteDataVersion);
-                            EventBus.getDefault().post(NPReactManagerTask.GetNewReactVersionSource);
-                        }
+                        ReactPreference.getInstance().save(NEW_BUNDLE_PATH, downloadFilePath);
+                        ReactPreference.getInstance().save(NEW_BUNDLE_VERSION, remoteDataVersion);
+                        EventBus.getDefault().post(NPReactManagerTask.GetNewReactVersionSource);
                     }
                 }
             }
@@ -397,18 +406,48 @@ public class ReactManager {
         }
         Log.i(TAG, "js bundle file file success, reload js bundle");
         try {
-            Class<?> RIManagerClazz = rnInstanceManager.getClass();
-            Field f = RIManagerClazz.getDeclaredField("mJSCConfig");
-            f.setAccessible(true);
-            JSCConfig jscConfig = (JSCConfig) f.get(rnInstanceManager);
+            Class<?> rnManagerClazz = rnInstanceManager.getClass();
 
-            Method method = RIManagerClazz.getDeclaredMethod("recreateReactContextInBackground",
-                    com.facebook.react.bridge.JavaScriptExecutor.Factory.class,
-                    com.facebook.react.bridge.JSBundleLoader.class);
-            method.setAccessible(true);
-            method.invoke(rnInstanceManager,
-                    new com.facebook.react.bridge.JSCJavaScriptExecutor.Factory(jscConfig.getConfigMap()),
-                    com.facebook.react.bridge.JSBundleLoader.createFileLoader(rnDir + File.separator + bundleName));
+            try {
+
+                Field f = rnManagerClazz.getDeclaredField("mJSCConfig");
+                f.setAccessible(true);
+
+                Object jscConfig = f.get(rnInstanceManager);
+                Method getConfigMapMethod = jscConfig.getClass().getDeclaredMethod("getConfigMap");
+                Object jsConfigMap = getConfigMapMethod.invoke(jscConfig);
+
+                Class jsConfigClass = Class.forName("com.facebook.react.bridge.JavaScriptExecutor.Factory.class");
+                Method method = rnManagerClazz.getDeclaredMethod("recreateReactContextInBackground",
+                        jsConfigClass,
+                        com.facebook.react.bridge.JSBundleLoader.class);
+                method.setAccessible(true);
+
+                Class jsConfigFactoryClass = Class.forName("com.facebook.react.bridge.JSCJavaScriptExecutor.Factory");
+                method.invoke(rnInstanceManager,
+                        jsConfigFactoryClass.getDeclaredConstructor(ReadableNativeMap.class).newInstance(jsConfigMap),
+                        com.facebook.react.bridge.JSBundleLoader.createFileLoader(rnDir + File.separator + bundleName));
+            } catch (Exception ex) {
+                Field f = rnManagerClazz.getDeclaredField("mJSCConfig");
+                f.setAccessible(true);
+
+                Object jscConfig = f.get(rnInstanceManager);
+                Method getConfigMapMethod = jscConfig.getClass().getDeclaredMethod("getConfigMap");
+                Object jsConfigMap = getConfigMapMethod.invoke(jscConfig);
+
+                Class jsConfigClass = Class.forName("com.facebook.react.bridge.JavaScriptExecutor.Factory.class");
+                Method method = rnManagerClazz.getDeclaredMethod("recreateReactContextInBackground",
+                        jsConfigClass,
+                        com.facebook.react.bridge.JSBundleLoader.class);
+                method.setAccessible(true);
+
+                Class jsConfigFactoryClass = Class.forName("com.facebook.react.bridge.JSCJavaScriptExecutor.Factory");
+                method.invoke(rnInstanceManager,
+                        jsConfigFactoryClass.getDeclaredConstructor(ReadableNativeMap.class).newInstance(jsConfigMap),
+                        com.facebook.react.bridge.JSBundleLoader.createFileLoader(rnDir + File.separator + bundleName));
+            }
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -418,7 +457,7 @@ public class ReactManager {
     /**
      * 获取指定bundle文件内容
      *
-     * @param patPath bundle文件路径
+     * @param patPath  bundle文件路径
      * @param isAssets 是否为assets下
      * @return string
      */
@@ -436,7 +475,7 @@ public class ReactManager {
             is.read(buffer);
             is.close();
             result = new String(buffer, "utf-8");
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
@@ -446,8 +485,8 @@ public class ReactManager {
      * 增量包和旧包合并
      *
      * @param patchStr 增量包内容
-     * @param bundle 旧bundle包内容
-     * @param rnDir 更新后的bundle路径
+     * @param bundle   旧bundle包内容
+     * @param rnDir    更新后的bundle路径
      */
     private void merge(String patchStr, String bundle, String rnDir) {
         DiffMatchPatchUtils dmp = new DiffMatchPatchUtils();
@@ -470,7 +509,7 @@ public class ReactManager {
      * 读取assets配置文件，删除需要删除的文件
      *
      * @param configDetail 配置文件内容
-     * @param rnDir 删除初始路径
+     * @param rnDir        删除初始路径
      */
     private void checkAssetconfigFile(String configDetail, String rnDir) {
         String[] lines = configDetail.split(",");
