@@ -20,6 +20,7 @@ import com.facebook.react.common.LifecycleState;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.react.views.text.ReactFontManager;
 import com.fego.android.utils.AssetUtil;
+import com.fego.android.utils.DiffMatchPatchUtils;
 import com.fego.android.utils.FileUtils;
 
 import org.greenrobot.eventbus.EventBus;

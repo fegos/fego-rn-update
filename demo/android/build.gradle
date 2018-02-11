@@ -1,25 +1,4 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-ext {
-    android = [
-            compileSdkVersion    : 23,
-            buildToolsVersion    : "23.0.3",
-            supportLibraryVersion: '23.4.0',
-            minSdkVersion        : 16,
-            targetSdkVersion     : 23
-    ]
-
-    dependencies = [
-            libs              : fileTree(include: ['*.jar'], dir: 'libs/jar'),
-            test              : "junit:junit:4.12",
-            support_v7        : "com.android.support:appcompat-v7:${android.supportLibraryVersion}",
-
-            eventbus          : "org.greenrobot:eventbus:3.0.0",
-            retrofit          : "com.squareup.retrofit2:retrofit:2.1.0",
-            retrofit_gson     : "com.squareup.retrofit2:converter-gson:2.0.0",
-            rn                : "com.facebook.react:react-native:0.47.2"
-    ]
-}
-
 buildscript {
     repositories {
         jcenter()

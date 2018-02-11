@@ -103,6 +103,10 @@ distributionUrl=https\://services.gradle.org/distributions/gradle-3.3-all.zip
 ```
 dependencies {
     compile project(':fego')
+	// 需要添加以下依赖项
+	compile "org.greenrobot:eventbus:3.0.0"
+    compile "com.squareup.retrofit2:retrofit:2.1.0"
+    compile "com.squareup.retrofit2:converter-gson:2.0.0"
 }
 ```
 

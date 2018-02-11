@@ -2,12 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven'
 
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        minSdkVersion 16
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
 
@@ -27,13 +27,12 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile rootProject.ext.dependencies.rn
-    compile rootProject.ext.dependencies.support_v7
+    compile "com.facebook.react:react-native:0.47.2"
     testCompile 'junit:junit:4.12'
     testCompile "org.robolectric:robolectric:3.6.1"
     testCompile "org.mockito:mockito-core:1.+"
 
-    provided rootProject.ext.dependencies.retrofit
-    provided rootProject.ext.dependencies.retrofit_gson
-    provided rootProject.ext.dependencies.eventbus
+    provided "com.squareup.retrofit2:retrofit:2.1.0"
+    provided "com.squareup.retrofit2:converter-gson:2.0.0"
+    provided "org.greenrobot:eventbus:3.0.0"
 }
