@@ -189,10 +189,10 @@ public class ReactManager {
             Class<?> clazz = builder.getClass();
             Method method = null;
             try {
-                method = clazz.getMethod("setJSMainModuleName");
+                method = clazz.getMethod("setJSMainModuleName", String.class);
             } catch (Exception ex) {
                 try {
-                    method = clazz.getMethod("setJSMainModulePath");
+                    method = clazz.getMethod("setJSMainModulePath", String.class);
 
                 } catch (Exception ex0) {
 
