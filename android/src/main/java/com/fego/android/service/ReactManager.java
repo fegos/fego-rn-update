@@ -429,23 +429,18 @@ public class ReactManager {
                         jsConfigFactoryClass.getDeclaredConstructor(WritableNativeMap.class).newInstance(jsConfigMap),
                         com.facebook.react.bridge.JSBundleLoader.createFileLoader(rnDir + File.separator + bundleName));
             } catch (Exception ex) {
-                ex.printStackTrace();
-                Field f = rnManagerClazz.getDeclaredField("mJSCConfig");
+
+                Field f = rnManagerClazz.getDeclaredField("mJavaScriptExecutorFactory");
                 f.setAccessible(true);
-
                 Object jscConfig = f.get(rnInstanceManager);
-                Method getConfigMapMethod = jscConfig.getClass().getDeclaredMethod("getConfigMap");
-                Object jsConfigMap = getConfigMapMethod.invoke(jscConfig);
 
-                Class jsConfigClass = Class.forName("com.facebook.react.bridge.JavaScriptExecutor.Factory.class");
                 Method method = rnManagerClazz.getDeclaredMethod("recreateReactContextInBackground",
-                        jsConfigClass,
+                        Class.forName("com.facebook.react.bridge.JavaScriptExecutorFactory"),
                         com.facebook.react.bridge.JSBundleLoader.class);
                 method.setAccessible(true);
 
-                Class jsConfigFactoryClass = Class.forName("com.facebook.react.bridge.JSCJavaScriptExecutor.Factory");
                 method.invoke(rnInstanceManager,
-                        jsConfigFactoryClass.getDeclaredConstructor(ReadableNativeMap.class).newInstance(jsConfigMap),
+                        jscConfig,
                         com.facebook.react.bridge.JSBundleLoader.createFileLoader(rnDir + File.separator + bundleName));
             }
 
