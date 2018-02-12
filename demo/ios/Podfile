@@ -11,6 +11,7 @@ target 'hotUpdate' do
   pod 'ZipArchive',               '~> 1.4.0'
   pod 'React’, :path => ‘../node_modules/react-native’, :subspecs => [
     'Core',
+    'BatchedBridge',
     'DevSupport', # Include this to enable In-App Devmenu if RN >= 0.43
     'RCTActionSheet',
     'RCTText',
