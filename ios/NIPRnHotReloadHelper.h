@@ -84,5 +84,5 @@
  
  @param input 文件Data
  */
-+ (NSString *)md5:(NSData *) input;
++(NSString*)getFileMD5WithPath:(NSString*)path;
 @end

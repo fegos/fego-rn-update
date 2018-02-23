@@ -288,8 +288,7 @@
 }
 
 -(BOOL)checkMD5OfRnZip:(NSString*)path{
-    NSData *zipData = [NSData dataWithContentsOfFile:path];
-    NSString* MD5OfZip = [NIPRnHotReloadHelper md5:zipData];
+    NSString* MD5OfZip = [NIPRnHotReloadHelper getFileMD5WithPath:path];
     NSLog(@"下载文件的MD5值为：%@",MD5OfZip);
     
     if (self.remoteMD5 == MD5OfZip) {
