@@ -79,4 +79,10 @@
  @param names 字体文件名数组
  */
 + (void)registerIconFontsByNames:(NSArray *)names;
+/**
+ 生成文件MD5值
+ 
+ @param input 文件Data
+ */
++ (NSString *)md5:(NSData *) input;
 @end

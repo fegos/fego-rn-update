@@ -43,6 +43,10 @@
  *  用来记录远程数据的SDK版本号,默认=RN_SDK_VERSION
  */
 @property (nonatomic, strong) NSString* remoteSDKVersion;
+/**
+ *  用来验证文件的MD5值
+ */
+@property (nonatomic, strong) NSString* remoteMD5;
 
 @property (nonatomic, copy) CFRCTUpdateAssetsSuccesBlock successBlock;
 @property (nonatomic, copy) CFRCTUpdateAssetsFailBlock failBlock;
@@ -189,22 +193,17 @@
     NSString *remoteLowDataVersion = nil;
     NSString *wholeStr = nil;
     if (items.count >= 4) {
-      //            NSString *remoteSdkVersion = [items objectAtIndex:0];
-      //            NSString *remoteDataVersion = [items objectAtIndex:1];
-      //            NSString *remoteDataZip = [items objectAtIndex:2];
-      //            if ([remoteSdkVersion isEqualToString:NIP_RN_SDK_VERSION]) {
-      //            if ([self.localDataVersion isEqualToString:@"0"] || ![self.localDataVersion isEqualToString:remoteDataVersion]) {
+
       self.remoteSDKVersion = [items objectAtIndex:0];
       self.remoteDataVersion = [items objectAtIndex:1];
       remoteLowDataVersion = [items objectAtIndex:2];
       wholeStr = [items objectAtIndex:3];
+      self.remoteMD5 = [items objectAtIndex:4];
       if (wholeStr.length > 1) {
         wholeStr = [wholeStr substringWithRange:NSMakeRange(0, 1)];
       }
       if ([self.remoteSDKVersion isEqualToString:NIP_RN_SDK_VERSION]) {
-        //                if ([self.localDataVersion isEqualToString:@"0"] || ![self.localDataVersion isEqualToString:self.remoteDataVersion]) {
         if ([self.localDataVersion isEqualToString:remoteLowDataVersion]) {
-          //                    [self downLoadRCTData:remoteDataVersion zip:remoteDataZip];
           [self downLoadRCTZip:@"rn" withWholeString:wholeStr];
           needDownload = YES;
           break;
@@ -278,16 +277,29 @@
                                                 actualPath = [actualPath substringFromIndex:7];
                                               }
                                               NSLog(@"热更新zip地址：%@", actualPath);
-                                              //                [weakSelf removeOldDataFiles];
-                                              //                [weakSelf writeDataFromPath:actualPath];
-                                              [[NSUserDefaults standardUserDefaults] setObject:self.remoteDataVersion forKey:RN_DATA_VERSION];
-                                              [[NSUserDefaults standardUserDefaults] setObject:NIP_RN_SDK_VERSION forKey:RN_SDK_VERSION];
-                                              [self alertIfUpdateRnZipWithFilePath:actualPath];
-                                              
-                                              
+                                              //检查MD5值是否正确
+                                              if(![self checkMD5OfRnZip:actualPath]){
+                                                [weakSelf requestSuccess:NO];
+                                              }
+
                                             }
                                           }];
   [self.downloadTask resume];
+}
+
+-(BOOL)checkMD5OfRnZip:(NSString*)path{
+    NSData *zipData = [NSData dataWithContentsOfFile:path];
+    NSString* MD5OfZip = [NIPRnHotReloadHelper md5:zipData];
+    NSLog(@"下载文件的MD5值为：%@",MD5OfZip);
+    
+    if (self.remoteMD5 == MD5OfZip) {
+        [[NSUserDefaults standardUserDefaults] setObject:self.remoteDataVersion forKey:RN_DATA_VERSION];
+        [[NSUserDefaults standardUserDefaults] setObject:NIP_RN_SDK_VERSION forKey:RN_SDK_VERSION];
+        [self alertIfUpdateRnZipWithFilePath:path];
+        return true;
+    }
+    return false;
+
 }
 
 - (NSString *)filePathOfRnZip {

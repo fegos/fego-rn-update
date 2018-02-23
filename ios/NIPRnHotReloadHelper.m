@@ -8,6 +8,7 @@
 
 #import "NIPRnHotReloadHelper.h"
 #import <CoreText/CoreText.h>
+#import<CommonCrypto/CommonDigest.h>
 
 @interface NIPRnHotReloadHelper()
 
@@ -248,5 +249,17 @@
   }
 }
 
++ (NSString *)md5:(NSData *) input{
+    const char* str = input.bytes;
+    unsigned char result[CC_MD5_DIGEST_LENGTH];
+    
+    CC_MD5(str, (CC_LONG)input.length, result);
+    
+    NSMutableString *output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++)
+        [output appendFormat:@"%02x", result[i]];
+    
+    return  output;
+}
 
 @end
