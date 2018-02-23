@@ -93,7 +93,7 @@ public class ReactManager {
     /**
      * rn bundle文件名
      */
-    private String bundleName = "index.bundle";
+    private String bundleName = "index.jsbundle";
     /**
      * 用于请求配置文件
      */
@@ -106,6 +106,10 @@ public class ReactManager {
      * 用来临时记录增量还是全量
      */
     private String type = null;
+    /**
+     * 用来临时记录zip包的md5值
+     */
+    private String md5Value = "";
     private Application application = null;
     private Activity currentActivity;
     private ReactInstanceManager rnInstanceManager;
@@ -306,6 +310,7 @@ public class ReactManager {
                         continue;
                     }
                     type = infos[3];
+                    md5Value = infos[4];
                     if (remoteSdkVersion.equals(SDK_VERSION)) {
                         //如果新版本字典存在,说明是已下载还没有使用的资源,如果跟线上的版本号相同也不必要下载了
                         String needUpdateVersion = ReactPreference.getInstance().getString(NEW_BUNDLE_VERSION);
@@ -341,9 +346,12 @@ public class ReactManager {
                     File file = new File(downloadFilePath);
                     boolean writtenToDisk = FileUtils.writeResponseBodyToDisk(response.body(), file);
                     if (writtenToDisk) {
-                        ReactPreference.getInstance().save(NEW_BUNDLE_PATH, downloadFilePath);
-                        ReactPreference.getInstance().save(NEW_BUNDLE_VERSION, remoteDataVersion);
-                        EventBus.getDefault().post(NPReactManagerTask.GetNewReactVersionSource);
+                        String tmpValue = FileUtils.getMd5ByFile(file);
+                        if (tmpValue.equals(md5Value)) {
+                            ReactPreference.getInstance().save(NEW_BUNDLE_PATH, downloadFilePath);
+                            ReactPreference.getInstance().save(NEW_BUNDLE_VERSION, remoteDataVersion);
+                            EventBus.getDefault().post(NPReactManagerTask.GetNewReactVersionSource);
+                        }
                     }
                 }
             }
