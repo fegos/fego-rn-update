@@ -291,7 +291,7 @@
     NSString* MD5OfZip = [NIPRnHotReloadHelper getFileMD5WithPath:path];
     NSLog(@"下载文件的MD5值为：%@",MD5OfZip);
     
-    if (self.remoteMD5 == MD5OfZip) {
+    if ([self.remoteMD5 isEqualToString: MD5OfZip]) {
         [[NSUserDefaults standardUserDefaults] setObject:self.remoteDataVersion forKey:RN_DATA_VERSION];
         [[NSUserDefaults standardUserDefaults] setObject:NIP_RN_SDK_VERSION forKey:RN_SDK_VERSION];
         [self alertIfUpdateRnZipWithFilePath:path];
