@@ -73,7 +73,7 @@ $ npm install fego-rn-update --save
 ## 手动安装
 
 ### Android
-1. 把下面几行添加到 `android/build.gradle`
+1. 把下面几行添加到 `android/setting.gradle`
 
 ```
 include ':fego'
