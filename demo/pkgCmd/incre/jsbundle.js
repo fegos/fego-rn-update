@@ -29,7 +29,7 @@ module.exports = function (oldVer, newVer, sdkVer, platform) {
 	// 增量包路径前缀；
 	var incrementPathPrefix = pathPrefix + '/increment/';
 	// 全量包路径前缀：
-	var allPathPrefix = pathPrefix + '/all/';
+	var allPathPrefix = pathPrefix + '/all/temp/';
 	// 全量包bundle的名字
 	const bundleName = 'index.jsbundle';
 	// 增量包里bundle的名字

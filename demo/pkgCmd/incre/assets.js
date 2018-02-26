@@ -32,7 +32,7 @@ module.exports = function (oldVer, newVer, sdkVer, platform, isIncrement) {
 	//增量包路径前缀；
 	var incrementPathPrefix = pathPrefix + '/increment/';
 	//全量包路径前缀：
-	var allPathPrefix = pathPrefix + '/all/';
+	var allPathPrefix = pathPrefix + '/all/temp/';
 	//全量包zip名字
 	var zipName = 'rn_' + sdkVer;
 	var oldZipName = zipName + '_' + oldVer;
