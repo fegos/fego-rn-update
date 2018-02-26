@@ -72,6 +72,9 @@ function unzipAll() {
 		}
 
 		// 将解压包存放至temp文件中，方便git忽略
+		if (!fs.existsSync(allPathPrefix + 'temp/')) {
+			fs.mkdirSync(allPathPrefix + 'temp/');
+		}
 		if (!fs.existsSync(allPathPrefix + 'temp/' + sdkVer)) {
 			fs.mkdirSync(allPathPrefix + 'temp/' + sdkVer);
 		}

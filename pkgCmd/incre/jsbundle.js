@@ -7,6 +7,7 @@ var diff = require('../third/diff_match_patch_uncompressed');
 var dmp = new diff.diff_match_patch();
 var assets = require('./assets');
 var zipper = require("zip-local");
+var crypto = require('crypto');
 
 /**
  * bundle增量生成函数
@@ -28,7 +29,7 @@ module.exports = function (oldVer, newVer, sdkVer, platform) {
 	// 增量包路径前缀；
 	var incrementPathPrefix = pathPrefix + '/increment/';
 	// 全量包路径前缀：
-	var allPathPrefix = pathPrefix + '/all/';
+	var allPathPrefix = pathPrefix + '/all/temp/';
 	// 全量包bundle的名字
 	const bundleName = 'index.jsbundle';
 	// 增量包里bundle的名字
@@ -163,9 +164,10 @@ module.exports = function (oldVer, newVer, sdkVer, platform) {
 			if (!error) {
 				zipped.save(zipPath + '.zip', function (error) {
 					if (!error) {
+						let md5Value = generateFileMd5(zipPath + '.zip');
 						console.log("ZIP EXCELLENT!");
 						deleteFolder(zipPath);
-						fs.appendFileSync(incrementPathPrefix + '/config', sdkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement + ',');
+						fs.appendFileSync(incrementPathPrefix + '/config', sdkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement + '_' + md5Value + ',');
 					} else {
 						console.log("ZIP FAIL!");
 					}
@@ -173,6 +175,18 @@ module.exports = function (oldVer, newVer, sdkVer, platform) {
 			}
 		});
 
+	}
+
+	/**
+	 * 生成文件md5值
+	 * @param {*} filepath 
+	 */
+	function generateFileMd5(filepath) {
+		var buffer = fs.readFileSync(filepath);
+		var fsHash = crypto.createHash('md5');
+		fsHash.update(buffer);
+		var md5 = fsHash.digest('hex');
+		return md5;
 	}
 
 	/**

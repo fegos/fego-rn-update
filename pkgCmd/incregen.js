@@ -71,13 +71,19 @@ function unzipAll() {
 			return;
 		}
 
-		// 判断是否已经存在sdkVer目录，不存在则创建，以免出现文件夹不存在的问题
-		if (!fs.existsSync(allPathPrefix + sdkVer + '/' + zipName)) {
-			fs.mkdirSync(allPathPrefix + sdkVer + '/' + zipName);
+		// 将解压包存放至temp文件中，方便git忽略
+		if (!fs.existsSync(allPathPrefix + 'temp/')) {
+			fs.mkdirSync(allPathPrefix + 'temp/');
+		}
+		if (!fs.existsSync(allPathPrefix + 'temp/' + sdkVer)) {
+			fs.mkdirSync(allPathPrefix + 'temp/' + sdkVer);
+		}
+		if (!fs.existsSync(allPathPrefix + 'temp/' + sdkVer + '/' + zipName)) {
+			fs.mkdirSync(allPathPrefix + 'temp/' + sdkVer + '/' + zipName);
 		}
 
 		// 解压包
-		zipper.sync.unzip(allPathPrefix + sdkVer + '/' + zipName + ".zip").save(allPathPrefix + sdkVer + '/' + zipName);
+		zipper.sync.unzip(allPathPrefix + sdkVer + '/' + zipName + ".zip").save(allPathPrefix + 'temp/' + sdkVer + '/' + zipName);
 	}
 
 	// 更新config文件，将其改为newVer+1
