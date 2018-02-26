@@ -1,4 +1,4 @@
-platform="android"
+platform="ios"
 if [ $# = 1 ]; then
 	if [ $1 = 'ios' ];then
 		platform="ios"

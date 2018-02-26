@@ -32,7 +32,7 @@ zipName=''
 # currentPath=`pwd`
 #rn资源ftp的相对路径
 #mac
-configDir=$path/$platform/all/$sdkVer/
+configDir=$path$platform/all/$sdkVer/
 if [ ! -e "$configDir" ]; then 
 	mkdir $configDir
 fi
