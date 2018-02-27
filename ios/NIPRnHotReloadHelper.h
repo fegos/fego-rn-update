@@ -82,7 +82,7 @@
 /**
  生成文件MD5值
  
- @param input 文件Data
+ @param path 文件路径
  */
 +(NSString*)getFileMD5WithPath:(NSString*)path;
 @end
