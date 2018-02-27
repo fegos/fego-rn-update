@@ -12,8 +12,6 @@
 
 #define TEMP_DIRECTORY NSTemporaryDirectory()
 #define TEST_JSBUNDLE_DIRECTORY [NSTemporaryDirectory() stringByAppendingString:@"test.jsbundle"]
-//#define TEST_JSBUNDLE_DIRECTORY_FILE_TO_DEL [NSTemporaryDirectory() stringByAppendingString:@"delTest.jsbundle"]
-//#define TEST_JSBUNDLE_DIRECTORY_FOLDER_TO_DEL [NSTemporaryDirectory() stringByAppendingString:@"/delTest/delTest.jsbundle"]
 
 @interface NIPRNHotReloadHelperTests : XCTestCase
 
@@ -26,7 +24,6 @@
     //temp中添加.jsbundle，用来进行文件系统的相关测试
     NSString *string = @"test";
     [string writeToFile:TEST_JSBUNDLE_DIRECTORY atomically:YES encoding:NSUTF8StringEncoding error:nil];
-//    [string writeToFile:TEST_JSBUNDLE_DIRECTORY_FILE_TO_DEL atomically:YES encoding:NSUTF8StringEncoding error:nil];
 }
 
 - (void)tearDown {

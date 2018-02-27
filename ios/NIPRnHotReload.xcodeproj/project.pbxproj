@@ -28,6 +28,7 @@
 		AF7D2ACD20440946004BBF11 /* NIPRnManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7D2AC320440946004BBF11 /* NIPRnManager.m */; };
 		AF7D2ACE20440946004BBF11 /* NIPRnUpdateService.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7D2AC420440946004BBF11 /* NIPRnUpdateService.m */; };
 		AF7D2AD020440B8C004BBF11 /* NIPRNHotReloadHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7D2ACF20440B8C004BBF11 /* NIPRNHotReloadHelperTests.m */; };
+		AF7D2AD6204509D4004BBF11 /* NIPRnUpdateServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7D2AD5204509D4004BBF11 /* NIPRnUpdateServiceTests.m */; };
 		FD084195F33FE5C5318DE1F8 /* libPods-NIPRnHotReload.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 13D81632A3A7CF579C0CAE3D /* libPods-NIPRnHotReload.a */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +99,7 @@
 		AF7D2AC320440946004BBF11 /* NIPRnManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPRnManager.m; sourceTree = "<group>"; };
 		AF7D2AC420440946004BBF11 /* NIPRnUpdateService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPRnUpdateService.m; sourceTree = "<group>"; };
 		AF7D2ACF20440B8C004BBF11 /* NIPRNHotReloadHelperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NIPRNHotReloadHelperTests.m; sourceTree = "<group>"; };
+		AF7D2AD5204509D4004BBF11 /* NIPRnUpdateServiceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NIPRnUpdateServiceTests.m; sourceTree = "<group>"; };
 		C1965E3D89BEED3FCAEEB6E1 /* Pods-NIPRnHotReload.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NIPRnHotReload.release.xcconfig"; path = "Pods/Target Support Files/Pods-NIPRnHotReload/Pods-NIPRnHotReload.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -196,6 +198,7 @@
 			children = (
 				AF7D2A6E20440668004BBF11 /* NIPRnHotReloadTests.m */,
 				AF7D2ACF20440B8C004BBF11 /* NIPRNHotReloadHelperTests.m */,
+				AF7D2AD5204509D4004BBF11 /* NIPRnUpdateServiceTests.m */,
 				AF7D2A7020440668004BBF11 /* Info.plist */,
 			);
 			path = NIPRnHotReloadTests;
@@ -550,6 +553,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AF7D2AD020440B8C004BBF11 /* NIPRNHotReloadHelperTests.m in Sources */,
+				AF7D2AD6204509D4004BBF11 /* NIPRnUpdateServiceTests.m in Sources */,
 				AF7D2A6F20440668004BBF11 /* NIPRnHotReloadTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
