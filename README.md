@@ -5,6 +5,7 @@
 # 项目介绍
 
 + 基于React Native的热更新库
++ 目前支持ReactNative版本0.47-0.53
 + 提供android和ios两端的支持
 + 支持增量更新，配置简单，部署方便，一键打包
 
@@ -187,20 +188,34 @@ pod update
 ├── android             # 存放android生成的包
 │   ├── all             # 存放全量包
 │   │   └── README.md   
+│   │   └── temp		# 存放解压后的包，该目录可添加到.gitignore文件中
+│   │       └── README.md
 │   └── increment       # 存放增量包
 │       └── README.md
 └── ios                 # 存放ios生成的包
     ├── all             # 存放全量包
     │   └── README.md
+	│   └── temp		# 存放解压后的包，该目录可添加到.gitignore文件中
+    │       └── README.md
     └── increment       # 存放增量包
         └── README.md
 ```
 
 3. 修改配置文件`config.js`中的`path`和`sdk`
 
+	path：生成包存储路径
+	sdk：跟apk版本号一致
+
 ```
 // 写个用户名跟路径对应的字典，这个方便一个工程多个人维护使用，支持mac
 let map = {
+	/**
+	 * 注意：
+	 * 1、username为电脑用户名；
+	 * 2、path为包存储位置，末尾需要加“/”，否则会报路径错误
+	 */
+	"username1": "path1",
+	"username2": "path2"
 }
 // 获取系统信息
 let os = require('os');
