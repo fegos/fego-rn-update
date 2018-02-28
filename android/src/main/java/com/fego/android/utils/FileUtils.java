@@ -40,8 +40,8 @@ public class FileUtils {
         }
         if (file.isDirectory()) {
             File[] arrayOfFile = file.listFiles();
-            for (File loalFile : arrayOfFile) {
-                delete(loalFile);
+            for (File localFile : arrayOfFile) {
+                delete(localFile);
             }
         }
         return file.delete();
@@ -75,15 +75,17 @@ public class FileUtils {
      * @param data         要写入的内容
      * @param fileFullName 写入的文件
      */
-    public static void writeFile(byte[] data, String fileFullName) {
+    public static boolean writeFile(byte[] data, String fileFullName) {
         try {
             File file = new File(fileFullName);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             fileOutputStream.write(data);
             fileOutputStream.flush();
             fileOutputStream.close();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -94,7 +96,7 @@ public class FileUtils {
      * @param zipFile    zip文件
      * @param folderPath 解压的目标路径
      */
-    public static void upZipFile(File zipFile, String folderPath) {
+    public static boolean upZipFile(File zipFile, String folderPath) {
         try {
             ZipFile zFile = new ZipFile(zipFile);
             Enumeration zList = zFile.entries();
@@ -123,8 +125,10 @@ public class FileUtils {
                 os.close();
             }
             zFile.close();
+            return true;
         } catch (Exception ex) {
             ex.printStackTrace();
+            return false;
         }
     }
 
@@ -160,10 +164,12 @@ public class FileUtils {
      *
      * @param filePath 文件路径
      */
-    public static void deleteFile(String filePath) {
+    public static boolean deleteFile(String filePath) {
         File patFile = new File(filePath);
         if (patFile.exists()) {
-            patFile.delete();
+            return patFile.delete();
+        } else {
+            return false;
         }
     }
 
@@ -176,22 +182,19 @@ public class FileUtils {
      */
     public static boolean writeResponseBodyToDisk(ResponseBody body, File file) {
         try {
-            File futureStudioIconFile = file;
+            File futureFile = file;
             InputStream inputStream = null;
             OutputStream outputStream = null;
             try {
                 byte[] fileReader = new byte[4096];
-                long fileSize = body.contentLength();
-                long fileSizeDownloaded = 0;
                 inputStream = body.byteStream();
-                outputStream = new FileOutputStream(futureStudioIconFile);
+                outputStream = new FileOutputStream(futureFile);
                 while (true) {
                     int read = inputStream.read(fileReader);
                     if (read == -1) {
                         break;
                     }
                     outputStream.write(fileReader, 0, read);
-                    fileSizeDownloaded += read;
                 }
                 outputStream.flush();
                 return true;
