@@ -232,15 +232,27 @@ module.exports = {
 ```
 sh pkg.sh platform  // 其中platform为android/ios
 ```
-**注意**：首次运行，因为只生成一个包，故会提示没有新包，并需要在android和ios两个工程中均放置一份包，android放在`android/app/src/main/assets/rn/`下，ios放于`ios/项目名/rn/`下；之后在同一sdk下继续运行该脚本时，会进行增量包生成。
+**注意**：
 
-5. 在原生修改启动文件名字为`index.js`，bundle名字为`index.jsbundle`，请求地址为`config请求地址`
+	+ 首次运行，因为只生成一个包，故会提示没有新包，不会生成增量包；
+	+ 运行之后需要在android和ios两个工程中均放置一份解压后的包，android放在`android/app/src/main/assets/rn/`下，ios放于`ios/项目名/rn/`下（目录若需调整，需要修改原生代码，建议不修改）；
+	+ 之后在同一sdk版本下继续运行该脚本时，会进行增量包生成。
+	+ 生成包之后，需要上传到服务器，用于原生更新时请求，此时的地址就是上面需要在原生中配置的sourceUrl
+
+5. 在原生修改几处
+
++ 启动文件名字为`index.js`；
++ bundle名字为`index.jsbundle`；
++ 请求地址为`config请求地址`（如demo中，请求地址为https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/increment/，ios平台只需替换地址中的android即可，ios无需加末尾的‘/’）
 
 `android`：在MainActivity中修改
 
 `ios`：在AppDelegate中修改
 
-**注意**：android和ios需要统一启动文件名称，均为index.js，否则需要修改全量打包脚本；bundle名字也需要两端统一为index.jsbundle，否则需要修改增量更新打包脚本
+**注意**：
+
+	+ android和ios需要统一启动文件名称，均为index.js，否则需要修改全量打包脚本；
+	+ bundle名字也需要两端统一为index.jsbundle，否则需要修改增量更新打包脚本
 
 6. js端调用
 
