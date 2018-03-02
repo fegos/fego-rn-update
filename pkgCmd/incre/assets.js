@@ -50,14 +50,34 @@ module.exports = function (oldVer, newVer, sdkVer, platform, isIncrement) {
 		if (!fs.existsSync(allPathPrefix + sdkVer + '/' + newZipName + dir)) {
 			return;
 		}
+		if (!fs.existsSync(allPathPrefix + sdkVer + '/' + oldZipName + dir)) {
+			// 此时应让将最新的包中的资源放到增量包中
+			resultNew = rd.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + dir); max = resultNew.length;
+			for (let i = 0; i < max; i++) {
+				if (platform === 'android' && resultNew[i].search('drawable-') !== -1) {
+					resultNew[i] = resultNew[i].substring(resultNew[i].indexOf('drawable-'));
+					fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]));
+				} else if (platform === 'ios' && resultNew[i].search('assets') !== -1) {
+					resultNew[i] = resultNew[i].substring(resultNew[i].indexOf('assets'));
+					fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]));
+				} else {
+					//删除不是drawable下的文件
+					resultNew.splice(i, 1);
+					max = max - 1;
+					i = i - 1;
+				}
+			}
+			resultNew = [];
+			return;
+		}
 		resultOld = rd.readFileSync(allPathPrefix + sdkVer + '/' + oldZipName + dir);
 		resultNew = rd.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + dir);
 		let max = resultOld.length;
 		for (let i = 0; i < max; i++) {
-			if (resultOld[i].search('drawable-') !== -1) {
+			if (platform === 'android' && resultOld[i].search('drawable-') !== -1) {
 				resultOld[i] = resultOld[i].substring(resultOld[i].indexOf('drawable-'))
 				hashOld[resultOld[i]] = true;
-			} else if (resultOld[i].search('assets') !== -1) {
+			} else if (platform === 'ios' && resultOld[i].search('assets') !== -1) {
 				resultOld[i] = resultOld[i].substring(resultOld[i].indexOf('assets'))
 				hashOld[resultOld[i]] = true;
 			} else {
@@ -69,10 +89,10 @@ module.exports = function (oldVer, newVer, sdkVer, platform, isIncrement) {
 		}
 		max = resultNew.length;
 		for (let i = 0; i < max; i++) {
-			if (resultNew[i].search('drawable-') !== -1) {
+			if (platform === 'android' && resultNew[i].search('drawable-') !== -1) {
 				resultNew[i] = resultNew[i].substring(resultNew[i].indexOf('drawable-'))
 				hashNew[resultNew[i]] = true;
-			} else if (resultNew[i].search('assets') !== -1) {
+			} else if (platform === 'ios' && resultNew[i].search('assets') !== -1) {
 				resultNew[i] = resultNew[i].substring(resultNew[i].indexOf('assets'))
 				hashNew[resultNew[i]] = true;
 			} else {
