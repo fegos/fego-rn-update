@@ -11,7 +11,7 @@ else
 	sedPath='pkgCmd/'
 fi
 echo $sedPath
-path=`sed -n "/$user/s/[^\']*\'$user\':[^\']*\'\([^\']*\)'.*/\1/p" ${sedPath}config.js`
+path=`sed -n "/$user/s/[^\']*$user:[^\']*\'\([^\']*\)'.*/\1/p" ${sedPath}config.js`
 echo $path
 platform="android"
 if [ $# = 1 ]; then
