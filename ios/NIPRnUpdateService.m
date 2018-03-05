@@ -198,7 +198,10 @@
       self.remoteDataVersion = [items objectAtIndex:1];
       remoteLowDataVersion = [items objectAtIndex:2];
       wholeStr = [items objectAtIndex:3];
-      self.remoteMD5 = [items objectAtIndex:4];
+      //兼容没有MD5加密的版本
+      if(items.count>=5){
+        self.remoteMD5 = [items objectAtIndex:4];
+      }
       if (wholeStr.length > 1) {
         wholeStr = [wholeStr substringWithRange:NSMakeRange(0, 1)];
       }
@@ -288,10 +291,11 @@
 }
 
 -(BOOL)checkMD5OfRnZip:(NSString*)path{
+
     NSString* MD5OfZip = [NIPRnHotReloadHelper getFileMD5WithPath:path];
     NSLog(@"下载文件的MD5值为：%@",MD5OfZip);
-    
-    if ([self.remoteMD5 isEqualToString: MD5OfZip]) {
+    //对于没有md5的情况直接返回成功
+    if (!self.remoteMD5 || [self.remoteMD5 isEqualToString: MD5OfZip]) {
         [[NSUserDefaults standardUserDefaults] setObject:self.remoteDataVersion forKey:RN_DATA_VERSION];
         [[NSUserDefaults standardUserDefaults] setObject:NIP_RN_SDK_VERSION forKey:RN_SDK_VERSION];
         [self alertIfUpdateRnZipWithFilePath:path];
