@@ -150,12 +150,22 @@ pod 'FegoRnUpdate'
 ```
 pod update
 ```
-3. AppDelegate中添加热更新代码
+3.调用热更新代码
+```
+[[NIPRnManager sharedManager] requestRCTAssetsBehind];
+```
+4.处理结果通知
+```
+[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(successHandler) name:@"RNHotReloadRequestSuccess" object:nil];
+[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(failHandler) name:@"RNHotReloadRequestfail" object:nil];
+```
+5. AppDelegate中添加热更新代码的例子
 ```
 #import "NIPRnManager.h"
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [self loadRnController];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRnController) name:@"RNHotReloadRequestSuccess" object:nil];
 
@@ -163,7 +173,6 @@ pod update
 }
 
 - (void)loadRnController {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     /**
     @param bundleUrl 服务器存放bundle的地址
     @param noHotUpdate 用来标记只使用工程自带的rn包，不支持热更新 default:NO
@@ -178,6 +187,7 @@ pod update
     #pragma clang diagnostic pop
 }
 ```
+
 
 # 使用
 
