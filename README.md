@@ -141,6 +141,29 @@ if (mReactRootView == null) {
     setContentView(mReactRootView);
 }
 ```
+
+7、调用热更新代码（也可js端调用）
+
+```
+ReactManager.getInstance().loadBundleBehind();
+```
+8、处理结果通知
+
+```
+// onCreate中注册EventBus
+EventBus.getDefault().register(this);
+// onDestroy中
+EventBus.getDefault().unregister(this);
+// 添加监听
+@Subscribe
+public void onEventMainThread(ReactManager.NPReactManagerTask task) {
+    if (task == ReactManager.NPReactManagerTask.GetNewReactVersionSource) {
+		// 可以直接调用ReactManager.getInstance().doReloadBundle();进行更新
+		// 或者进行弹窗提示
+        questionUpdateReactSource();
+    }
+}
+```
 ### IOS
 1. pod库引入热更新库，Podfile中添加：
 ```
@@ -248,7 +271,7 @@ sh pkg.sh platform  // 其中platform为android/ios
 **注意**：
 
 	+ 首次运行，因为只生成一个包，故会提示没有新包，不会生成增量包；
-	+ 运行之后需要在android和ios两个工程中均放置一份解压后的包，android放在`android/app/src/main/assets/rn/`下，ios放于`ios/项目名/rn/`下（目录若需调整，需要修改原生代码，建议不修改）；
+	+ 运行之后需要在android和ios两个工程中均放置一份解压后的包，android放在`assets/rn/`下，ios放于`项目名/rn/`下（目录若需调整，需要修改原生代码，建议不修改）；
 	+ 之后在同一sdk版本下继续运行该脚本时，会进行增量包生成。
 	+ 生成包之后，需要上传到服务器，用于原生更新时请求，此时的地址就是上面需要在原生中配置的sourceUrl
 
