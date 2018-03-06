@@ -33,6 +33,7 @@
 //  rootViewController.view = rootView;
 //  self.window.rootViewController = rootViewController;
 //  [self.window makeKeyAndVisible];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRnController) name:@"RNHotReloadRequestSuccess" object:nil];
   
   [self loadDefaultKeyWindow];
   

@@ -321,24 +321,26 @@
 }
 
 - (void)alertIfUpdateRnZipWithFilePath:(NSString *)filePath {
-  /*最低支持ios8，故直接使用alertViewController*/
-  UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"有新的资源包可以更新，是否立即更新" preferredStyle:UIAlertControllerStyleAlert];
-  UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
     [self unzipAssets:filePath];
-    HOTRELOAD_SUPPRESS_Undeclaredselector_WARNING([[[UIApplication sharedApplication] delegate] performSelector:@selector(loadRnController)]);
 
-  }];
-  UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-    
-  }];
-  [alertVC addAction:actionOK];
-  [alertVC addAction:actionCancel];
-  
-  UIViewController *topController = [[NIPRnHotReloadHelper alloc] topViewControllerWithRootViewController:[UIApplication sharedApplication].keyWindow.rootViewController];
-  
-  if (![topController isKindOfClass:[UIAlertController class]]) { //避免alertcontroller弹出多次
-    [topController presentViewController:alertVC animated:YES completion:nil];
-  }
+//  /*最低支持ios8，故直接使用alertViewController*/
+//  UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"有新的资源包可以更新，是否立即更新" preferredStyle:UIAlertControllerStyleAlert];
+//  UIAlertAction *actionOK = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//    [self unzipAssets:filePath];
+//    HOTRELOAD_SUPPRESS_Undeclaredselector_WARNING([[[UIApplication sharedApplication] delegate] performSelector:@selector(loadRnController)]);
+//
+//  }];
+//  UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//
+//  }];
+//  [alertVC addAction:actionOK];
+//  [alertVC addAction:actionCancel];
+//
+//  UIViewController *topController = [[NIPRnHotReloadHelper alloc] topViewControllerWithRootViewController:[UIApplication sharedApplication].keyWindow.rootViewController];
+//
+//  if (![topController isKindOfClass:[UIAlertController class]]) { //避免alertcontroller弹出多次
+//    [topController presentViewController:alertVC animated:YES completion:nil];
+//  }
   
 }
 
@@ -347,11 +349,20 @@
  */
 - (void)requestSuccess:(BOOL)bSuccess
 {
-  if (bSuccess && self.successBlock) {
-    self.successBlock();
-  }
-  else if (self.failBlock) {
-    self.failBlock();
+  if (bSuccess) {
+        //发送成功通知
+      [[NSNotificationCenter defaultCenter] postNotificationName:@"RNHotReloadRequestSuccess" object:nil];
+      if(self.successBlock){
+          self.successBlock();
+      }
+      
+  }else
+  {
+      //发送失败通知
+      [[NSNotificationCenter defaultCenter] postNotificationName:@"RNHotReloadRequestfail" object:nil];
+      if (self.failBlock) {
+          self.failBlock();
+      }
   }
 }
 

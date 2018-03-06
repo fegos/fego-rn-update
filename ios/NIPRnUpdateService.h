@@ -12,11 +12,11 @@
 /**
  资源下载成功回调
  */
-typedef void (^CFRCTUpdateAssetsSuccesBlock)();
+typedef void (^CFRCTUpdateAssetsSuccesBlock)(void);
 /**
  资源下载失败回调
  */
-typedef void (^CFRCTUpdateAssetsFailBlock)();
+typedef void (^CFRCTUpdateAssetsFailBlock)(void);
 
 //! 用来检测当前的rn脚本是否需要升级的管理类
 @interface NIPRnUpdateService : NSObject
