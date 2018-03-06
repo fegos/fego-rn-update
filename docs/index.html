@@ -28,7 +28,8 @@
 		<section id="banner">
 			<div class="inner">
 				<h2>fego-rn-update</h2>
-				<pre><p>React Native 热更新解决方案
+				<pre><p>基于React Native的热更新库
+目前支持ReactNative版本0.47-0.53
 提供android和ios两端的支持
 支持增量更新，配置简单，部署方便，一键打包
 <a href="http://fe.hhtcex.com/">NSIP大前端团队</a>出品</p></pre>
@@ -242,11 +243,13 @@ distributionUrl=https\://services.gradle.org/distributions/gradle-3.3-all.zip</c
 	├── android             # 存放android生成的包
 	│   ├── all             # 存放全量包
 	│   │   └── README.md   
+	│   │   └── temp		# 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
 	│   └── increment       # 存放增量包
 	│       └── README.md
 	└── ios                 # 存放ios生成的包
 		├── all             # 存放全量包
 		│   └── README.md
+		│   └── temp		# 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
 		└── increment       # 存放增量包
 			└── README.md</code></pre>
 				<ol start="3" type="1">
@@ -255,9 +258,17 @@ distributionUrl=https\://services.gradle.org/distributions/gradle-3.3-all.zip</c
 						<code>path</code>和
 						<code>sdk</code>
 					</li>
+					<p>path：生成包存储路径 sdk：跟apk版本号一致</p>
 				</ol>
 				<pre><code>// 写个用户名跟路径对应的字典，这个方便一个工程多个人维护使用，支持mac
 let map = {
+	/**
+	 * 注意：
+	 * 1、username为电脑用户名；
+	 * 2、path为包存储位置，末尾需要加“/”，否则会报路径错误
+	 */
+	username1: 'path1',
+	username2: 'path2'
 }
 // 获取系统信息
 let os = require(&#39;os&#39;);
@@ -265,7 +276,7 @@ let os = require(&#39;os&#39;);
 let username = os.userInfo().username;
 console.log(map[username]);
 module.exports = {
-	path: map[username],//在此处可以直接更改为自己要生成包的位置，即第二步中的最外层目录
+	path: map[username],//在此处可以直接更改为自己要生成包的位置
 	sdkVer: &#39;1.0&#39;//需跟apk版本保持一致
 }</code></pre>
 				<ol start="4" type="1">
@@ -276,14 +287,29 @@ module.exports = {
 				</ol>
 				<pre><code>sh pkg.sh platform  // 其中platform为android/ios</code></pre>
 				<p>
-					<strong>注意</strong>：首次运行，因为只生成一个包，故会提示没有新包，并需要在android和ios两个工程中均放置一份包，android放在
-					<code>android/app/src/main/assets/rn/</code>下，ios放于
-					<code>ios/项目名/rn/</code>下；之后在同一sdk下继续运行该脚本时，会进行增量包生成。</p>
+					<strong>注意</strong>:
+					<pre><code>+ 首次运行，因为只生成一个包，故会提示没有新包，不会生成增量包；
++ 运行之后需要在android和ios两个工程中均放置一份解压后的包，android放在`android/app/src/main/assets/rn/`下，ios放于`ios/项目名/rn/`下（目录若需调整，需要修改原生代码，建议不修改）；
++ 之后在同一sdk版本下继续运行该脚本时，会进行增量包生成。
++ 生成包之后，需要上传到服务器，用于原生更新时请求，此时的地址就是上面需要在原生中配置的sourceUrl</code></pre>
+				</p>
 				<ol start="5" type="1">
-					<li>在原生修改启动文件名字为
-						<code>index.js</code>，bundle名字为
-						<code>index.jsbundle</code>，请求地址为
-						<code>config请求地址</code>
+					<li>在原生修改几处
+						<ul>
+							<li>启动文件名字为
+								<code>index.js</code>
+							</li>
+						</ul>
+						<ul>
+							<li>bundle名字为
+								<code>index.jsbundle</code>
+							</li>
+						</ul>
+						<ul>
+							<li>请求地址
+								<code>config请求地址（如demo中，请求地址为https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/increment/， ios平台只需替换地址中的android即可，ios无需加末尾的‘/’）</code>
+							</li>
+						</ul>
 					</li>
 				</ol>
 				<p>
@@ -291,7 +317,10 @@ module.exports = {
 				<p>
 					<code>ios</code>：在AppDelegate中修改</p>
 				<p>
-					<strong>注意</strong>：android和ios需要统一启动文件名称，均为index.js，否则需要修改全量打包脚本；bundle名字也需要两端统一为index.jsbundle，否则需要修改增量更新打包脚本</p>
+					<strong>注意</strong>：
+					<pre><code>+ android和ios需要统一启动文件名称，均为index.js，否则需要修改全量打包脚本；
++ bundle名字也需要两端统一为index.jsbundle，否则需要修改增量更新打包脚本</code></pre>
+				</p>
 				<ol start="6" type="1">
 					<li>js端调用</li>
 				</ol>
