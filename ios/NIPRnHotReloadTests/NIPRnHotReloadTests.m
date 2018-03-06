@@ -11,14 +11,6 @@
 #import "NIPRnController.h"
 #import "NIPRnHotReloadHelper.h"
 
-#define WAIT do{\\
-[self expectationForNotification:@"RSBaseTest" object:nil handler: nil];\\
-[self waitForExpectationsWithTimeout:60 handler:nil];\\
-} while (0)
-
-#define NOTIFY \\
-[[NSNotificationCenter defaultCenter] postNotificationName: @"RSBaseTest" object: nil]
-
 @interface NIPRnHotReloadTests : XCTestCase
 @property (nonatomic,strong)XCTestExpectation* exception;
 @end
