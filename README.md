@@ -156,21 +156,26 @@ pod update
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-	/**
- 	@param bundleUrl 服务器存放bundle的地址
- 	@param noHotUpdate 用来标记只使用工程自带的rn包，不支持热更新 default:NO
-	@param noJsServer 不通过本地启动的server来获取bundle，直接使用离线包 default:NO
- 	@param moduleName 默认main bundle的指定模块
-	*/
-	NIPRnController *controller = [[NIPRnManager managerWithBundleUrl:@"bundle下载路径" noHotUpdate:NO noJsServer:YES] loadControllerWithModel:@"moduleName"];
-
-	#pragma clang diagnostic push
-	#pragma clang diagnostic ignored "-Wincompatible-pointer-types"
-  	self.window.rootViewController = controller;
-	#pragma clang diagnostic pop
+    [self loadRnController];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRnController) name:@"RNHotReloadRequestSuccess" object:nil];
 
   	return YES;
+}
+
+- (void)loadRnController {
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    /**
+    @param bundleUrl 服务器存放bundle的地址
+    @param noHotUpdate 用来标记只使用工程自带的rn包，不支持热更新 default:NO
+    @param noJsServer 不通过本地启动的server来获取bundle，直接使用离线包 default:NO
+    @param moduleName 默认main bundle的指定模块
+    */
+    NIPRnController *controller = [[NIPRnManager managerWithBundleUrl:@"bundle下载路径" noHotUpdate:NO noJsServer:YES] loadControllerWithModel:@"moduleName"];
+
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
+    self.window.rootViewController = controller;
+    #pragma clang diagnostic pop
 }
 ```
 
