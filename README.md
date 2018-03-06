@@ -188,15 +188,13 @@ pod update
 ├── android             # 存放android生成的包
 │   ├── all             # 存放全量包
 │   │   └── README.md   
-│   │   └── temp		# 存放解压后的包，该目录可添加到.gitignore文件中
-│   │       └── README.md
+│   │   └── temp		# 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
 │   └── increment       # 存放增量包
 │       └── README.md
 └── ios                 # 存放ios生成的包
     ├── all             # 存放全量包
     │   └── README.md
-	│   └── temp		# 存放解压后的包，该目录可添加到.gitignore文件中
-    │       └── README.md
+	│   └── temp		# 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
     └── increment       # 存放增量包
         └── README.md
 ```
@@ -223,7 +221,7 @@ let os = require('os');
 let username = os.userInfo().username;
 console.log(map[username]);
 module.exports = {
-	path: map[username],//在此处可以直接更改为自己要生成包的位置，即第二步中的最外层目录
+	path: map[username],//在此处可以直接更改为自己要生成包的位置
 	sdkVer: '1.0'//需跟apk版本保持一致
 }
 ```
@@ -243,7 +241,7 @@ sh pkg.sh platform  // 其中platform为android/ios
 
 + 启动文件名字为`index.js`；
 + bundle名字为`index.jsbundle`；
-+ 请求地址为`config请求地址`（如demo中，请求地址为https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/increment/，ios平台只需替换地址中的android即可，ios无需加末尾的‘/’）
++ 请求地址为`config请求地址`（如demo中，请求地址为https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/increment/， ios平台只需替换地址中的android即可，ios无需加末尾的‘/’）
 
 `android`：在MainActivity中修改
 
