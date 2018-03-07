@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "NIPRnDefines.h"
+#import "NIPRnManager.h"
 
 /**
  资源下载成功回调
@@ -17,6 +18,7 @@ typedef void (^CFRCTUpdateAssetsSuccesBlock)(void);
  资源下载失败回调
  */
 typedef void (^CFRCTUpdateAssetsFailBlock)(void);
+
 
 //! 用来检测当前的rn脚本是否需要升级的管理类
 @interface NIPRnUpdateService : NSObject
@@ -33,6 +35,9 @@ typedef void (^CFRCTUpdateAssetsFailBlock)(void);
  */
 @property (nonatomic, strong) NSString *requestUrl;
 
+@property (nonatomic,weak) id<NIPRnManagerDelegate> delegate;
+
+-(void)unzipBundle:(NSString *)filePath;
 /**
  静默后台下载rn资源
  */

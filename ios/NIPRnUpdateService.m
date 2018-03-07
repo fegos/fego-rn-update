@@ -8,7 +8,6 @@
 
 #import "NIPRnUpdateService.h"
 #import <AFNetworking/AFHTTPSessionManager.h>
-#import "NIPRnManager.h"
 #import <ZipArchive/ZipArchive.h>
 #import "DiffMatchPatch.h"
 #import "NIPRnHotReloadHelper.h"
@@ -160,7 +159,10 @@
         }
         completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
             if (error) {
-                [weakSelf requestSuccess:NO];
+                if ([weakSelf.delegate respondsToSelector:@selector(failedHandlerWithStatus:)]) {
+                    [weakSelf.delegate failedHandlerWithStatus:NIPReadConfigFailed];
+                }
+//                [weakSelf requestSuccess:NO];
             }
             else {
                 NSString *actualPath = [filePath absoluteString];
@@ -219,7 +221,10 @@
     if ((zipPath = [self filePathOfRnZip])) {
       [self alertIfUpdateRnZipWithFilePath:zipPath];
     } else {
-      [self requestSuccess:YES];
+        if ([self.delegate respondsToSelector:@selector(successHandlerWithFilePath:)]) {
+            [self.delegate successHandlerWithFilePath:zipPath];
+        }
+//      [self requestSuccess:YES];
     }
   }
 //    for (NSString *line in array) {
@@ -272,7 +277,10 @@
                                                 }
                                           completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
                                             if (error) {
-                                              [weakSelf requestSuccess:NO];
+                                                if ([weakSelf.delegate respondsToSelector:@selector(failedHandlerWithStatus:)]) {
+                                                    [weakSelf.delegate failedHandlerWithStatus:NIPDownloadBundleFailed];
+                                                }
+//                                              [weakSelf requestSuccess:NO];
                                             }
                                             else {
                                               NSString *actualPath = [filePath absoluteString];
@@ -281,8 +289,11 @@
                                               }
                                               NSLog(@"热更新zip地址：%@", actualPath);
                                               //检查MD5值是否正确
-                                              if(![self checkMD5OfRnZip:actualPath]){
-                                                [weakSelf requestSuccess:NO];
+                                              if(![weakSelf checkMD5OfRnZip:actualPath]){
+                                                  if ([weakSelf.delegate respondsToSelector:@selector(failedHandlerWithStatus:)]) {
+                                                      [weakSelf.delegate failedHandlerWithStatus:NIPMD5CheckFailed];
+                                                  }
+//                                                [weakSelf requestSuccess:NO];
                                               }
 
                                             }
@@ -320,8 +331,24 @@
   return nil;
 }
 
+-(void)unzipBundle:(NSString *)filePath{
+    //filePath
+    if (filePath) {
+        [self unzipAssets:filePath];
+    }else{
+
+    }
+}
 - (void)alertIfUpdateRnZipWithFilePath:(NSString *)filePath {
-    [self unzipAssets:filePath];
+    if ([self.delegate respondsToSelector:@selector(successHandlerWithFilePath:)]) {
+        [self.delegate successHandlerWithFilePath:filePath];
+    }else{
+        [self unzipAssets:filePath];
+        NIPRnController *controller = [[NIPRnManager sharedManager] loadControllerWithModel:@"hotUpdate"];
+        [[UIApplication sharedApplication].keyWindow setRootViewController:(UIViewController*)controller];
+//        [[NIPRnManager sharedManager] loadBundleUnderDocument];
+    }
+    
 
 //  /*最低支持ios8，故直接使用alertViewController*/
 //  UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"有新的资源包可以更新，是否立即更新" preferredStyle:UIAlertControllerStyleAlert];
@@ -347,24 +374,24 @@
 /**
  *  后台请求完成后，在主线程更新数据
  */
-- (void)requestSuccess:(BOOL)bSuccess
-{
-  if (bSuccess) {
-        //发送成功通知
-      [[NSNotificationCenter defaultCenter] postNotificationName:@"RNHotReloadRequestSuccess" object:nil];
-      if(self.successBlock){
-          self.successBlock();
-      }
-      
-  }else
-  {
-      //发送失败通知
-      [[NSNotificationCenter defaultCenter] postNotificationName:@"RNHotReloadRequestfail" object:nil];
-      if (self.failBlock) {
-          self.failBlock();
-      }
-  }
-}
+//- (void)requestSuccess:(BOOL)bSuccess
+//{
+//  if (bSuccess) {
+//        //发送成功通知
+//      [[NSNotificationCenter defaultCenter] postNotificationName:@"RNHotReloadRequestSuccess" object:nil];
+//      if(self.successBlock){
+//          self.successBlock();
+//      }
+//
+//  }else
+//  {
+//      //发送失败通知
+//      [[NSNotificationCenter defaultCenter] postNotificationName:@"RNHotReloadRequestfail" object:nil];
+//      if (self.failBlock) {
+//          self.failBlock();
+//      }
+//  }
+//}
 
 /**
  *  删除老的客户端的rn资源相关文件
@@ -406,7 +433,7 @@
   [self checkAndApplyIncrement];
   [self checkAndApplyAssetsConfig];
   [[NIPRnManager sharedManager] loadBundleUnderDocument];
-  [self requestSuccess:YES];
+//  [self requestSuccess:YES];
 }
 
 - (void)checkAndApplyIncrement {

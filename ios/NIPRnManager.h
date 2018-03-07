@@ -16,8 +16,20 @@
 
 @class NIPRnController;
 
-@interface NIPRnManager : NSObject <RCTBridgeModule>
+typedef NS_ENUM(NSInteger,HotReloadStatus) {
+    NIPHotReloadSuccess = 0,
+    NIPReadConfigFailed,
+    NIPDownloadBundleFailed,
+    NIPMD5CheckFailed
+    
+};
 
+@protocol NIPRnManagerDelegate <NSObject>
+-(void)successHandlerWithFilePath:(NSString *)filePath;
+-(void)failedHandlerWithStatus:(HotReloadStatus)status;
+@end
+
+@interface NIPRnManager : NSObject <RCTBridgeModule>
 /**
  获取单例
 
@@ -75,6 +87,7 @@
  后台静默下载rn资源包
  */
 - (void)requestRCTAssetsBehind;
+-(void)unzipBundle:(NSString *)filePath;
 
 /**
  是否支持热更新
@@ -92,5 +105,6 @@
  字体名字
  */
 @property (nonatomic, copy) NSArray *fontNames;
+@property (nonatomic,weak) id<NIPRnManagerDelegate> delegate;
 
 @end

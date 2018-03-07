@@ -8,8 +8,9 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "NIPRnManager.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,NIPRnManagerDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
 

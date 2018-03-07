@@ -248,7 +248,14 @@
  */
 - (void)requestRCTAssetsBehind
 {
-    [[NIPRnUpdateService sharedService] requestRCTAssetsBehind];
+    NIPRnUpdateService *service = [NIPRnUpdateService sharedService];
+    service.delegate = self.delegate;
+    [service requestRCTAssetsBehind];
+}
+
+-(void)unzipBundle:(NSString *)filePath{
+    NIPRnUpdateService *service = [NIPRnUpdateService sharedService];
+    [service unzipBundle:filePath];
 }
 
 #pragma mark 工具

@@ -12,8 +12,6 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
-#import "NIPRnManager.h"
-
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -33,7 +31,12 @@
 //  rootViewController.view = rootView;
 //  self.window.rootViewController = rootViewController;
 //  [self.window makeKeyAndVisible];
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRnController) name:@"RNHotReloadRequestSuccess" object:nil];
+//  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRnController) name:@"RNHotReloadRequestSuccess" object:nil];
+  NIPRnManager *manager = [NIPRnManager sharedManager];
+  manager.delegate = self;
+  manager.bundleUrl = @"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/increment";
+  manager.noHotUpdate = NO;
+  manager.noJsServer = YES;
   
   [self loadDefaultKeyWindow];
   
@@ -48,8 +51,37 @@
    */
 }
 
+-(void)successHandlerWithFilePath:(NSString *)filePath{
+  NSLog(@"NIPHotReloadSuccess");
+  [[NIPRnManager sharedManager] unzipBundle:filePath];
+  [self loadRnController];
+}
+-(void)failedHandlerWithStatus:(HotReloadStatus)status{
+  switch (status) {
+    case NIPReadConfigFailed:
+    {
+      NSLog(@"NIPReadConfigFailed");
+    }
+      break;
+    case NIPDownloadBundleFailed:
+    {
+      NSLog(@"NIPDownloadBundleFailed");
+    }
+      break;
+    case NIPMD5CheckFailed:
+    {
+      NSLog(@"NIPMD5CheckFailed");
+    }
+      break;
+    default:
+      break;
+  }
+
+}
 
 - (void)loadRnController {
+//  NIPRnController *controller = [[NIPRnManager sharedManager] loadControllerWithModel:@"hotUpdate"];
+  
   NIPRnController *controller = [[NIPRnManager managerWithBundleUrl:@"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/increment" noHotUpdate:NO noJsServer:YES] loadControllerWithModel:@"hotUpdate"];
 //  [NIPRnManager sharedManager].fontNames = @[@"nsip"];
 //  controller.appProperties = @{@"productFlavor": @"ec"};
