@@ -148,20 +148,58 @@ ReactManager.getInstance().loadBundleBehind();
 ```
 8、处理结果通知
 
++ 默认全部更新，不需做任何其他处理
+
++ 可以分别实现SuccessListener、FailListener，来处理成功和失败的情况
 ```
-// onCreate中注册EventBus
-EventBus.getDefault().register(this);
-// onDestroy中
-EventBus.getDefault().unregister(this);
-// 添加监听
-@Subscribe
-public void onEventMainThread(ReactManager.NPReactManagerTask task) {
-    if (task == ReactManager.NPReactManagerTask.GetNewReactVersionSource) {
-		// 可以直接调用ReactManager.getInstance().doReloadBundle();进行更新
-		// 或者进行弹窗提示
-        questionUpdateReactSource();
+@Override
+public void onSuccess() {
+    questionUpdateReactSource();// 可以弹窗提示
+}
+
+protected void questionUpdateReactSource() {
+    //此处标记已经下载了新的rn资源包,提示用户是否进行更新
+    AlertDialog dialog = new AlertDialog.Builder(this)
+            .setTitle("温馨提示")
+            .setMessage("有新的资源包可以更新，是否立即更新?")
+            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            })
+            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ReactManager.getInstance().unzipBundle();
+                    ReactManager.getInstance().doReloadBundle();
+                    // 下次启动应用时更新
+                    // ReactManager.getInstance().unzipBundle();
+                }
+            })
+            .create();
+    dialog.show();
+}
+
+@Override
+public void onFail(ReactManager.NPReactManagerTask task) {
+    if (task == ReactManager.NPReactManagerTask.GetConfigFail) {
+        // 获取config失败
+    } else if (task == ReactManager.NPReactManagerTask.GetSourceFail) {
+        // 获取zip包失败
+    } else if (task == ReactManager.NPReactManagerTask.Md5VerifyFail) {
+        // md5验证失败
     }
 }
+```
+**注意**：
+
+如果实现了SuccessListener，则不会解压新包，也不会自动加载最新bundle，所有成功后的操作需要自行实现，可以调用下面的方法进行重新加载
+```
+// 仅解压包，不执行下面的操作时下次启动自动更新
+ReactManager.getInstance().unzipBundle();
+// 加载新bundle
+ReactManager.getInstance().doReloadBundle();
 ```
 ### IOS
 1. pod库引入热更新库，Podfile中添加：
