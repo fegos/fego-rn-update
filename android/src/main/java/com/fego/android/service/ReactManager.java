@@ -114,6 +114,26 @@ public class ReactManager {
     private Activity currentActivity;
     private ReactInstanceManager rnInstanceManager;
 
+    private SuccessListener successListener;
+
+    public SuccessListener getSuccessListener() {
+        return successListener;
+    }
+
+    public void setSuccessListener(SuccessListener successListener) {
+        this.successListener = successListener;
+    }
+
+    public FailListener getFailListener() {
+        return failListener;
+    }
+
+    public void setFailListener(FailListener failListener) {
+        this.failListener = failListener;
+    }
+
+    private FailListener failListener;
+
     /**
      * The enum Np react manager task.
      * 用于通知有新的资源包
@@ -122,7 +142,10 @@ public class ReactManager {
         /**
          * Get new react version source np react manager task.
          */
-        GetNewReactVersionSource
+        GetNewReactVersionSource,
+        GetConfigFail,
+        GetSourceFail,
+        Md5VerifyFail
     }
 
     private static ReactManager instance = null;
@@ -279,15 +302,25 @@ public class ReactManager {
                         String configDetail = new String(bytes);
                         Log.d(TAG, configDetail);
                         checkRNConfigFile(configDetail);
+                    } else {
+                        if (failListener != null) {
+                            failListener.onFail(NPReactManagerTask.GetConfigFail);
+                        }
                     }
                 } else {
                     Log.d(TAG, "load react data behind fail!");
+                    if (failListener != null) {
+                        failListener.onFail(NPReactManagerTask.GetConfigFail);
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.d(TAG, "load react data behind fail!");
+                if (failListener != null) {
+                    failListener.onFail(NPReactManagerTask.GetConfigFail);
+                }
             }
         });
     }
@@ -350,23 +383,43 @@ public class ReactManager {
                         if (tmpValue.equals(md5Value)) {
                             ReactPreference.getInstance().save(NEW_BUNDLE_PATH, downloadFilePath);
                             ReactPreference.getInstance().save(NEW_BUNDLE_VERSION, remoteDataVersion);
-                            EventBus.getDefault().post(NPReactManagerTask.GetNewReactVersionSource);
+                            if (successListener != null) {
+                                successListener.onSuccess();
+                            } else {
+                                unzipBundle();
+                                doReloadBundle();
+                            }
+                        } else {
+                            if (failListener != null) {
+                                failListener.onFail(NPReactManagerTask.Md5VerifyFail);
+                            }
+
                         }
+                    } else {
+                        if (failListener != null) {
+                            failListener.onFail(NPReactManagerTask.GetSourceFail);
+                        }
+                    }
+                } else {
+                    if (failListener != null) {
+                        failListener.onFail(NPReactManagerTask.GetSourceFail);
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                if (failListener != null) {
+                    failListener.onFail(NPReactManagerTask.GetSourceFail);
+                }
             }
         });
     }
 
     /**
-     * 重加载bundle
+     * 解压
      */
-    public void doReloadBundle() {
+    public void unzipBundle() {
         String downloadFilePath = ReactPreference.getInstance().getString(NEW_BUNDLE_PATH);
         String remoteDataVersion = ReactPreference.getInstance().getString(NEW_BUNDLE_VERSION);
         String rnDir = sourceDir;
@@ -389,11 +442,11 @@ public class ReactManager {
             String configDetail = new String(bytes);
             checkAssetconfigFile(configDetail, rnDir);
             //d、重新加载bundle
-            onJSBundleLoadedFromServer(rnDir);
+//            onJSBundleLoadedFromServer();
             //e、更新字体文件
             updateReactFonts();
             //f、删除不需要的存储和文件
-            ReactPreference.getInstance().save(BUNDLE_VERSION, remoteDataVersion);
+//            ReactPreference.getInstance().save(BUNDLE_VERSION, remoteDataVersion);
             FileUtils.delete(file);
             FileUtils.deleteFile(rnDir + "increment.jsbundle");
             FileUtils.deleteFile(rnDir + "assetsConfig.txt");
@@ -404,10 +457,10 @@ public class ReactManager {
 
     /**
      * 重新加载指定目录的rn的bundle资源
-     *
-     * @param rnDir rnbundle路径
      */
-    private void onJSBundleLoadedFromServer(String rnDir) {
+    public void doReloadBundle() {
+        String remoteDataVersion = ReactPreference.getInstance().getString(NEW_BUNDLE_VERSION);
+        String rnDir = sourceDir;
         File file = new File(rnDir + File.separator + bundleName);
         if (file == null || !file.exists()) {
             Log.i(TAG, "js bundle file download error, check URL or network state");
@@ -456,6 +509,9 @@ public class ReactManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        ReactPreference.getInstance().save(BUNDLE_VERSION, remoteDataVersion);
+        ReactPreference.getInstance().delete(NEW_BUNDLE_PATH);
+        ReactPreference.getInstance().delete(NEW_BUNDLE_VERSION);
     }
 
     /******************************tools*******************************/
@@ -653,4 +709,11 @@ public class ReactManager {
         return SDK_VERSION + "_" + dataVersion;
     }
 
+    public interface SuccessListener {
+        abstract void onSuccess();
+    }
+
+    public interface FailListener {
+        abstract void onFail(NPReactManagerTask task);
+    }
 }

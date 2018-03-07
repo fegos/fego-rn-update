@@ -19,19 +19,17 @@ import com.fego.android.service.HotUpdatePackage;
 import com.fego.android.service.ReactManager;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
+public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler, ReactManager.SuccessListener, ReactManager.FailListener {
     private ReactRootView mReactRootView;
     private ReactInstanceManager mReactInstanceManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(this)) {
             showPermissonDialog();
         } else {
@@ -53,6 +51,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
                     ReactManager.getInstance().setBundleName("index.jsbundle");
                     // 设置热更新路径
                     ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/increment/");
+                    ReactManager.getInstance().setSuccessListener(this);
                     List<ReactPackage> reactPackages = new ArrayList<>();
                     // 添加额外的package
                     reactPackages.add(new HotUpdatePackage());
@@ -132,7 +131,6 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
         if (mReactInstanceManager != null) {
             mReactInstanceManager.onHostDestroy(this);
         }
-        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -188,18 +186,6 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
     }
 
     /**
-     * On event main thread.
-     *
-     * @param task the task
-     */
-    @Subscribe
-    public void onEventMainThread(ReactManager.NPReactManagerTask task) {
-        if (task == ReactManager.NPReactManagerTask.GetNewReactVersionSource) {
-            questionUpdateReactSource();
-        }
-    }
-
-    /**
      * 询问是否更新最新包提示
      */
     protected void questionUpdateReactSource() {
@@ -216,10 +202,29 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        ReactManager.getInstance().unzipBundle();
                         ReactManager.getInstance().doReloadBundle();
+                        // 下次启动应用时更新
+                        // ReactManager.getInstance().unzipBundle();
                     }
                 })
                 .create();
         dialog.show();
+    }
+
+    @Override
+    public void onSuccess() {
+        questionUpdateReactSource();
+    }
+
+    @Override
+    public void onFail(ReactManager.NPReactManagerTask task) {
+        if (task == ReactManager.NPReactManagerTask.GetConfigFail) {
+            // 获取config失败
+        } else if (task == ReactManager.NPReactManagerTask.GetSourceFail) {
+            // 获取zip包失败
+        } else if (task == ReactManager.NPReactManagerTask.Md5VerifyFail) {
+            // md5验证失败
+        }
     }
 }
