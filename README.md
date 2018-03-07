@@ -1,11 +1,10 @@
-# fego-rn-update
+# [fego-rn-update](https://fegos.github.io/fego-rn-update/) &middot; [![npm version](https://badge.fury.io/js/fego-rn-update.svg)](https://www.npmjs.com/package/fego-rn-update) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/fegos/fego-rn-update/pulls)
 
 + fego-rn 官方热更新方案
 
 # 项目介绍
 
-+ 基于React Native的热更新库
-+ 目前支持ReactNative版本0.47-0.53
++ 基于React Native(0.47~0.53)的热更新库
 + 提供android和ios两端的支持
 + 支持增量更新，配置简单，部署方便，一键打包
 
