@@ -347,10 +347,20 @@ public class ReactManager {
                     if (remoteSdkVersion.equals(SDK_VERSION)) {
                         //如果新版本字典存在,说明是已下载还没有使用的资源,如果跟线上的版本号相同也不必要下载了
                         String needUpdateVersion = ReactPreference.getInstance().getString(NEW_BUNDLE_VERSION);
-                        if (!remoteDataVersion.equals(localDataVersion) && !remoteDataVersion.equals("") && !remoteDataVersion.equals(needUpdateVersion)) {
-                            loadRNSource(remoteDataVersion);
-                        } else {
-                            Log.d(TAG, "version is same,no need load rn data!");
+                        if (TextUtils.isEmpty(needUpdateVersion)) {// 没有新资源
+                            // 远程版本不为""；远程版本与本地版本不一致；
+                            if (!remoteDataVersion.equals("") && !remoteDataVersion.equals(localDataVersion)) {
+                                loadRNSource(remoteDataVersion);
+                            } else {
+                                Log.d(TAG, "version is same,no need load rn data!");
+                            }
+                        } else {// 资源已经下载好，但是还未被重新load
+                            if (remoteDataVersion.equals(needUpdateVersion)) {
+                                unzipBundle();
+                                doReloadBundle();
+                            } else {
+                                loadRNSource(remoteDataVersion);
+                            }
                         }
                         break;
                     }
@@ -451,8 +461,6 @@ public class ReactManager {
             FileUtils.deleteFile(rnDir + "increment.jsbundle");
             FileUtils.deleteFile(rnDir + "assetsConfig.txt");
         }
-        ReactPreference.getInstance().delete(NEW_BUNDLE_PATH);
-        ReactPreference.getInstance().delete(NEW_BUNDLE_VERSION);
     }
 
     /**

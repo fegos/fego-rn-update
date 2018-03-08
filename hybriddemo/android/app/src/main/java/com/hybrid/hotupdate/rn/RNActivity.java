@@ -12,21 +12,17 @@ import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 
 import com.facebook.react.ReactInstanceManager;
-import com.facebook.react.ReactPackage;
 import com.facebook.react.ReactRootView;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
-import com.fego.android.service.HotUpdatePackage;
 import com.fego.android.service.ReactManager;
 import com.hybrid.hotupdate.BuildConfig;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.hybrid.hotupdate.utils.ConfigUtil;
 
 /**
  * Created by sxiaoxia on 2018/3/8.
  */
 
-public class RNActivity extends Activity implements DefaultHardwareBackBtnHandler {
+public class RNActivity extends Activity implements DefaultHardwareBackBtnHandler, ReactManager.SuccessListener {
 
     ReactRootView mReactRootView;
     ReactInstanceManager mReactInstanceManager;
@@ -45,6 +41,7 @@ public class RNActivity extends Activity implements DefaultHardwareBackBtnHandle
     private void initData() {
         Bundle bundle = getIntent().getExtras();
         moduleName = bundle.getString("moduleName", "First");
+        ConfigUtil.getInstance().initReactManager(getApplication());
     }
 
     /**
@@ -54,18 +51,6 @@ public class RNActivity extends Activity implements DefaultHardwareBackBtnHandle
         if (mReactRootView == null) {
             mReactRootView = new ReactRootView(this);
             if (mReactInstanceManager == null) {
-                if (ReactManager.getInstance().getRnInstanceManager() == null) {
-                    // 设置react native启动文件的名称
-                    ReactManager.getInstance().setJsMainModuleName("index");
-                    // 设置加载的文件名
-                    ReactManager.getInstance().setBundleName("index.jsbundle");
-                    // 设置热更新路径
-                    ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/increment/");
-                    List<ReactPackage> reactPackages = new ArrayList<>();
-                    // 添加额外的package
-                    reactPackages.add(new HotUpdatePackage());
-                    ReactManager.getInstance().init(getApplication(), reactPackages, BuildConfig.DEBUG);
-                }
                 mReactInstanceManager = ReactManager.getInstance().getRnInstanceManager();
             }
             mReactRootView.startReactApplication(mReactInstanceManager, moduleName, null);
@@ -192,5 +177,37 @@ public class RNActivity extends Activity implements DefaultHardwareBackBtnHandle
                 updateReactView();
             }
         }
+    }
+
+    @Override
+    public void onSuccess() {
+        questionUpdateReactSource();
+    }
+
+    /**
+     * 询问是否更新最新包提示
+     */
+    protected void questionUpdateReactSource() {
+        //此处标记已经下载了新的rn资源包,提示用户是否进行更新
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("温馨提示")
+                .setMessage("有新的资源包可以更新，是否立即更新?")
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ReactManager.getInstance().unzipBundle();
+                        ReactManager.getInstance().doReloadBundle();
+                        // 下次启动应用时更新
+                        // ReactManager.getInstance().unzipBundle();
+                    }
+                })
+                .create();
+        dialog.show();
     }
 }
