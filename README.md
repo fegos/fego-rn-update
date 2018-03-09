@@ -212,12 +212,42 @@ pod update
 ```
 3.调用热更新代码
 ```
-[[NIPRnManager sharedManager] requestRCTAssetsBehind];
+NIPRnManager *manager = [NIPRnManager sharedManager];
+manager.delegate = self;
+manager.bundleUrl = @"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/increment";
+manager.noHotUpdate = NO;
+manager.noJsServer = YES;
+[manager requestRCTAssetsBehind];
 ```
-4.处理结果通知
+4.处理代理结果
 ```
-[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(successHandler) name:@"RNHotReloadRequestSuccess" object:nil];
-[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(failHandler) name:@"RNHotReloadRequestfail" object:nil];
+-(void)successHandlerWithFilePath:(NSString *)filePath{
+    NSLog(@"NIPHotReloadSuccess");
+    [[NIPRnManager sharedManager] unzipBundle:filePath];
+    [self loadRnController];
+}
+-(void)failedHandlerWithStatus:(HotReloadStatus)status{
+    switch (status) {
+    case NIPReadConfigFailed:
+    {
+    NSLog(@"NIPReadConfigFailed");
+    }
+    break;
+    case NIPDownloadBundleFailed:
+    {
+    NSLog(@"NIPDownloadBundleFailed");
+    }
+    break;
+    case NIPMD5CheckFailed:
+    {
+    NSLog(@"NIPMD5CheckFailed");
+    }
+    break;
+    default:
+    break;
+    }
+
+}
 ```
 5. AppDelegate中添加热更新代码的例子
 ```
