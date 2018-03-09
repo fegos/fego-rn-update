@@ -49,11 +49,10 @@ public class RNActivity extends Activity implements DefaultHardwareBackBtnHandle
      */
     private void updateReactView() {
         if (mReactRootView == null) {
-            mReactRootView = new ReactRootView(this);
             if (mReactInstanceManager == null) {
                 mReactInstanceManager = ReactManager.getInstance().getRnInstanceManager();
             }
-            mReactRootView.startReactApplication(mReactInstanceManager, moduleName, null);
+            mReactRootView = ReactManager.getInstance().getReactViewByModuleName(moduleName, this, null);
             setContentView(mReactRootView);
         }
     }

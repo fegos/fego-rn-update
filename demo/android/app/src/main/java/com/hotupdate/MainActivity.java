@@ -42,7 +42,6 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
      */
     private void updateReactView() {
         if (mReactRootView == null) {
-            mReactRootView = new ReactRootView(this);
             if (mReactInstanceManager == null) {
                 if (ReactManager.getInstance().getRnInstanceManager() == null) {
                     // 设置react native启动文件的名称
@@ -59,7 +58,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
                 }
                 mReactInstanceManager = ReactManager.getInstance().getRnInstanceManager();
             }
-            mReactRootView.startReactApplication(mReactInstanceManager, "hotUpdate", null);
+            mReactRootView = ReactManager.getInstance().getReactViewByModuleName("hotUpdate", this, null);
             setContentView(mReactRootView);
         }
     }
