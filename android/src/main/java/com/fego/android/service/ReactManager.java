@@ -392,7 +392,7 @@ public class ReactManager {
         ReactService service = new ReactService();
         String rnSourceUrl = "";
         if (isAll) {
-            rnZipName = SDK_VERSION + "_" + remoteDataVersion;
+            rnZipName = "rn_" + SDK_VERSION + "_" + remoteDataVersion + ".zip";
             rnSourceUrl = sourceUrl + "all/" + SDK_VERSION + "/" + rnZipName;
         }else {
             rnZipName = "rn_" + SDK_VERSION + "_" + remoteDataVersion + "_" + localDataVersion + "_" + type + ".zip";

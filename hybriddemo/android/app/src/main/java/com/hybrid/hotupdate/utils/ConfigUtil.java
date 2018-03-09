@@ -36,7 +36,7 @@ public class ConfigUtil {
             // 设置加载的文件名
             ReactManager.getInstance().setBundleName("index.jsbundle");
             // 设置热更新路径
-            ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/master/hybriddemo/rn/increment/android/increment/");
+            ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/master/hybriddemo/rn/increment/android/");
             List<ReactPackage> reactPackages = new ArrayList<>();
             // 添加额外的package
             reactPackages.add(new HotUpdatePackage());
