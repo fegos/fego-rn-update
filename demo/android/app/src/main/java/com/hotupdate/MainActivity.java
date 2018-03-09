@@ -49,7 +49,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
                     // 设置加载的文件名
                     ReactManager.getInstance().setBundleName("index.jsbundle");
                     // 设置热更新路径
-                    ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/increment/");
+                    ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/");
                     ReactManager.getInstance().setSuccessListener(this);
                     List<ReactPackage> reactPackages = new ArrayList<>();
                     // 添加额外的package
