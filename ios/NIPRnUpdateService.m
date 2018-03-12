@@ -198,18 +198,28 @@
 
       self.remoteSDKVersion = [items objectAtIndex:0];
       self.remoteDataVersion = [items objectAtIndex:1];
-      remoteLowDataVersion = [items objectAtIndex:2];
-      wholeStr = [items objectAtIndex:3];
-      //兼容没有MD5加密的版本
-      if(items.count>=5){
-        self.remoteMD5 = [items objectAtIndex:4];
+      //config文件分为2种形式，区分增量包或是全两包，两个字段是否存在
+      if (items.count==3) {
+          //1.0_1_md5格式,全量包格式
+          self.remoteMD5 = [items objectAtIndex:2];
+      }else{
+          //增量包
+          remoteLowDataVersion = [items objectAtIndex:2];
+          wholeStr = [items objectAtIndex:3];
+          self.remoteMD5 = [items objectAtIndex:4];
       }
+
       if (wholeStr.length > 1) {
         wholeStr = [wholeStr substringWithRange:NSMakeRange(0, 1)];
       }
       if ([self.remoteSDKVersion isEqualToString:NIP_RN_SDK_VERSION]) {
         if ([self.localDataVersion isEqualToString:remoteLowDataVersion]) {
           [self downLoadRCTZip:@"rn" withWholeString:wholeStr];
+          needDownload = YES;
+          break;
+        }else if(!remoteLowDataVersion){
+          //remoteLowDataVersion不存在时，则认为下载全量包WholeString为nil，为下层判断做依据。
+          [self downLoadRCTZip:@"rn" withWholeString:nil];
           needDownload = YES;
           break;
         }
@@ -264,7 +274,15 @@
 {
   __weak __typeof(self) weakSelf = self;
   //    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@.zip?version=%@&sdk=%@", RCT_SERVER_TEST_URL, zipName,self.localDataVersion, self.localSDKVersion]];
-  NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/%@/%@_%@_%@_%@_%@.zip?version=%@&sdk=%@", [NIPRnManager sharedManager].bundleUrl, self.remoteSDKVersion, self.remoteDataVersion, zipName, self.remoteSDKVersion, self.remoteDataVersion, self.localDataVersion, wholeStr, self.localDataVersion, self.localSDKVersion]];
+    
+  //根据wholeStr判断URL格式
+  NSURL *URL;
+  if (wholeStr) {
+      URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/%@/%@_%@_%@_%@_%@.zip?version=%@&sdk=%@", [NIPRnManager sharedManager].bundleUrl, self.remoteSDKVersion, self.remoteDataVersion, zipName, self.remoteSDKVersion, self.remoteDataVersion, self.localDataVersion, wholeStr, self.localDataVersion, self.localSDKVersion]];
+  }else{
+      URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/%@/%@_%@_%@.zip?version=%@&sdk=%@", [NIPRnManager sharedManager].bundleUrl, self.remoteSDKVersion, self.remoteDataVersion, zipName, self.remoteSDKVersion, self.remoteDataVersion, self.localDataVersion, self.localSDKVersion]];
+  }
+//  NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/%@/%@_%@_%@_%@_%@.zip?version=%@&sdk=%@", [NIPRnManager sharedManager].bundleUrl, self.remoteSDKVersion, self.remoteDataVersion, zipName, self.remoteSDKVersion, self.remoteDataVersion, self.localDataVersion, wholeStr, self.localDataVersion, self.localSDKVersion]];
   NSLog(@"%@", URL);
   
   NSURLRequest *request = [NSURLRequest requestWithURL:URL];
