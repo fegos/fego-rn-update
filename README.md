@@ -6,7 +6,7 @@
 
 + 基于React Native(0.47~0.53)的热更新库
 + 提供android和ios两端的支持
-+ 支持增量更新，配置简单，部署方便，一键打包
++ 支持热更新、增量更新，配置简单，部署方便，一键打包
 
 # 支持平台
 
@@ -59,6 +59,7 @@
     │   ├── assets.js       # 资源assets增量生成脚本
     │   └── jsbundle.js     # bundle增量生成脚本
     ├── incregen.js         # 增量包生成脚本
+	├── md5.js				# 生成全量更新config
     ├── pack.sh             # 全量包打包脚本
     └── third               # 依赖的第三方脚本
         ├── diff_match_patch_uncompressed.js    # 文件差异生成脚本
@@ -294,13 +295,49 @@ manager.noJsServer = YES;
 │   ├── all             # 存放全量包
 │   │   └── README.md   
 │   │   └── temp		# 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
+│	├── config			# 最终的config，该文件会自动生成，默认为增量
 │   └── increment       # 存放增量包
 │       └── README.md
 └── ios                 # 存放ios生成的包
     ├── all             # 存放全量包
     │   └── README.md
 	│   └── temp		# 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
+	├── config			# 最终的config，该文件会自动生成，默认为增量
     └── increment       # 存放增量包
+        └── README.md
+```
+```
+├── android
+│   ├── all
+│   │   ├── 1.0
+│   │   │   ├── config
+│   │   │   ├── rn_1.0_0.zip
+│   │   │   └── rn_1.0_1.zip
+│   │   ├── README.md
+│   │   ├── config
+│   │   └── temp
+│   │       └── 1.0
+│   │           ├── rn_1.0_0
+│   │           │   ├── index.jsbundle
+│   │           │   └── index.jsbundle.meta
+│   │           ├── rn_1.0_1
+│   │           │   ├── index.jsbundle
+│   │           │   └── index.jsbundle.meta
+│   │           └── rn_1.0_2
+│   │               ├── index.jsbundle
+│   │               └── index.jsbundle.meta
+│   ├── config
+│   └── increment
+│       ├── 1.0
+│       │   ├── 1
+│       │   │   └── rn_1.0_1_0_0.zip
+│       │   └── 2
+│       ├── README.md
+│       └── config
+└── ios
+    ├── all
+    │   └── README.md
+    └── increment
         └── README.md
 ```
 
@@ -333,20 +370,24 @@ module.exports = {
 4. 在`node_modules同级目录`下执行脚本`pkg.sh`
 
 ```
-sh pkg.sh platform  // 其中platform为android/ios
+sh pkg.sh 				// 默认是android平台下进行增量更新
+sh pkg.sh platform  	// 其中platform为android/ios，进行生成包工作，默认使用增量更新
+sh pkg.sh type			// 其中type为increment（增量）、all（全量），设置该参数时，只会进行增量和全量选择操作，不会进行包生成
+sh pkg.sh platform type	// 选在平台上的更新方式
 ```
 **注意**：
 
 	+ 首次运行，因为只生成一个包，故会提示没有新包，不会生成增量包；
-	+ 运行之后需要在android和ios两个工程中均放置一份解压后的包，android放在`assets/rn/`下，ios放于`项目名/rn/`下（目录若需调整，需要修改原生代码，建议不修改）；
+	+ 运行之后需要在android和ios两个工程中均放置一份解压后的包，android放在`assets/rn/`下，ios放于`项目名/rn/`下（目录若需调整，需要修改原生代码，建议不修改），每次app大版本变化时需要进行该操作；
 	+ 之后在同一sdk版本下继续运行该脚本时，会进行增量包生成。
 	+ 生成包之后，需要上传到服务器，用于原生更新时请求，此时的地址就是上面需要在原生中配置的sourceUrl
+	+ 如果想更换更新方式，可以执行带type参数的脚本，此时会选择将全量还是增量更新的config拷贝到platform/config（此config才是真正的更新config），默认使用的增量模式
 
 5. 在原生修改几处
 
 + 启动文件名字为`index.js`；
 + bundle名字为`index.jsbundle`；
-+ 请求地址为`config请求地址`（如demo中，请求地址为https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/increment/， ios平台只需替换地址中的android即可，ios无需加末尾的‘/’）
++ 请求地址为`config请求地址`（如demo中，请求地址为https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/， ios平台只需替换地址中的android即可，ios无需加末尾的‘/’）
 
 `android`：在MainActivity中修改
 
