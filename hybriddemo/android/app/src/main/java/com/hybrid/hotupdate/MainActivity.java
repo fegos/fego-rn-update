@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import com.fego.android.service.ReactManager;
-import com.hybrid.hotupdate.rn.RNActivity;
-import com.hybrid.hotupdate.utils.ConfigUtil;
+import com.hybrid.hotupdate.rn.RNHelloActivity;
+import com.hybrid.hotupdate.rn.RNWorldActivity;
 
 public class MainActivity extends Activity implements View.OnClickListener, ReactManager.SuccessListener {
 
@@ -21,14 +20,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Reac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-        ConfigUtil.getInstance().initReactManager(getApplication());
         ReactManager.getInstance().setSuccessListener(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ReactManager.getInstance().loadBundleBehind();
+//        ReactManager.getInstance().loadBundleBehind();
     }
 
     private void initViews() {
@@ -41,13 +39,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Reac
     @Override
     public void onClick(View view) {
         if (view == btnRn1) {
-            Intent intent = new Intent(this, RNActivity.class);
+            Intent intent = new Intent(this, RNHelloActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("moduleName", "First");
             intent.putExtras(bundle);
             startActivity(intent);
         } else if (view == btnRn2) {
-            Intent intent = new Intent(this, RNActivity.class);
+            Intent intent = new Intent(this, RNWorldActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("moduleName", "Second");
             intent.putExtras(bundle);

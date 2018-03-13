@@ -19,11 +19,10 @@ import com.hybrid.hotupdate.BuildConfig;
 import com.hybrid.hotupdate.utils.ConfigUtil;
 
 /**
- * Created by sxiaoxia on 2018/3/8.
+ * Created by sxiaoxia on 2018/3/12.
  */
 
-public class RNActivity extends Activity implements DefaultHardwareBackBtnHandler, ReactManager.SuccessListener {
-
+public class RNWorldActivity extends Activity implements DefaultHardwareBackBtnHandler, ReactManager.SuccessListener {
     ReactRootView mReactRootView;
     ReactInstanceManager mReactInstanceManager;
     String moduleName;
@@ -41,7 +40,7 @@ public class RNActivity extends Activity implements DefaultHardwareBackBtnHandle
     private void initData() {
         Bundle bundle = getIntent().getExtras();
         moduleName = bundle.getString("moduleName", "First");
-        ConfigUtil.getInstance().initReactManager(getApplication());
+        ConfigUtil.getInstance().initReactManager(getApplication(), "index", "module2.jsbundle");
     }
 
     /**
