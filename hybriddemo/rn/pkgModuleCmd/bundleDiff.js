@@ -61,7 +61,7 @@ module.exports = function (file1, file2) {
 			var patch_list = dmp.patch_make(text1, text2, diff);
 			patch_text = dmp.patch_toText(patch_list);
 			// 将生成的增量内容存储到指定路径下的bundle文件中
-			fs.writeFile(pathPrefix + 'a.jsbundle', patch_text, function (err) {
+			fs.writeFile(pathPrefix + file2, patch_text, function (err) {
 				if (err) {
 					console.log('生成增量包failure' + err);
 					reject(err);

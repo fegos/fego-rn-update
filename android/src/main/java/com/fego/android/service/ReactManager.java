@@ -215,6 +215,12 @@ public class ReactManager {
             //rn manager初始化，仅使用位于沙盒目录下的bundle资源
             ReactInstanceManagerBuilder builder = ReactInstanceManager.builder()
                     .setApplication(application);
+            if (ReactPreference.getInstance().getInt(bundleName) != 1) {
+                String patchStr = getJsBundle(sourceDir + bundleName, false);
+                String assetsBundle = getJsBundle(sourceDir + "common.jsbundle", false);
+                merge(patchStr, assetsBundle, sourceDir, bundleName);
+            }
+            ReactPreference.getInstance().saveInt(bundleName, 1);
 
             Class<?> clazz = builder.getClass();
             Method method = null;
@@ -461,7 +467,7 @@ public class ReactManager {
             if (type.equals("0")) {
                 String patchStr = getJsBundle(rnDir + "increment.jsbundle", false);
                 String assetsBundle = getJsBundle(rnDir + "index.jsbundle", false);
-                merge(patchStr, assetsBundle, rnDir);
+                merge(patchStr, assetsBundle, rnDir, bundleName);
             }
             //c、解析assetsConfig.txt，获取到需要删除的资源文件，进而删除
             if (!isAll) {
@@ -570,7 +576,7 @@ public class ReactManager {
      * @param bundle   旧bundle包内容
      * @param rnDir    更新后的bundle路径
      */
-    private void merge(String patchStr, String bundle, String rnDir) {
+    private void merge(String patchStr, String bundle, String rnDir, String bundleName) {
         DiffMatchPatchUtils dmp = new DiffMatchPatchUtils();
         // 转换pat
         LinkedList<DiffMatchPatchUtils.Patch> pathes = (LinkedList<DiffMatchPatchUtils.Patch>) dmp.patch_fromText(patchStr);
