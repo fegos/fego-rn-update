@@ -10,6 +10,7 @@ import {
 	StyleSheet,
 	Text,
 	View,
+	Image,
 	NativeModules,
 	TouchableHighlight
 } from 'react-native';
@@ -26,6 +27,7 @@ export default class App extends Component {
 	render() {
 		return (
 			<View style={styles.container}>
+				<Image source={require('./img/app.png')} style={{ width: 50, height: 59 }} />
 				<Text style={styles.welcome}>Welcome to React Native!</Text>
 				<Text style={styles.instructions}>To get started, edit App.js</Text>
 				<Text style={styles.instructions}>

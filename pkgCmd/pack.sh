@@ -1,43 +1,24 @@
 # 使用方式
 # 在终端中执行脚本 sh pack.android.sh platform
 # platform可选，ios/android，默认情况下为android
-paw=`pwd`
-echo $paw
-user=`who am i | awk '{print $1}'`
-echo $user
-if [[ $paw =~ "jsCmd" ]]; then
-	sedPath=''
-else
-	sedPath='pkgCmd/'
-fi
-echo $sedPath
-path=`sed -n "/$user/s/[^\']*$user:[^\']*\'\([^\']*\)'.*/\1/p" ${sedPath}config.js`
-echo $path
-platform="android"
-if [ $# = 1 ]; then
-	if [ $1 = 'ios' ];then
-		platform="ios"
-	elif [ $1 = 'android' ];then
-		platform="android"
-	fi
-fi
-#当前rn sdk的版本号
-sdkVer=`sed -n "/sdkVer/s/[^\']*sdkVer:[^\']*\'\([^\']*\)'.*/\1/p" ${sedPath}config.js`
-echo $sdkVer
+platform=$1
 #临时变量记录当前rn资源数据对应sdk的版本号
 newVer=1
 #生成的最终rn zip包的名称
 zipName=''
-#当前目录
-# currentPath=`pwd`
-#rn资源ftp的相对路径
-#mac
-configDir=$path/$platform/all/$sdkVer/
+path=$2
+sdkVer=$3
+echo $platform
+echo $path
+echo $sdkVer
+configDir=$path$platform/all/$sdkVer/
+hotConfigDir=$path$platform/all/
 if [ ! -e "$configDir" ]; then 
 	mkdir $configDir
 fi
 #config文件路径
 configPath=$configDir"config"
+hotConfigPath=$hotConfigDir"config"
 # 判断是否是新一期版本第一次开发
 isexist=0
 if [ ! -e "$configPath" ]; then 
@@ -63,11 +44,14 @@ if [ $isexist = 1 ];then
 		newVer=1
 	fi
 fi
+content=$sdkVer"_"$newVer
+# echo $content>$hotConfigPath
 #压缩包的名字
 zipName="rn_"$sdkVer"_"$newVer".zip"
 echo $newVer
 echo $zipName
 #生成压缩包放于deploy下
+cp -rf resource/ deploy/
 cd deploy
 zip -r $zipName *
 cd ../
@@ -79,6 +63,8 @@ cp deploy/$zipName $configDir
 #记录当前所在目录
 currentPath=`pwd`
 echo $currentPath
+
+node ./pkgCmd/md5.js $path$platform/all/ $sdkVer $zipName $content
 #推送到git
 # cd $configDir
 # git add .

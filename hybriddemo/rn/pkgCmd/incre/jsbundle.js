@@ -8,6 +8,7 @@ var dmp = new diff.diff_match_patch();
 var assets = require('./assets');
 var zipper = require("zip-local");
 var crypto = require('crypto');
+var rd = require('../third/file_list');
 
 /**
  * bundle增量生成函数
@@ -168,7 +169,6 @@ module.exports = function (oldVer, newVer, sdkVer, platform) {
 						console.log("ZIP EXCELLENT!");
 						deleteFolder(zipPath);
 						fs.appendFileSync(incrementPathPrefix + '/config', sdkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement + '_' + md5Value + ',');
-						fs.writeFileSync(pathPrefix + '/config', fs.readFileSync(incrementPathPrefix + 'config'))
 					} else {
 						console.log("ZIP FAIL!");
 					}
@@ -217,6 +217,14 @@ module.exports = function (oldVer, newVer, sdkVer, platform) {
 	}).then(function (value) {
 		// return patch_launch();
 		//2、生成图片资源的增量
+		let fileList = rd.readFileSync(allPathPrefix + sdkVer + '/' + zipName);
+		for (let i = 0; i < fileList.length; i++) {
+			if (fileList[i].search('.ttf') !== -1) {
+				let tmp = fileList[i].split('/');
+				let name = tmp[tmp.length - 1];
+				fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + name, fs.readFileSync(fileList[i]));
+			}
+		}
 		let assetsIncrement = new assets(oldVer, newVer, sdkVer, platform, value);
 		//3、将生成的增量包进行压缩操作，并删除之前生成的文件夹即其下的所有内容
 		zipIncrement();
