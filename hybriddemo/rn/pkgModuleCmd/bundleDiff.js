@@ -12,7 +12,7 @@ var dmp = new diff.diff_match_patch();
  * @param {*} sdkVer sdk版本号
  * @param {*} platform 平台，android/ios
  */
-module.exports = function (file1, file2) {
+module.exports = function (commonFile, moduleName) {
 	// 旧包内容
 	var bunOld = '';
 	// 新包内容
@@ -20,7 +20,7 @@ module.exports = function (file1, file2) {
 	// 获取的增量内容
 	var patch_text = '';
 
-	var pathPrefix = '/Users/sxiaoxia/Desktop/work/kaiyuan/fego-rn-update/hybriddemo/rn/deploy/'
+	var pathPrefix = '/Users/sxiaoxia/Desktop/work/kaiyuan/fego-rn-update/hybriddemo/rn/deploy/';
 
 	/**
 	 * 读取文件内容	
@@ -42,8 +42,15 @@ module.exports = function (file1, file2) {
 	}
 
 	// 读取新旧版本的bundle文件内容	
-	let promises = [file1, file2].map(function (id) {
-		return readFile(pathPrefix + id);
+	let promises = [commonFile, moduleName].map(function (id) {
+		let file;
+		if (id.includes('common')) {
+			file = pathPrefix + id;
+		} else {
+			file = pathPrefix + id + '/index.jsbundle';
+		}
+		return readFile(file);
+
 	});
 
 	/**
@@ -61,12 +68,12 @@ module.exports = function (file1, file2) {
 			var patch_list = dmp.patch_make(text1, text2, diff);
 			patch_text = dmp.patch_toText(patch_list);
 			// 将生成的增量内容存储到指定路径下的bundle文件中
-			fs.writeFile(pathPrefix + file2, patch_text, function (err) {
+			fs.writeFile(pathPrefix + moduleName + '/index.jsbundle', patch_text, function (err) {
 				if (err) {
-					console.log('生成增量包failure' + err);
+					console.log('生成diff FAILURE' + err);
 					reject(err);
 				} else {
-					console.log('生成包success');
+					console.log('生成diff SUCCESS');
 					resolve(true);
 				}
 			});

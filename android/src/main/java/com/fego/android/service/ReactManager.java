@@ -94,6 +94,12 @@ public class ReactManager {
      * rn bundle文件名
      */
     private String bundleName = "index.jsbundle";
+
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
+    }
+
+    private String moduleName = "";
     /**
      * 用于请求配置文件
      */
@@ -215,12 +221,12 @@ public class ReactManager {
             //rn manager初始化，仅使用位于沙盒目录下的bundle资源
             ReactInstanceManagerBuilder builder = ReactInstanceManager.builder()
                     .setApplication(application);
-            if (ReactPreference.getInstance().getInt(bundleName) != 1) {
-                String patchStr = getJsBundle(sourceDir + bundleName, false);
+            if (ReactPreference.getInstance().getInt(moduleName) != 1) {
+                String patchStr = getJsBundle(sourceDir + moduleName + "/index.jsbundle", false);
                 String assetsBundle = getJsBundle(sourceDir + "common.jsbundle", false);
-                merge(patchStr, assetsBundle, sourceDir, bundleName);
+                merge(patchStr, assetsBundle, sourceDir, moduleName);
             }
-            ReactPreference.getInstance().saveInt(bundleName, 1);
+            ReactPreference.getInstance().saveInt(moduleName, 1);
 
             Class<?> clazz = builder.getClass();
             Method method = null;
@@ -248,7 +254,7 @@ public class ReactManager {
                 }
             }
             //直接读取该bundle资源
-            builder.setJSBundleFile(sourceDir + bundleName);
+            builder.setJSBundleFile(sourceDir + moduleName + "/index.jsbundle");
             //更新字体文件
             updateReactFonts();
             rnInstanceManager = builder.build();
@@ -584,7 +590,7 @@ public class ReactManager {
         Object[] bundleArray = dmp.patch_apply(pathes, bundle);
         // 保存新的bundle文件
         try {
-            Writer writer = new FileWriter(rnDir + bundleName);
+            Writer writer = new FileWriter(rnDir + bundleName + "/index.jsbundle");
             String newBundle = (String) bundleArray[0];
             writer.write(newBundle);
             writer.close();
