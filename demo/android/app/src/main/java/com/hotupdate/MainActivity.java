@@ -18,8 +18,6 @@ import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.fego.android.service.HotUpdatePackage;
 import com.fego.android.service.ReactManager;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
 
