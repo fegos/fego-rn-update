@@ -169,6 +169,7 @@ module.exports = function (oldVer, newVer, sdkVer, platform) {
 						console.log("ZIP EXCELLENT!");
 						deleteFolder(zipPath);
 						fs.appendFileSync(incrementPathPrefix + '/config', sdkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement + '_' + md5Value + ',');
+						fs.writeFileSync(pathPrefix + '/config', fs.readFileSync(incrementPathPrefix + 'config'))
 					} else {
 						console.log("ZIP FAIL!");
 					}
