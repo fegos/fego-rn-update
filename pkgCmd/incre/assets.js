@@ -56,9 +56,11 @@ module.exports = function (oldVer, newVer, sdkVer, platform, isIncrement) {
 			for (let i = 0; i < max; i++) {
 				if (platform === 'android' && resultNew[i].search('drawable-') !== -1) {
 					resultNew[i] = resultNew[i].substring(resultNew[i].indexOf('drawable-'));
+					mkDir(resultNew[i]);
 					fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]));
 				} else if (platform === 'ios' && resultNew[i].search('assets') !== -1) {
 					resultNew[i] = resultNew[i].substring(resultNew[i].indexOf('assets'));
+					mkDir(resultNew[i]);
 					fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]));
 				} else {
 					//删除不是drawable下的文件
@@ -104,6 +106,17 @@ module.exports = function (oldVer, newVer, sdkVer, platform, isIncrement) {
 		}
 	}
 
+	function mkDir(newPath) {
+		let path = newPath.split('/');
+		let sumPath = incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/';
+		for (let i = 0; i < path.length - 1; i++) {
+			if (!fs.existsSync(sumPath + path[i])) {
+				fs.mkdirSync(sumPath + path[i]);
+			}
+			sumPath = sumPath + path[i] + '/';
+		}
+	}
+
 	/**
 	 * 生成文件md5值
 	 * @param {*} filepath 
@@ -131,28 +144,13 @@ module.exports = function (oldVer, newVer, sdkVer, platform, isIncrement) {
 					console.log(allPathPrefix + sdkVer + '/' + oldZipName + '/' + resultNew[i]);
 					console.log(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]);
 					addArray.push(resultNew[i]);
-					let path = resultNew[i].split('/');
-					let sumPath = incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/';
-					for (let i = 0; i < path.length - 1; i++) {
-						if (!fs.existsSync(sumPath + path[i])) {
-							fs.mkdirSync(sumPath + path[i]);
-						}
-						sumPath = sumPath + path[i] + '/';
-					}
+					mkDir(resultNew[i]);
 					fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]));
 				}
 			} else {
 				// 不同元素    
 				addArray.push(resultNew[i])
-				let path = resultNew[i].split('/');
-				console.log(resultNew[i])
-				let sumPath = incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/';
-				for (let i = 0; i < path.length - 1; i++) {
-					if (!fs.existsSync(sumPath + path[i])) {
-						fs.mkdirSync(sumPath + path[i]);
-					}
-					sumPath = sumPath + path[i] + '/';
-				}
+				mkDir(resultNew[i]);
 				let tmp = fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]);
 				fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + resultNew[i], tmp);
 			}

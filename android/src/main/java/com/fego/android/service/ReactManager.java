@@ -15,7 +15,6 @@ import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactInstanceManagerBuilder;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.ReactRootView;
-import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.common.LifecycleState;
 import com.facebook.react.shell.MainReactPackage;
@@ -23,8 +22,6 @@ import com.facebook.react.views.text.ReactFontManager;
 import com.fego.android.utils.AssetUtil;
 import com.fego.android.utils.DiffMatchPatchUtils;
 import com.fego.android.utils.FileUtils;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileInputStream;

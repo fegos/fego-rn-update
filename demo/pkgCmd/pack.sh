@@ -51,6 +51,7 @@ zipName="rn_"$sdkVer"_"$newVer".zip"
 echo $newVer
 echo $zipName
 #生成压缩包放于deploy下
+cp -rf resource/ deploy/
 cd deploy
 zip -r $zipName *
 cd ../

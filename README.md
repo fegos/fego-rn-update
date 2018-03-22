@@ -7,6 +7,7 @@
 + 基于React Native(0.47~0.53)的热更新库
 + 提供android和ios两端的支持
 + 支持热更新、增量更新，配置简单，部署方便，一键打包
++ 支持字体文件更新
 
 # 支持平台
 
@@ -40,7 +41,8 @@
 │   ├── index.js            # js入口文件
 │   ├── ios                 # ios工程
 │   ├── pkg.sh              # 主打包脚本文件
-│   └── pkgCmd              # 辅助脚本文件夹
+│   ├── pkgCmd              # 辅助脚本文件夹
+│   └── resource            # 存放字体文件
 ├── increment               # 包生成目录
 ├── index.js                # js源码
 ├── ios                     # ios源码
@@ -105,7 +107,6 @@ distributionUrl=https\://services.gradle.org/distributions/gradle-3.3-all.zip
 dependencies {
     compile project(':fego')
 	// 需要添加以下依赖项
-	compile "org.greenrobot:eventbus:3.0.0"
     compile "com.squareup.retrofit2:retrofit:2.1.0"
     compile "com.squareup.retrofit2:converter-gson:2.0.0"
 }
@@ -341,7 +342,7 @@ manager.noJsServer = YES;
         └── README.md
 ```
 
-3. 修改配置文件`config.js`中的`path`和`sdk`
+3. 修改配置文件`config.js`中的`path`和`sdk`（config.js文件位于pkgCmd/下）
 
 	path：生成包存储路径
 	sdk：跟apk版本号一致
@@ -367,7 +368,11 @@ module.exports = {
 	sdkVer: '1.0'//需跟apk版本保持一致
 }
 ```
-4. 在`node_modules同级目录`下执行脚本`pkg.sh`
+4. 更新字体文件
+
+需在`pkg.sh`同级目录下创建resource，并将ttf文件存放于该目录下
+
+5. 在`node_modules同级目录`下执行脚本`pkg.sh`
 
 ```
 sh pkg.sh 				// 默认是android平台下进行增量更新
@@ -383,7 +388,7 @@ sh pkg.sh platform type	// 选在平台上的更新方式
 	+ 生成包之后，需要上传到服务器，用于原生更新时请求，此时的地址就是上面需要在原生中配置的sourceUrl
 	+ 如果想更换更新方式，可以执行带type参数的脚本，此时会选择将全量还是增量更新的config拷贝到platform/config（此config才是真正的更新config），默认使用的增量模式
 
-5. 在原生修改几处
+6. 在原生修改几处
 
 + 启动文件名字为`index.js`；
 + bundle名字为`index.jsbundle`；
@@ -398,7 +403,7 @@ sh pkg.sh platform type	// 选在平台上的更新方式
 	+ android和ios需要统一启动文件名称，均为index.js，否则需要修改全量打包脚本；
 	+ bundle名字也需要两端统一为index.jsbundle，否则需要修改增量更新打包脚本
 
-6. js端调用
+7. js端调用
 
 ```
 import FegoRNUpdate from 'fego-rn-update'
