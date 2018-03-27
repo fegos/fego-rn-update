@@ -91,12 +91,10 @@ public class ReactManager {
      * rn bundle文件名
      */
     private String bundleName = "index.jsbundle";
-
-    public void setModuleName(String moduleName) {
-        this.moduleName = moduleName;
-    }
-
-    private String moduleName = "";
+    /**
+     * 业务名
+     */
+    private String businessName = "";
     /**
      * 用于请求配置文件
      */
@@ -218,12 +216,12 @@ public class ReactManager {
             //rn manager初始化，仅使用位于沙盒目录下的bundle资源
             ReactInstanceManagerBuilder builder = ReactInstanceManager.builder()
                     .setApplication(application);
-            if (ReactPreference.getInstance().getInt(moduleName) != 1) {
-                String patchStr = getJsBundle(sourceDir + moduleName + "/index.jsbundle", false);
-                String assetsBundle = getJsBundle(sourceDir + "common.jsbundle", false);
-                merge(patchStr, assetsBundle, sourceDir, moduleName);
+            if (ReactPreference.getInstance().getInt(businessName) != 1) {
+                String patchStr = getJsBundle(sourceDir + businessName + "/index.jsbundle", false);
+                String assetsBundle = getJsBundle(sourceDir + "common/index.jsbundle", false);
+                merge(patchStr, assetsBundle, sourceDir, businessName);
             }
-            ReactPreference.getInstance().saveInt(moduleName, 1);
+            ReactPreference.getInstance().saveInt(businessName, 1);
 
             Class<?> clazz = builder.getClass();
             Method method = null;
@@ -251,7 +249,7 @@ public class ReactManager {
                 }
             }
             //直接读取该bundle资源
-            builder.setJSBundleFile(sourceDir + moduleName + "/index.jsbundle");
+            builder.setJSBundleFile(sourceDir + businessName + "/index.jsbundle");
             //更新字体文件
             updateReactFonts();
             rnInstanceManager = builder.build();
@@ -423,7 +421,9 @@ public class ReactManager {
                                 successListener.onSuccess();
                             } else {
                                 unzipBundle();
-                                doReloadBundle();
+                                if (!businessName.equals("common")) {
+                                    doReloadBundle();
+                                }
                             }
                         } else {
                             if (failListener != null) {
@@ -698,6 +698,21 @@ public class ReactManager {
         this.bundleName = bundleName;
     }
 
+    /**
+     * 获取业务名
+     * @return
+     */
+    public String getBusinessName() {
+        return businessName;
+    }
+
+    /**
+     * 设置业务名
+     * @param businessName 业务名
+     */
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
+    }
     /**
      * 获取ReactRootView
      *

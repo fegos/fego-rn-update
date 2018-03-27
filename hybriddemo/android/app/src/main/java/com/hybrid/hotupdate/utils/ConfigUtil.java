@@ -29,13 +29,13 @@ public class ConfigUtil {
     private ConfigUtil() {
     }
 
-    public void initReactManager(Application application, String mainModuleName, String bundleName, String moduleName) {
+    public void initReactManager(Application application, String mainModuleName, String bundleName, String businessName) {
 //        if (ReactManager.getInstance().getRnInstanceManager() == null) {
             // 设置react native启动文件的名称
             ReactManager.getInstance().setJsMainModuleName(mainModuleName);
             // 设置加载的文件名
             ReactManager.getInstance().setBundleName(bundleName);
-            ReactManager.getInstance().setModuleName(moduleName);
+            ReactManager.getInstance().setBusinessName(businessName);
             // 设置热更新路径
             ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/master/hybriddemo/rn/increment/android/");
             List<ReactPackage> reactPackages = new ArrayList<>();
