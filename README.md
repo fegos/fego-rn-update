@@ -136,7 +136,7 @@ if (mReactRootView == null) {
             reactPackages.add(new HotUpdatePackage());
             ReactManager.getInstance().init(getApplication(), reactPackages, BuildConfig.DEBUG);
         }
-        mReactInstanceManager = ReactManager.getInstance().getRnInstanceManager();
+		mReactInstanceManager = ReactManager.getInstance().getRnInstanceManager();
 	}
     mReactRootView.startReactApplication(mReactInstanceManager, "hotUpdate", null);
     setContentView(mReactRootView);
@@ -307,41 +307,6 @@ manager.noJsServer = YES;
     └── increment       # 存放增量包
         └── README.md
 ```
-```
-├── android
-│   ├── all
-│   │   ├── 1.0
-│   │   │   ├── config
-│   │   │   ├── rn_1.0_0.zip
-│   │   │   └── rn_1.0_1.zip
-│   │   ├── README.md
-│   │   ├── config
-│   │   └── temp
-│   │       └── 1.0
-│   │           ├── rn_1.0_0
-│   │           │   ├── index.jsbundle
-│   │           │   └── index.jsbundle.meta
-│   │           ├── rn_1.0_1
-│   │           │   ├── index.jsbundle
-│   │           │   └── index.jsbundle.meta
-│   │           └── rn_1.0_2
-│   │               ├── index.jsbundle
-│   │               └── index.jsbundle.meta
-│   ├── config
-│   └── increment
-│       ├── 1.0
-│       │   ├── 1
-│       │   │   └── rn_1.0_1_0_0.zip
-│       │   └── 2
-│       ├── README.md
-│       └── config
-└── ios
-    ├── all
-    │   └── README.md
-    └── increment
-        └── README.md
-```
-
 3. 修改配置文件`config.js`中的`path`和`sdk`（config.js文件位于pkgCmd/下）
 
 	path：生成包存储路径
