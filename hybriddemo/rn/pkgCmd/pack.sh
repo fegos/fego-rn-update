@@ -50,8 +50,13 @@ content=$sdkVer"_"$newVer
 zipName="rn_"$sdkVer"_"$newVer".zip"
 echo $newVer
 echo $zipName
+#拷贝字体文件到打包文件夹中
+if [ ! -e "resource/" ]; then 
+	echo 'resource not exist'
+else
+	cp -rf resource/ deploy/
+fi
 #生成压缩包放于deploy下
-cp -rf resource/ deploy/
 cd deploy
 zip -r $zipName *
 cd ../
