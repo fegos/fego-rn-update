@@ -212,49 +212,49 @@ public class ReactManager {
                 //完了后设置本地的appversioncode
                 ReactPreference.getInstance().saveInt(APP_VERSIONCODE, appVersionCode);
             }
+            if (!businessName.equals("common")) {
+                //rn manager初始化，仅使用位于沙盒目录下的bundle资源
+                ReactInstanceManagerBuilder builder = ReactInstanceManager.builder()
+                        .setApplication(application);
+                if (ReactPreference.getInstance().getInt(businessName) != 1) {
+                    String patchStr = getJsBundle(sourceDir + businessName + "/index.jsbundle", false);
+                    String assetsBundle = getJsBundle(sourceDir + "common/index.jsbundle", false);
+                    merge(patchStr, assetsBundle, sourceDir, businessName);
+                }
+                ReactPreference.getInstance().saveInt(businessName, 1);
 
-            //rn manager初始化，仅使用位于沙盒目录下的bundle资源
-            ReactInstanceManagerBuilder builder = ReactInstanceManager.builder()
-                    .setApplication(application);
-            if (ReactPreference.getInstance().getInt(businessName) != 1) {
-                String patchStr = getJsBundle(sourceDir + businessName + "/index.jsbundle", false);
-                String assetsBundle = getJsBundle(sourceDir + "common/index.jsbundle", false);
-                merge(patchStr, assetsBundle, sourceDir, businessName);
-            }
-            ReactPreference.getInstance().saveInt(businessName, 1);
-
-            Class<?> clazz = builder.getClass();
-            Method method = null;
-            try {
-                method = clazz.getMethod("setJSMainModuleName", String.class);
-            } catch (Exception ex) {
+                Class<?> clazz = builder.getClass();
+                Method method = null;
                 try {
-                    method = clazz.getMethod("setJSMainModulePath", String.class);
+                    method = clazz.getMethod("setJSMainModuleName", String.class);
+                } catch (Exception ex) {
+                    try {
+                        method = clazz.getMethod("setJSMainModulePath", String.class);
 
-                } catch (Exception ex0) {
+                    } catch (Exception ex0) {
 
+                    }
                 }
-            }
-            if (method != null) {
-                method.invoke(builder, jsMainModuleName);
-            }
-
-            builder.addPackage(new MainReactPackage())
-                    .setUseDeveloperSupport(useDevelop)
-                    .setInitialLifecycleState(LifecycleState.BEFORE_CREATE);
-
-            if (reactPackages != null && reactPackages.size() > 0) {
-                for (ReactPackage reactPackage : reactPackages) {
-                    builder.addPackage(reactPackage);
+                if (method != null) {
+                    method.invoke(builder, jsMainModuleName);
                 }
-            }
-            //直接读取该bundle资源
-            builder.setJSBundleFile(sourceDir + businessName + "/index.jsbundle");
-            //更新字体文件
-            updateReactFonts();
-            rnInstanceManager = builder.build();
-            rnInstanceManager.createReactContextInBackground();
 
+                builder.addPackage(new MainReactPackage())
+                        .setUseDeveloperSupport(useDevelop)
+                        .setInitialLifecycleState(LifecycleState.BEFORE_CREATE);
+
+                if (reactPackages != null && reactPackages.size() > 0) {
+                    for (ReactPackage reactPackage : reactPackages) {
+                        builder.addPackage(reactPackage);
+                    }
+                }
+                //直接读取该bundle资源
+                builder.setJSBundleFile(sourceDir + businessName + "/index.jsbundle");
+                //更新字体文件
+                updateReactFonts();
+                rnInstanceManager = builder.build();
+                rnInstanceManager.createReactContextInBackground();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

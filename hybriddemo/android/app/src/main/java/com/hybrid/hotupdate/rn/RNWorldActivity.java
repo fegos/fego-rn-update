@@ -41,6 +41,7 @@ public class RNWorldActivity extends Activity implements DefaultHardwareBackBtnH
         Bundle bundle = getIntent().getExtras();
         moduleName = bundle.getString("moduleName", "First");
         ConfigUtil.getInstance().initReactManager(getApplication(), "index", "index.jsbundle", "World");
+        ReactManager.getInstance().loadBundleBehind();
     }
 
     /**

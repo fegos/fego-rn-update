@@ -31,19 +31,17 @@ public class ConfigUtil {
 
     public void initReactManager(Application application, String mainModuleName, String bundleName, String businessName) {
 //        if (ReactManager.getInstance().getRnInstanceManager() == null) {
-            // 设置react native启动文件的名称
-            ReactManager.getInstance().setJsMainModuleName(mainModuleName);
-            // 设置加载的文件名
-            ReactManager.getInstance().setBundleName(bundleName);
-            ReactManager.getInstance().setBusinessName(businessName);
-            // 设置热更新路径
-            ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/master/hybriddemo/rn/bao/android/" + businessName + "/");
-            List<ReactPackage> reactPackages = new ArrayList<>();
-            // 添加额外的package
-            reactPackages.add(new HotUpdatePackage());
-            if (!businessName.equals("common")) {
-                ReactManager.getInstance().init(application, reactPackages, BuildConfig.DEBUG);
-            }
+        // 设置react native启动文件的名称
+        ReactManager.getInstance().setJsMainModuleName(mainModuleName);
+        // 设置加载的文件名
+        ReactManager.getInstance().setBundleName(bundleName);
+        ReactManager.getInstance().setBusinessName(businessName);
+        // 设置热更新路径
+        ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/dev_module/hybriddemo/rn/bao/android/" + businessName + "/");
+        List<ReactPackage> reactPackages = new ArrayList<>();
+        // 添加额外的package
+        reactPackages.add(new HotUpdatePackage());
+        ReactManager.getInstance().init(application, reactPackages, BuildConfig.DEBUG);
 //        }
     }
 }
