@@ -264,7 +264,7 @@ public class ReactManager {
      * 更新字体文件
      */
     private void updateReactFonts() {
-        File rnSourceDirFile = new File(sourceDir);
+        File rnSourceDirFile = new File(sourceDir + businessName + '/');
         FilenameFilter fileNameFilter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
@@ -274,9 +274,9 @@ public class ReactManager {
         String[] fontsFiles = rnSourceDirFile.list(fileNameFilter);
         for (int i = 0; i < fontsFiles.length; i++) {
             String[] fontsNames = fontsFiles[i].split("\\.");
-            File fontFile = new File(sourceDir + fontsFiles[i]);
+            File fontFile = new File(sourceDir + businessName + '/' + fontsFiles[i]);
             if (fontFile.exists()) {
-                Typeface tf = Typeface.createFromFile(sourceDir + fontsFiles[i]);
+                Typeface tf = Typeface.createFromFile(sourceDir + businessName + '/' + fontsFiles[i]);
                 ReactFontManager.getInstance().setTypeface(fontsNames[0], 0, tf);
             }
         }
@@ -303,7 +303,7 @@ public class ReactManager {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Log.d(TAG, "load react data behind success!");
-                    String downloadFilePath = application.getFilesDir().getAbsolutePath() + File.separator + "rn_"+ businessName + "_config";
+                    String downloadFilePath = application.getFilesDir().getAbsolutePath() + File.separator + "rn_" + businessName + "_config";
                     File file = new File(downloadFilePath);
                     boolean writtenToDisk = FileUtils.writeResponseBodyToDisk(response.body(), file);
                     if (writtenToDisk) {
@@ -346,7 +346,7 @@ public class ReactManager {
                 String[] infos = line.split("_");
                 if (infos.length > 1) {
                     String remoteSdkVersion = "";
-                    String remoteDataVersion ="";
+                    String remoteDataVersion = "";
                     remoteSdkVersion = infos[0];
                     remoteDataVersion = infos[1];
                     if (infos.length == 3) {
@@ -401,7 +401,7 @@ public class ReactManager {
         if (isAll) {
             rnZipName = "rn_" + SDK_VERSION + "_" + remoteDataVersion + ".zip";
             rnSourceUrl = sourceUrl + "all/" + SDK_VERSION + "/" + rnZipName;
-        }else {
+        } else {
             rnZipName = "rn_" + SDK_VERSION + "_" + remoteDataVersion + "_" + localDataVersion + "_" + type + ".zip";
             rnSourceUrl = sourceUrl + "increment/" + SDK_VERSION + "/" + remoteDataVersion + "/" + rnZipName;
         }
@@ -457,7 +457,7 @@ public class ReactManager {
      */
     public void unzipBundle() {
         String downloadFilePath = ReactPreference.getInstance().getString(businessName + NEW_BUNDLE_PATH);
-        String rnDir = sourceDir;
+        String rnDir = sourceDir + businessName + "/";
         File fileRNDir = new File(rnDir);
         if (!fileRNDir.exists()) {
             fileRNDir.mkdirs();
@@ -480,6 +480,11 @@ public class ReactManager {
                 FileUtils.deleteFile(rnDir + "increment.jsbundle");
                 FileUtils.deleteFile(rnDir + "assetsConfig.txt");
             }
+            if (!businessName.equals("common")) {
+                String patchStr = getJsBundle(sourceDir + businessName + "/index.jsbundle", false);
+                String assetsBundle = getJsBundle(sourceDir + "common/index.jsbundle", false);
+                merge(patchStr, assetsBundle, sourceDir, businessName);
+            }
             updateReactFonts();
             FileUtils.delete(file);
         }
@@ -490,7 +495,7 @@ public class ReactManager {
      */
     public void doReloadBundle() {
         String remoteDataVersion = ReactPreference.getInstance().getString(businessName + NEW_BUNDLE_VERSION);
-        String rnDir = sourceDir;
+        String rnDir = sourceDir + businessName + "/";
         File file = new File(rnDir + File.separator + bundleName);
         if (file == null || !file.exists()) {
             Log.i(TAG, "js bundle file download error, check URL or network state");
@@ -518,7 +523,7 @@ public class ReactManager {
                 Class jsConfigFactoryClass = Class.forName("com.facebook.react.bridge.JSCJavaScriptExecutor$Factory");
                 method.invoke(rnInstanceManager,
                         jsConfigFactoryClass.getDeclaredConstructor(WritableNativeMap.class).newInstance(jsConfigMap),
-                        com.facebook.react.bridge.JSBundleLoader.createFileLoader(rnDir + File.separator + bundleName));
+                        com.facebook.react.bridge.JSBundleLoader.createFileLoader(rnDir + bundleName));
             } catch (Exception ex) {
 
                 Field f = rnManagerClazz.getDeclaredField("mJavaScriptExecutorFactory");
@@ -532,7 +537,7 @@ public class ReactManager {
 
                 method.invoke(rnInstanceManager,
                         jscConfig,
-                        com.facebook.react.bridge.JSBundleLoader.createFileLoader(rnDir + File.separator + bundleName));
+                        com.facebook.react.bridge.JSBundleLoader.createFileLoader(rnDir + bundleName));
             }
 
 
@@ -700,6 +705,7 @@ public class ReactManager {
 
     /**
      * 获取业务名
+     *
      * @return
      */
     public String getBusinessName() {
@@ -708,11 +714,13 @@ public class ReactManager {
 
     /**
      * 设置业务名
+     *
      * @param businessName 业务名
      */
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
     }
+
     /**
      * 获取ReactRootView
      *

@@ -42,13 +42,14 @@ public class RNHelloActivity extends Activity implements DefaultHardwareBackBtnH
         Bundle bundle = getIntent().getExtras();
         moduleName = bundle.getString("moduleName", "First");
         ConfigUtil.getInstance().initReactManager(getApplication(), "index", "index.jsbundle", "Hello");
-        ReactManager.getInstance().loadBundleBehind();
+        ReactManager.getInstance().setSuccessListener(this);
     }
 
     /**
      * 更新reactview
      */
     private void updateReactView() {
+        ReactManager.getInstance().loadBundleBehind();
         if (mReactRootView == null) {
             if (mReactInstanceManager == null) {
                 mReactInstanceManager = ReactManager.getInstance().getRnInstanceManager();
