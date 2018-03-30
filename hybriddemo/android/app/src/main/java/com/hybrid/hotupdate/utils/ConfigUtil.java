@@ -37,11 +37,13 @@ public class ConfigUtil {
             ReactManager.getInstance().setBundleName(bundleName);
             ReactManager.getInstance().setBusinessName(businessName);
             // 设置热更新路径
-            ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/master/hybriddemo/rn/increment/android/");
+            ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/master/hybriddemo/rn/bao/android/" + businessName + "/");
             List<ReactPackage> reactPackages = new ArrayList<>();
             // 添加额外的package
             reactPackages.add(new HotUpdatePackage());
-            ReactManager.getInstance().init(application, reactPackages, BuildConfig.DEBUG);
+            if (!businessName.equals("common")) {
+                ReactManager.getInstance().init(application, reactPackages, BuildConfig.DEBUG);
+            }
 //        }
     }
 }

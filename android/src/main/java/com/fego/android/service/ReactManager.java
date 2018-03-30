@@ -290,7 +290,7 @@ public class ReactManager {
         if (USE_LOCAL) return;
 
         //获取本地rn资源的sdk版本号、资源数据迭代版本号
-        localDataVersion = ReactPreference.getInstance().getString(BUNDLE_VERSION);
+        localDataVersion = ReactPreference.getInstance().getString(businessName + BUNDLE_VERSION);
 
         if (this.localDataVersion.equals("")) {
             this.localDataVersion = "0";
@@ -303,7 +303,7 @@ public class ReactManager {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Log.d(TAG, "load react data behind success!");
-                    String downloadFilePath = application.getFilesDir().getAbsolutePath() + File.separator + "rn_config";
+                    String downloadFilePath = application.getFilesDir().getAbsolutePath() + File.separator + "rn_"+ businessName + "_config";
                     File file = new File(downloadFilePath);
                     boolean writtenToDisk = FileUtils.writeResponseBodyToDisk(response.body(), file);
                     if (writtenToDisk) {
@@ -364,7 +364,7 @@ public class ReactManager {
                     }
                     if (remoteSdkVersion.equals(SDK_VERSION)) {
                         //如果新版本字典存在,说明是已下载还没有使用的资源,如果跟线上的版本号相同也不必要下载了
-                        String needUpdateVersion = ReactPreference.getInstance().getString(NEW_BUNDLE_VERSION);
+                        String needUpdateVersion = ReactPreference.getInstance().getString(businessName + NEW_BUNDLE_VERSION);
                         if (TextUtils.isEmpty(needUpdateVersion)) {// 没有新资源
                             // 远程版本不为""；远程版本与本地版本不一致；
                             if (!remoteDataVersion.equals("") && !remoteDataVersion.equals(localDataVersion)) {
@@ -415,8 +415,8 @@ public class ReactManager {
                     if (writtenToDisk) {
                         String tmpValue = FileUtils.getMd5ByFile(file);
                         if (tmpValue.equals(md5Value)) {
-                            ReactPreference.getInstance().save(NEW_BUNDLE_PATH, downloadFilePath);
-                            ReactPreference.getInstance().save(NEW_BUNDLE_VERSION, remoteDataVersion);
+                            ReactPreference.getInstance().save(businessName + NEW_BUNDLE_PATH, downloadFilePath);
+                            ReactPreference.getInstance().save(businessName + NEW_BUNDLE_VERSION, remoteDataVersion);
                             if (successListener != null) {
                                 successListener.onSuccess();
                             } else {
@@ -456,7 +456,7 @@ public class ReactManager {
      * 解压
      */
     public void unzipBundle() {
-        String downloadFilePath = ReactPreference.getInstance().getString(NEW_BUNDLE_PATH);
+        String downloadFilePath = ReactPreference.getInstance().getString(businessName + NEW_BUNDLE_PATH);
         String rnDir = sourceDir;
         File fileRNDir = new File(rnDir);
         if (!fileRNDir.exists()) {
@@ -489,7 +489,7 @@ public class ReactManager {
      * 重新加载指定目录的rn的bundle资源
      */
     public void doReloadBundle() {
-        String remoteDataVersion = ReactPreference.getInstance().getString(NEW_BUNDLE_VERSION);
+        String remoteDataVersion = ReactPreference.getInstance().getString(businessName + NEW_BUNDLE_VERSION);
         String rnDir = sourceDir;
         File file = new File(rnDir + File.separator + bundleName);
         if (file == null || !file.exists()) {
@@ -539,9 +539,9 @@ public class ReactManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ReactPreference.getInstance().save(BUNDLE_VERSION, remoteDataVersion);
-        ReactPreference.getInstance().delete(NEW_BUNDLE_PATH);
-        ReactPreference.getInstance().delete(NEW_BUNDLE_VERSION);
+        ReactPreference.getInstance().save(businessName + BUNDLE_VERSION, remoteDataVersion);
+        ReactPreference.getInstance().delete(businessName + NEW_BUNDLE_PATH);
+        ReactPreference.getInstance().delete(businessName + NEW_BUNDLE_VERSION);
     }
 
     /******************************tools*******************************/
@@ -737,7 +737,7 @@ public class ReactManager {
      * @return boolean true为有，false为没有
      */
     public boolean hasNewVersion() {
-        String newVersion = ReactPreference.getInstance().getString(NEW_BUNDLE_VERSION);
+        String newVersion = ReactPreference.getInstance().getString(businessName + NEW_BUNDLE_VERSION);
         return !TextUtils.isEmpty(newVersion);
     }
 
@@ -747,7 +747,7 @@ public class ReactManager {
      * @return String 包含rn资源版本号的的版本号
      */
     public String getReactVersion() {
-        String dataVersion = ReactPreference.getInstance().getString(BUNDLE_VERSION);
+        String dataVersion = ReactPreference.getInstance().getString(businessName + BUNDLE_VERSION);
         if (TextUtils.isEmpty(dataVersion)) {
             return SDK_VERSION;
         }

@@ -11,6 +11,7 @@ import android.widget.Button;
 import com.fego.android.service.ReactManager;
 import com.hybrid.hotupdate.rn.RNHelloActivity;
 import com.hybrid.hotupdate.rn.RNWorldActivity;
+import com.hybrid.hotupdate.utils.ConfigUtil;
 
 public class MainActivity extends Activity implements View.OnClickListener, ReactManager.SuccessListener {
 
@@ -21,12 +22,18 @@ public class MainActivity extends Activity implements View.OnClickListener, Reac
         setContentView(R.layout.activity_main);
         initViews();
         ReactManager.getInstance().setSuccessListener(this);
+        updateData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 //        ReactManager.getInstance().loadBundleBehind();
+    }
+
+    private void updateData () {
+        ConfigUtil.getInstance().initReactManager(getApplication(), "index","index.jsbundle","common");
+        ReactManager.getInstance().loadBundleBehind();
     }
 
     private void initViews() {

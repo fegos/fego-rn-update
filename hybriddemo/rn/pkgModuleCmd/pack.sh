@@ -16,7 +16,8 @@ echo $businessName
 configDir=$path$platform/$businessName/all/$sdkVer/
 hotConfigDir=$path$platform/$businessName/all/
 mkdir -p $configDir
-mkdir -p $path$platform/$businessName/increment/
+# 暂且不支持增量更新
+# mkdir -p $path$platform/$businessName/increment/
 #config文件路径
 configPath=$configDir"config"
 hotConfigPath=$hotConfigDir"config"
