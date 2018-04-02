@@ -23,7 +23,7 @@ platform="android"
 # increment/all 选择是增量还是全量，默认increment
 type="test"
 # 业务模块名
-businessName="common"
+businessName="no"
 if [ $# = 1 ]; then
 	if [ $1 = 'android' ] || [ $1 = 'ios' ]; then
 		platform=$1
@@ -67,5 +67,6 @@ if [ $type = 'test' ]; then
 else 
 	# 全量包和增量包生成之后将最终的config更新，可根据脚本参数确定使用增量还是全量，increment/all，
 	# 此时需将上述两条注释，打开下面的注释
-	cp $path$platform/$businessName/$type/config $path$platform/$businessName
+	# cp $path$platform/$businessName/$type/config $path$platform/$businessName
+	echo '暂时不支持增量'
 fi
