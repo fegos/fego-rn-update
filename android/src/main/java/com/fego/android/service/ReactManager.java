@@ -217,9 +217,9 @@ public class ReactManager {
                 ReactInstanceManagerBuilder builder = ReactInstanceManager.builder()
                         .setApplication(application);
                 if (ReactPreference.getInstance().getInt(businessName) != 1) {
-                    String patchStr = getJsBundle(sourceDir + businessName + "/index.jsbundle", false);
-                    String assetsBundle = getJsBundle(sourceDir + "common/index.jsbundle", false);
-                    merge(patchStr, assetsBundle, sourceDir, businessName);
+                    String patchStr = getJsBundle(sourceDir + businessName + "/" + bundleName, false);
+                    String assetsBundle = getJsBundle(sourceDir + "common/" + bundleName, false);
+                    merge(patchStr, assetsBundle, sourceDir + businessName + "/");
                 }
                 ReactPreference.getInstance().saveInt(businessName, 1);
 
@@ -249,7 +249,7 @@ public class ReactManager {
                     }
                 }
                 //直接读取该bundle资源
-                builder.setJSBundleFile(sourceDir + businessName + "/index.jsbundle");
+                builder.setJSBundleFile(sourceDir + businessName + "/" + bundleName);
                 //更新字体文件
                 updateReactFonts();
                 rnInstanceManager = builder.build();
@@ -469,8 +469,8 @@ public class ReactManager {
             //b、type为"0"，bundle合并；否则继续
             if (type.equals("0")) {
                 String patchStr = getJsBundle(rnDir + "increment.jsbundle", false);
-                String assetsBundle = getJsBundle(rnDir + "index.jsbundle", false);
-                merge(patchStr, assetsBundle, rnDir, bundleName);
+                String assetsBundle = getJsBundle(rnDir + bundleName, false);
+                merge(patchStr, assetsBundle, rnDir);
             }
             //c、解析assetsConfig.txt，获取到需要删除的资源文件，进而删除
             if (!isAll) {
@@ -579,7 +579,7 @@ public class ReactManager {
      * @param bundle   旧bundle包内容
      * @param rnDir    更新后的bundle路径
      */
-    private void merge(String patchStr, String bundle, String rnDir, String bundleName) {
+    private void merge(String patchStr, String bundle, String rnDir) {
         DiffMatchPatchUtils dmp = new DiffMatchPatchUtils();
         // 转换pat
         LinkedList<DiffMatchPatchUtils.Patch> pathes = (LinkedList<DiffMatchPatchUtils.Patch>) dmp.patch_fromText(patchStr);
@@ -587,7 +587,7 @@ public class ReactManager {
         Object[] bundleArray = dmp.patch_apply(pathes, bundle);
         // 保存新的bundle文件
         try {
-            Writer writer = new FileWriter(rnDir + bundleName + "/index.jsbundle");
+            Writer writer = new FileWriter(rnDir + bundleName);
             String newBundle = (String) bundleArray[0];
             writer.write(newBundle);
             writer.close();
