@@ -80,7 +80,6 @@ module.exports = function (oldVer, newVer, sdkVer, platform, businessName, commo
 			var text1 = bunOld;
 			var text2 = bunNew;
 			if (businessName !== 'no' && businessName !== 'common') {
-				console.log('Hello')
 				var patches1 = dmp.patch_fromText(text1);
 				var results1 = dmp.patch_apply(patches1, commonText);
 				text1 = results1[0];
