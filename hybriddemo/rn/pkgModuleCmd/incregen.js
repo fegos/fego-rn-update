@@ -108,10 +108,38 @@ function unzipAll() {
  * @param {*} platform 平台，android/ios
  */
 function generateIncrement() {
+	// 如果是非common模块，需要事先读取common bundle包内容
+	let commonText = '';
+	if (businessName !== 'no' && businessName !== 'common') {
+		let commonAllPath = configs.path + platform + '/common/all/';
+		if (!fs.existsSync(commonAllPath + sdkVer + '/config')) {
+			console.log("还没有common包，请先生成包");
+			newVer = 0;
+			return;
+		}
+		// 读取全量包中config文件，获取最新版本号
+		let config = fs.readFileSync(commonAllPath + sdkVer + '/config');
+		let commonNewVer = Number.parseInt(config);
+		var zipName = '';
+		if (commonNewVer === 0) {// 如果取到的值为0，则说明这是首次生成增量包，需要将最新版本更改为1
+			zipName = 'rn_' + sdkVer + '_' + commonNewVer;
+			if (!fs.existsSync(commonAllPath + 'temp/')) {
+				fs.mkdirSync(commonAllPath + 'temp/');
+			}
+			if (!fs.existsSync(commonAllPath + 'temp/' + sdkVer)) {
+				fs.mkdirSync(commonAllPath + 'temp/' + sdkVer);
+			}
+			if (!fs.existsSync(commonAllPath + 'temp/' + sdkVer + '/' + zipName)) {
+				fs.mkdirSync(commonAllPath + 'temp/' + sdkVer + '/' + zipName);
+			}
+			zipper.sync.unzip(commonAllPath + sdkVer + '/' + zipName + ".zip").save(commonAllPath + 'temp/' + sdkVer + '/' + zipName);
+		} else {
+			zipName = 'rn_' + sdkVer + '_' + (commonNewVer - 1);
+		}
+		commonText = fs.readFileSync(commonAllPath + 'temp/' + sdkVer + '/' + zipName + '/' + bundleName);
+	}
 	for (let i = newVer - 1; i >= 0; i--) {
-		let bundleIncrement = new Promise(function (resolve, reject) {
-			new jsbundle(i, newVer, sdkVer, platform, businessName);
-		})
+		new jsbundle(i, newVer, sdkVer, platform, businessName, commonText);
 	}
 }
 

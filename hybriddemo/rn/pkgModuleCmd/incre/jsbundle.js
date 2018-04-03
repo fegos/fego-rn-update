@@ -17,7 +17,7 @@ var rd = require('../third/file_list');
  * @param {*} sdkVer sdk版本号
  * @param {*} platform 平台，android/ios
  */
-module.exports = function (oldVer, newVer, sdkVer, platform, businessName) {
+module.exports = function (oldVer, newVer, sdkVer, platform, businessName, commonText) {
 	// 旧包内容
 	var bunOld = '';
 	// 新包内容
@@ -79,6 +79,15 @@ module.exports = function (oldVer, newVer, sdkVer, platform, businessName) {
 			// 生成增量内容
 			var text1 = bunOld;
 			var text2 = bunNew;
+			if (businessName !== 'no' && businessName !== 'common') {
+				console.log('Hello')
+				var patches1 = dmp.patch_fromText(text1);
+				var results1 = dmp.patch_apply(patches1, commonText);
+				text1 = results1[0];
+				var patches2 = dmp.patch_fromText(text2);
+				var results2 = dmp.patch_apply(patches2, commonText);
+				text2 = results2[0];
+			}
 			var diff = dmp.diff_main(text1, text2, true);
 			if (diff.length > 2) {
 				dmp.diff_cleanupSemantic(diff);
@@ -123,45 +132,6 @@ module.exports = function (oldVer, newVer, sdkVer, platform, businessName) {
 	}
 
 	/**
-	 * 合并成最新的全量包（可选）
-	 */
-	function patch_launch() {
-		var promise = new Promise(function (resolve, reject) {
-			var text1 = bunOld;
-			var patches = dmp.patch_fromText(patch_text);
-
-			// var ms_start = (new Date).getTime();
-			var results = dmp.patch_apply(patches, text1);
-			// var ms_end = (new Date).getTime();
-			// console.log(ms_end - ms_start);
-
-			let error = false;
-			let patch_results = results[1];
-			var html = '';
-			for (var x = 0; x < patch_results.length; x++) {
-				if (patch_results[x]) {
-				} else {
-					error = true;
-				}
-			}
-			if (error) {
-				console.log('增量更新failure');
-				reject('增量更新failure');
-			}
-			fs.writeFile(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/all.bundle', results[0], function (err) {
-				if (err) {
-					console.log('增量更新failure' + err);
-					reject(err);
-				} else {
-					console.log('增量更新success');
-					resolve(patch_text);
-				}
-			});
-		});
-		return promise;
-	}
-
-	/**
 	 * 在bundle和assets均生成增量后进行压缩，并更新config文件
 	 */
 	function zipIncrement() {
@@ -181,7 +151,6 @@ module.exports = function (oldVer, newVer, sdkVer, platform, businessName) {
 				});
 			}
 		});
-
 	}
 
 	/**
