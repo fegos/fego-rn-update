@@ -9,6 +9,9 @@ export default class Hello extends Component {
 				<Text>第一个rn页面</Text>
 				<Text>我更新了</Text>
 				<Text>我要单独更新了</Text>
+				<Text>第一个rn页面</Text>
+				<Text>我更新了</Text>
+				<Text>我要单独更新了</Text>
 			</View>
 		)
 	}
