@@ -96,8 +96,8 @@ else
 	cd deploy
 	if [ $isexist = 0 ]; then
 		echo 'first pack'
-		# mkdir -p $currentPath/../android/app/src/main/assets/rn/$businessName/
-		# cp -rf $businessName/ $currentPath/../android/app/src/main/assets/rn/$businessName/
+		mkdir -p $currentPath/../android/app/src/main/assets/rn/$businessName/
+		cp -rf $businessName/ $currentPath/../android/app/src/main/assets/rn/$businessName/
 	fi
 	cd $businessName
 fi
