@@ -63,7 +63,7 @@ if [ $type = 'test' ]; then
 	# 全量包生成
 	sh ./pkgModuleCmd/pack.sh $platform $path $sdkVer $businessName
 	# 增量包生成
-	# node ./pkgCmd/incregen.js $platform
+	node ./pkgModuleCmd/incregen.js $platform $businessName
 else 
 	# 全量包和增量包生成之后将最终的config更新，可根据脚本参数确定使用增量还是全量，increment/all，
 	# 此时需将上述两条注释，打开下面的注释

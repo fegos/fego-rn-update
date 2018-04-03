@@ -26,6 +26,7 @@ if (process.argv.length === 3) {
 	businessName = process.argv[3];
 }
 console.log(platform);
+console.log(businessName);
 // 包路径前缀
 var pathPrefix = '';
 // 增量包路径前缀；
@@ -46,7 +47,7 @@ function unzipAll() {
 	if (businessName === 'no') {
 		pathPrefix = configs.path + platform;
 	} else {
-		pathPrefix = configs.path + businessName + '/' + platform;
+		pathPrefix = configs.path + platform + '/' + businessName;
 	}
 	incrementPathPrefix = pathPrefix + '/increment/';
 	allPathPrefix = pathPrefix + '/all/';
@@ -109,7 +110,7 @@ function unzipAll() {
 function generateIncrement() {
 	for (let i = newVer - 1; i >= 0; i--) {
 		let bundleIncrement = new Promise(function (resolve, reject) {
-			new jsbundle(i, newVer, sdkVer, platform);
+			new jsbundle(i, newVer, sdkVer, platform, businessName);
 		})
 	}
 }
