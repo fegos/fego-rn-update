@@ -7,6 +7,7 @@ var rd = require('../third/file_list');
 var diff = require('../third/diff_match_patch_uncompressed');
 var dmp = new diff.diff_match_patch();
 var crypto = require('crypto');
+let Utils = require('../Utils');
 
 /**
  * 资源增量生成
@@ -120,18 +121,6 @@ module.exports = function (oldVer, newVer, apkVer, platform, isIncrement) {
 	}
 
 	/**
-	 * 生成文件md5值
-	 * @param {*} filepath 
-	 */
-	function generateFileMd5(filepath) {
-		var buffer = fs.readFileSync(filepath);
-		var fsHash = crypto.createHash('md5');
-		fsHash.update(buffer);
-		var md5 = fsHash.digest('hex');
-		return md5;
-	}
-
-	/**
 	 * 生成资源的增量包
 	 * 目前想的是增加和改动图片直接复制到目标目录，对于删除的文件需要在目标目录中删除相应的文件
 	 */
@@ -140,8 +129,8 @@ module.exports = function (oldVer, newVer, apkVer, platform, isIncrement) {
 		for (let i = 0, max = resultNew.length; i < max; i++) {
 			if (typeof hashOld[resultNew[i]] !== "undefined") {
 				// 相同元素,比较两个文件大小进一步判断
-				let oldMd5 = generateFileMd5(allPathPrefix + apkVer + '/' + oldZipName + '/' + resultNew[i]);
-				let newMd5 = generateFileMd5(allPathPrefix + apkVer + '/' + newZipName + '/' + resultNew[i]);
+				let oldMd5 = Utils.generateFileMd5(allPathPrefix + apkVer + '/' + oldZipName + '/' + resultNew[i]);
+				let newMd5 = Utils.generateFileMd5(allPathPrefix + apkVer + '/' + newZipName + '/' + resultNew[i]);
 				if (oldMd5 !== newMd5) {
 					console.log(allPathPrefix + apkVer + '/' + oldZipName + '/' + resultNew[i]);
 					console.log(allPathPrefix + apkVer + '/' + newZipName + '/' + resultNew[i]);

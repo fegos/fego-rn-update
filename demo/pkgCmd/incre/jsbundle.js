@@ -9,6 +9,7 @@ var assets = require('./assets');
 var zipper = require("zip-local");
 var crypto = require('crypto');
 var rd = require('../third/file_list');
+let Utils = require('../Utils');
 
 /**
  * bundle增量生成函数
@@ -126,9 +127,9 @@ module.exports = function (oldVer, newVer, apkVer, platform) {
 			if (!error) {
 				zipped.save(zipPath + '.zip', function (error) {
 					if (!error) {
-						let md5Value = generateFileMd5(zipPath + '.zip');
+						let md5Value = Utils.generateFileMd5(zipPath + '.zip');
 						console.log("ZIP EXCELLENT!");
-						deleteFolder(zipPath);
+						Utils.deleteFolder(zipPath);
 						fs.appendFileSync(incrementPathPrefix + '/config', apkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement + '_' + md5Value + ',');
 						fs.writeFileSync(pathPrefix + '/config', fs.readFileSync(incrementPathPrefix + 'config'))
 					} else {
@@ -138,37 +139,6 @@ module.exports = function (oldVer, newVer, apkVer, platform) {
 			}
 		});
 
-	}
-
-	/**
-	 * 生成文件md5值
-	 * @param {*} filepath 
-	 */
-	function generateFileMd5(filepath) {
-		var buffer = fs.readFileSync(filepath);
-		var fsHash = crypto.createHash('md5');
-		fsHash.update(buffer);
-		var md5 = fsHash.digest('hex');
-		return md5;
-	}
-
-	/**
-	 * 删除目录及下边的所有文件、文件夹
-	 */
-	function deleteFolder(zipPath) {
-		var files = [];
-		if (fs.existsSync(zipPath)) {
-			files = fs.readdirSync(zipPath);
-			files.forEach(function (file, index) {
-				var curPath = zipPath + "/" + file;
-				if (fs.statSync(curPath).isDirectory()) { // recurse
-					deleteFolder(curPath);
-				} else { // delete file
-					fs.unlinkSync(curPath);
-				}
-			});
-			fs.rmdirSync(zipPath);
-		}
 	}
 
 	let promise = Promise.all(promises).then(function (posts) {
