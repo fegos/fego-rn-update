@@ -311,7 +311,7 @@ public class ReactManager {
             rnSourceUrl = sourceUrl + "all/" + apkVersion + "/" + rnZipName;
         }else {
             rnZipName = "rn_" + apkVersion + "_" + remoteDataVersion + "_" + localDataVersion + "_" + type + ".zip";
-            rnSourceUrl = sourceUrl + "increment/" + apkVersion + "/" + remoteDataVersion + "/" + rnZipName;
+            rnSourceUrl = sourceUrl + "increment/" + apkVersion + "/" + rnZipName;
         }
         bundleCall = service.downloadFile(rnSourceUrl, new Callback<ResponseBody>() {
             @Override
