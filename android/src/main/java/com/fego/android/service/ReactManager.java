@@ -136,12 +136,16 @@ public class ReactManager {
                 //rn manager初始化，仅使用位于沙盒目录下的bundle资源
                 ReactInstanceManagerBuilder builder = ReactInstanceManager.builder()
                         .setApplication(application);
-                if (ReactPreference.getInstance().getInt(businessName) != 1) {
-                    String patchStr = getJsBundle(sourceDir + businessName + "/" + bundleName, false);
-                    String assetsBundle = getJsBundle(sourceDir + "common/" + bundleName, false);
-                    merge(patchStr, assetsBundle, sourceDir + businessName + "/");
+                if (!TextUtils.isEmpty(businessName)) {
+                    if (ReactPreference.getInstance().getInt(businessName) != 1) {
+                        String patchStr = getJsBundle(sourceDir + businessName + "/" + bundleName, false);
+                        String assetsBundle = getJsBundle(sourceDir + "common/" + bundleName, false);
+                        merge(patchStr, assetsBundle, sourceDir + businessName + "/");
+                    }
+                    ReactPreference.getInstance().saveInt(businessName, 1);
+                } else {
+                    businessName = "";
                 }
-                ReactPreference.getInstance().saveInt(businessName, 1);
 
                 Class<?> clazz = builder.getClass();
                 Method method = null;
@@ -169,7 +173,11 @@ public class ReactManager {
                     }
                 }
                 //直接读取该bundle资源
-                builder.setJSBundleFile(sourceDir + businessName + "/" + bundleName);
+                if (TextUtils.isEmpty(businessName)) {
+                    builder.setJSBundleFile(sourceDir + bundleName);
+                } else {
+                    builder.setJSBundleFile(sourceDir + businessName + "/" + bundleName);
+                }
                 //更新字体文件
                 updateReactFonts();
                 rnInstanceManager = builder.build();
@@ -184,7 +192,13 @@ public class ReactManager {
      * 更新字体文件
      */
     private void updateReactFonts() {
-        File rnSourceDirFile = new File(sourceDir + businessName + '/');
+        String tempPath = "";
+        if (TextUtils.isEmpty(businessName)) {
+            tempPath = sourceDir;
+        } else {
+            tempPath = sourceDir + businessName + '/';
+        }
+        File rnSourceDirFile = new File(tempPath);
         FilenameFilter fileNameFilter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
@@ -194,9 +208,9 @@ public class ReactManager {
         String[] fontsFiles = rnSourceDirFile.list(fileNameFilter);
         for (int i = 0; i < fontsFiles.length; i++) {
             String[] fontsNames = fontsFiles[i].split("\\.");
-            File fontFile = new File(sourceDir + businessName + '/' + fontsFiles[i]);
+            File fontFile = new File(tempPath + fontsFiles[i]);
             if (fontFile.exists()) {
-                Typeface tf = Typeface.createFromFile(sourceDir + businessName + '/' + fontsFiles[i]);
+                Typeface tf = Typeface.createFromFile(tempPath + fontsFiles[i]);
                 ReactFontManager.getInstance().setTypeface(fontsNames[0], 0, tf);
             }
         }
@@ -220,7 +234,8 @@ public class ReactManager {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Log.d(TAG, "load react data behind success!");
-                    String downloadFilePath = application.getFilesDir().getAbsolutePath() + File.separator + "rn_" + businessName + "_config";
+                    String temp = TextUtils.isEmpty(businessName) ? "" : businessName + "_";
+                    String downloadFilePath = application.getFilesDir().getAbsolutePath() + File.separator + "rn_" + temp + "config";
                     File file = new File(downloadFilePath);
                     boolean writtenToDisk = FileUtils.writeResponseBodyToDisk(response.body(), file);
                     if (writtenToDisk) {
@@ -374,7 +389,7 @@ public class ReactManager {
      */
     public void unzipBundle() {
         String downloadFilePath = ReactPreference.getInstance().getString(businessName + NEW_BUNDLE_PATH);
-        String rnDir = sourceDir + businessName + "/";
+        String rnDir = TextUtils.isEmpty(businessName) ? sourceDir : sourceDir + businessName + "/";
         File fileRNDir = new File(rnDir);
         if (!fileRNDir.exists()) {
             fileRNDir.mkdirs();
@@ -407,7 +422,7 @@ public class ReactManager {
      */
     public void doReloadBundle() {
         String remoteDataVersion = ReactPreference.getInstance().getString(businessName + NEW_BUNDLE_VERSION);
-        String rnDir = sourceDir + businessName + "/";
+        String rnDir = TextUtils.isEmpty(businessName) ? sourceDir : sourceDir + businessName + "/";
         File file = new File(rnDir + File.separator + bundleName);
         if (file == null || !file.exists()) {
             Log.i(TAG, "js bundle file download error, check URL or network state");
