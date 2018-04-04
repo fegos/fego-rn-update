@@ -62,10 +62,11 @@
     │   └── jsbundle.js     # bundle增量生成脚本
     ├── incregen.js         # 增量包生成脚本
 	├── md5.js				# 生成全量更新config
-    ├── pack.sh             # 全量包打包脚本
-    └── third               # 依赖的第三方脚本
-        ├── diff_match_patch_uncompressed.js    # 文件差异生成脚本
-        └── file_list.js    # 列出目录下所有的文件
+    ├── allPkg.sh           # 全量包打包脚本
+    ├── third               # 依赖的第三方脚本
+    │   ├── diff_match_patch_uncompressed.js    # 文件差异生成脚本
+    │   └── file_list.js    # 列出目录下所有的文件
+	└── Utils				# 公共方法
 ```
 
 # 安装
@@ -287,7 +288,7 @@ manager.noJsServer = YES;
 
 2. 在想要生成包的地方创建包存储目录
 
-存储目录可以参考`node_modules/fego-rn-update/`下的`increment文件夹`
+存储目录可以参考`node_modules/fego-rn-update/`下的`increment文件夹`（其内部是android和ios目录均是自动生成的）
 
 ```
 .
@@ -307,10 +308,10 @@ manager.noJsServer = YES;
     └── increment       # 存放增量包
         └── README.md
 ```
-3. 修改配置文件`config.js`中的`path`和`sdk`（config.js文件位于pkgCmd/下）
+3. 修改配置文件`config.js`中的`path`和`apkVer`（config.js文件位于pkgCmd/下）
 
 	path：生成包存储路径
-	sdk：跟apk版本号一致
+	apkVer：apk版本号
 
 ```
 // 写个用户名跟路径对应的字典，这个方便一个工程多个人维护使用，支持mac
@@ -330,7 +331,7 @@ let username = os.userInfo().username;
 console.log(map[username]);
 module.exports = {
 	path: map[username],//在此处可以直接更改为自己要生成包的位置
-	sdkVer: '1.0'//需跟apk版本保持一致
+	apkVer: '1.0'//需跟apk版本保持一致
 }
 ```
 4. 更新字体文件
@@ -340,7 +341,7 @@ module.exports = {
 5. 在`node_modules同级目录`下执行脚本`pkg.sh`
 
 ```
-sh pkg.sh 				// 默认是android平台下进行增量更新
+sh pkg.sh 				// 默认是两个平台下均进行增量更新
 sh pkg.sh platform  	// 其中platform为android/ios，进行生成包工作，默认使用增量更新
 sh pkg.sh type			// 其中type为increment（增量）、all（全量），设置该参数时，只会进行增量和全量选择操作，不会进行包生成
 sh pkg.sh platform type	// 选在平台上的更新方式

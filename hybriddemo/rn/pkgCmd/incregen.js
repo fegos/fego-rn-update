@@ -9,7 +9,7 @@ var zipper = require("zip-local");
 
 /******************** 变量说明 *******************/
 // sdk版本
-var sdkVer = configs.sdkVer;
+var apkVer = configs.apkVer;
 // 最新版本号
 var newVer = 0;
 // ios/android, 执行本脚本时可以作为参数传入
@@ -43,51 +43,44 @@ function unzipAll() {
 	if (fs.existsSync(incrementPathPrefix + '/config')) {
 		fs.unlinkSync(incrementPathPrefix + '/config')
 	}
-	console.log(allPathPrefix + sdkVer + '/config')
 
-	// 看全量包中是否有包存在（打包脚本在第一次使用时会自动生成config文件，如果没有该文件，说明没有包存在）
-	if (!fs.existsSync(allPathPrefix + sdkVer + '/config')) {
+	// 看全量包中是否有包存在（打包脚本在第一次使用时会自动生成unzipVer文件，如果没有该文件，说明没有包存在）
+	if (!fs.existsSync(allPathPrefix + apkVer + '/unzipVer')) {
 		console.log("还没有可用的包，请先生成包");
 		newVer = 0;
 		return;
 	}
 
-	// 读取全量包中config文件，获取最新版本号
-	let config = fs.readFileSync(allPathPrefix + sdkVer + '/config');
-	console.log(config + '**************');
-	newVer = Number.parseInt(config);
+	// 读取全量包中unzipVer文件，获取最新版本号
+	let unzipVer = fs.readFileSync(allPathPrefix + apkVer + '/unzipVer');
+	console.log(unzipVer + '**************');
+	newVer = Number.parseInt(unzipVer);
 	if (newVer === 0) {// 如果取到的值为0，则说明这是首次生成增量包，需要将最新版本更改为1
 		newVer = 1;
 	}
 
 	// 从最新包开始依次解压包
-	for (let i = newVer; i >= Number.parseInt(config); i--) {
-		var zipName = 'rn_' + sdkVer + '_' + i;
+	for (let i = newVer; i >= Number.parseInt(unzipVer); i--) {
+		var zipName = 'rn_' + apkVer + '_' + i;
 
 		// 兼容只存在老包就执行增量更新的情况，判断是否存在新包，不存在就终止整个脚本运行
-		if (!fs.existsSync(allPathPrefix + sdkVer + '/' + zipName + '.zip')) {
+		if (!fs.existsSync(allPathPrefix + apkVer + '/' + zipName + '.zip')) {
 			console.log("新包" + zipName + ".zip不存在，请先生成新包");
 			newVer = 0;
 			return;
 		}
 
 		// 将解压包存放至temp文件中，方便git忽略
-		if (!fs.existsSync(allPathPrefix + 'temp/')) {
-			fs.mkdirSync(allPathPrefix + 'temp/');
-		}
-		if (!fs.existsSync(allPathPrefix + 'temp/' + sdkVer)) {
-			fs.mkdirSync(allPathPrefix + 'temp/' + sdkVer);
-		}
-		if (!fs.existsSync(allPathPrefix + 'temp/' + sdkVer + '/' + zipName)) {
-			fs.mkdirSync(allPathPrefix + 'temp/' + sdkVer + '/' + zipName);
+		if (!fs.existsSync(allPathPrefix + 'temp/' + apkVer + '/' + zipName)) {
+			fs.mkdirSync(allPathPrefix + 'temp/' + apkVer + '/' + zipName);
 		}
 
 		// 解压包
-		zipper.sync.unzip(allPathPrefix + sdkVer + '/' + zipName + ".zip").save(allPathPrefix + 'temp/' + sdkVer + '/' + zipName);
+		zipper.sync.unzip(allPathPrefix + apkVer + '/' + zipName + ".zip").save(allPathPrefix + 'temp/' + apkVer + '/' + zipName);
 	}
 
-	// 更新config文件，将其改为newVer+1
-	fs.writeFileSync(allPathPrefix + sdkVer + '/config', (newVer + 1) + '');
+	// 更新unzipVer文件，将其改为newVer+1
+	fs.writeFileSync(allPathPrefix + apkVer + '/unzipVer', (newVer + 1) + '');
 }
 
 /**
@@ -97,7 +90,7 @@ function unzipAll() {
 function generateIncrement() {
 	for (let i = newVer - 1; i >= 0; i--) {
 		let bundleIncrement = new Promise(function (resolve, reject) {
-			new jsbundle(i, newVer, sdkVer, platform);
+			new jsbundle(i, newVer, apkVer, platform);
 		})
 	}
 }
