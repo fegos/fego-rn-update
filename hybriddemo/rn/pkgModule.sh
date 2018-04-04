@@ -55,6 +55,9 @@ if [ $type = 'test' ]; then
 else 
 	# 全量包和增量包生成之后将最终的config更新，可根据脚本参数确定使用增量还是全量，increment/all，
 	# 此时需将上述两条注释，打开下面的注释
-	# cp $path$platform/$businessName/$type/config $path$platform/$businessName
-	echo '暂时不支持增量'
+	if [ $businessName = 'no' ]; then
+		cp $path$platform/$type/config $path$platform
+	else
+		cp $path$platform/$businessName/$type/config $path$platform/$businessName
+	fi
 fi
