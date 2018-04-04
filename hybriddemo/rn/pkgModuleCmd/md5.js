@@ -13,10 +13,10 @@ function generateFileMd5(filepath) {
 }
 
 filepath = process.argv[2];
-sdkVer = process.argv[3];
+apkVer = process.argv[3];
 zipName = process.argv[4];
 content = process.argv[5];
 
-fs.writeFileSync(filepath + 'config', content + '_' + generateFileMd5(filepath + sdkVer + '/' + zipName));
+fs.writeFileSync(filepath + 'config', content + '_' + generateFileMd5(filepath + apkVer + '/' + zipName));
 
 fs.writeFileSync(filepath.substring(0, filepath.length - 4) + 'config', fs.readFileSync(filepath + 'config'));

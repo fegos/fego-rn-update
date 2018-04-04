@@ -7,7 +7,6 @@ export default class World extends Component {
 		return (
 			<View style={[Style.container, { alignItems: 'center', justifyContent: 'center' }]} >
 				<Text>第二个rn页面</Text>
-				<Text>我更新了</Text>
 			</View>
 		)
 	}

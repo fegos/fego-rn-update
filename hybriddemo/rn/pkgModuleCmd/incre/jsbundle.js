@@ -9,15 +9,16 @@ var assets = require('./assets');
 var zipper = require("zip-local");
 var crypto = require('crypto');
 var rd = require('../third/file_list');
+let Utils = require('../Utils');
 
 /**
  * bundle增量生成函数
  * @param {*} oldVer bundle老版本号
  * @param {*} newVer bundle新版本号
- * @param {*} sdkVer sdk版本号
+ * @param {*} apkVer sdk版本号
  * @param {*} platform 平台，android/ios
  */
-module.exports = function (oldVer, newVer, sdkVer, platform, businessName, commonText) {
+module.exports = function (oldVer, newVer, apkVer, platform, businessName, commonText) {
 	// 旧包内容
 	var bunOld = '';
 	// 新包内容
@@ -41,11 +42,11 @@ module.exports = function (oldVer, newVer, sdkVer, platform, businessName, commo
 	// 增量包里bundle的名字
 	const incrementBundleName = 'increment.jsbundle';
 	// 全量包zip名字
-	var zipName = 'rn_' + sdkVer + '_' + newVer;
+	var zipName = 'rn_' + apkVer + '_' + newVer;
 	// 是否是增量包，'0'表示是增量包，'1'表示全量包
 	var isIncrement = '0';
 	// 增量包zip名字
-	var incrementName = 'rn_' + sdkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement;
+	var incrementName = 'rn_' + apkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement;
 
 	/**
 	 * 读取文件内容	
@@ -68,7 +69,7 @@ module.exports = function (oldVer, newVer, sdkVer, platform, businessName, commo
 
 	// 读取新旧版本的bundle文件内容	
 	let promises = [oldVer, newVer].map(function (id) {
-		return readFile(allPathPrefix + sdkVer + '/rn_' + sdkVer + '_' + id + "/" + bundleName);
+		return readFile(allPathPrefix + apkVer + '/rn_' + apkVer + '_' + id + "/" + bundleName);
 	});
 
 	/**
@@ -102,8 +103,8 @@ module.exports = function (oldVer, newVer, sdkVer, platform, businessName, commo
 			}
 
 			// 生成到的指定路径如果不存在，则一一生成指定目录
-			incrementName = 'rn_' + sdkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement;
-			let path = sdkVer + '/' + incrementName + '/' + incrementBundleName;
+			incrementName = 'rn_' + apkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement;
+			let path = apkVer + '/' + incrementName + '/' + incrementBundleName;
 			path = path.split('/');
 			let sumPath = incrementPathPrefix;
 			for (let i = 0; i < path.length - 1; i++) {
@@ -116,7 +117,7 @@ module.exports = function (oldVer, newVer, sdkVer, platform, businessName, commo
 			// 将生成的增量内容存储到指定路径下的bundle文件中
 			let text = isIncrement === '0' ? patch_text : text2;
 			let finalName = isIncrement === '0' ? incrementBundleName : bundleName;
-			fs.writeFile(incrementPathPrefix + sdkVer + '/' + incrementName + '/' + finalName, text, function (err) {
+			fs.writeFile(incrementPathPrefix + apkVer + '/' + incrementName + '/' + finalName, text, function (err) {
 				if (err) {
 					console.log('生成增量包failure' + err);
 					reject(err);
@@ -134,15 +135,15 @@ module.exports = function (oldVer, newVer, sdkVer, platform, businessName, commo
 	 * 在bundle和assets均生成增量后进行压缩，并更新config文件
 	 */
 	function zipIncrement() {
-		let zipPath = incrementPathPrefix + sdkVer + '/' + incrementName;
+		let zipPath = incrementPathPrefix + apkVer + '/' + incrementName;
 		zipper.zip(zipPath, function (error, zipped) {
 			if (!error) {
 				zipped.save(zipPath + '.zip', function (error) {
 					if (!error) {
-						let md5Value = generateFileMd5(zipPath + '.zip');
+						let md5Value = Utils.generateFileMd5(zipPath + '.zip');
 						console.log("ZIP EXCELLENT!");
-						deleteFolder(zipPath);
-						fs.appendFileSync(incrementPathPrefix + '/config', sdkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement + '_' + md5Value + ',');
+						Utils.deleteFolder(zipPath);
+						fs.appendFileSync(incrementPathPrefix + '/config', apkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement + '_' + md5Value + ',');
 						fs.writeFileSync(pathPrefix + '/config', fs.readFileSync(incrementPathPrefix + 'config'))
 					} else {
 						console.log("ZIP FAIL!");
@@ -150,37 +151,6 @@ module.exports = function (oldVer, newVer, sdkVer, platform, businessName, commo
 				});
 			}
 		});
-	}
-
-	/**
-	 * 生成文件md5值
-	 * @param {*} filepath 
-	 */
-	function generateFileMd5(filepath) {
-		var buffer = fs.readFileSync(filepath);
-		var fsHash = crypto.createHash('md5');
-		fsHash.update(buffer);
-		var md5 = fsHash.digest('hex');
-		return md5;
-	}
-
-	/**
-	 * 删除目录及下边的所有文件、文件夹
-	 */
-	function deleteFolder(zipPath) {
-		var files = [];
-		if (fs.existsSync(zipPath)) {
-			files = fs.readdirSync(zipPath);
-			files.forEach(function (file, index) {
-				var curPath = zipPath + "/" + file;
-				if (fs.statSync(curPath).isDirectory()) { // recurse
-					deleteFolder(curPath);
-				} else { // delete file
-					fs.unlinkSync(curPath);
-				}
-			});
-			fs.rmdirSync(zipPath);
-		}
 	}
 
 	let promise = Promise.all(promises).then(function (posts) {
@@ -191,15 +161,15 @@ module.exports = function (oldVer, newVer, sdkVer, platform, businessName, commo
 	}).then(function (value) {
 		// return patch_launch();
 		//2、生成图片资源的增量
-		let fileList = rd.readFileSync(allPathPrefix + sdkVer + '/' + zipName);
+		let fileList = rd.readFileSync(allPathPrefix + apkVer + '/' + zipName);
 		for (let i = 0; i < fileList.length; i++) {
 			if (fileList[i].search('.ttf') !== -1) {
 				let tmp = fileList[i].split('/');
 				let name = tmp[tmp.length - 1];
-				fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + incrementName + '/' + name, fs.readFileSync(fileList[i]));
+				fs.writeFileSync(incrementPathPrefix + apkVer + '/' + incrementName + '/' + name, fs.readFileSync(fileList[i]));
 			}
 		}
-		let assetsIncrement = new assets(oldVer, newVer, sdkVer, platform, value, businessName);
+		let assetsIncrement = new assets(oldVer, newVer, apkVer, platform, value, businessName);
 		//3、将生成的增量包进行压缩操作，并删除之前生成的文件夹即其下的所有内容
 		zipIncrement();
 		return true;
