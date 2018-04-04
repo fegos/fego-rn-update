@@ -50,9 +50,11 @@ module.exports = function (oldVer, newVer, apkVer, platform, isIncrement) {
 		if (!fs.existsSync(allPathPrefix + apkVer + '/' + newZipName + dir)) {
 			return;
 		}
+		let max;
 		if (!fs.existsSync(allPathPrefix + apkVer + '/' + oldZipName + dir)) {
 			// 此时应让将最新的包中的资源放到增量包中
-			resultNew = rd.readFileSync(allPathPrefix + apkVer + '/' + newZipName + dir); max = resultNew.length;
+			resultNew = rd.readFileSync(allPathPrefix + apkVer + '/' + newZipName + dir);
+			max = resultNew.length;
 			for (let i = 0; i < max; i++) {
 				if (platform === 'android' && resultNew[i].search('drawable-') !== -1) {
 					resultNew[i] = resultNew[i].substring(resultNew[i].indexOf('drawable-'));
@@ -74,7 +76,7 @@ module.exports = function (oldVer, newVer, apkVer, platform, isIncrement) {
 		}
 		resultOld = rd.readFileSync(allPathPrefix + apkVer + '/' + oldZipName + dir);
 		resultNew = rd.readFileSync(allPathPrefix + apkVer + '/' + newZipName + dir);
-		let max = resultOld.length;
+		max = resultOld.length;
 		for (let i = 0; i < max; i++) {
 			if (platform === 'android' && resultOld[i].search('drawable-') !== -1) {
 				resultOld[i] = resultOld[i].substring(resultOld[i].indexOf('drawable-'))
