@@ -46,111 +46,39 @@ import retrofit2.Response;
 public class ReactManager {
 
     private final static String TAG = "REACT_MANAGER";
-    /**
-     * 用来决定rn是否读取线上的资源
-     */
-    private static Boolean USE_LOCAL = false;
-    /**
-     * The constant SDK_VERSION.
-     * 用来标记本地rn_sdk的版本号
-     */
-    public static String SDK_VERSION = "1.0";
-    /**
-     * 用来标记本地rn资源版本号
-     */
-    private static String BUNDLE_VERSION = "BUNDLE_VERSION";
-    /**
-     * 用来标记apk的versioncode
-     */
-    private static String APP_VERSIONCODE = "APP_VERSIONCODE";
-    /**
-     * 用来存储下载的最新的rn资源路径
-     */
-    private static String NEW_BUNDLE_PATH = "NEW_BUNDLE_PATH";
-    /**
-     * 用来记录最新的rn资源版本号
-     */
-    private static String NEW_BUNDLE_VERSION = "NEW_BUNDLE_VERSION";
-    /**
-     * 热更新rn资源下载路径
-     */
-    private String sourceUrl = "";
-    /**
-     * 记录本地rn资源包版本号
-     */
-    private String localDataVersion = "0";
-    /**
-     * rn资源的本地存储路径
-     */
-    private String sourceDir = null;
-    /**
-     * 启动文件名
-     */
-    private String jsMainModuleName = "index";
-    /**
-     * rn bundle文件名
-     */
-    private String bundleName = "index.jsbundle";
-    /**
-     * 业务名
-     */
-    private String businessName = "";
-    /**
-     * 用于请求配置文件
-     */
-    private Call<ResponseBody> configCall;
-    /**
-     * 用于请求rn资源文件
-     */
-    private Call<ResponseBody> bundleCall;
-    /**
-     * 用来临时记录增量还是全量
-     */
-    private String type = null;
-    private boolean isAll = false;
-    String rnZipName = "";
-    /**
-     * 用来临时记录zip包的md5值
-     */
-    private String md5Value = "";
-    private Application application = null;
-    private Activity currentActivity;
-    private ReactInstanceManager rnInstanceManager;
+    private final static String BUNDLE_VERSION = "BUNDLE_VERSION";        // 用来标记本地rn资源版本号
+    private final static String APP_VERSIONCODE = "APP_VERSIONCODE";      // 用来标记apk的versioncode
+    private final static String NEW_BUNDLE_PATH = "NEW_BUNDLE_PATH";      // 用来存储下载的最新的rn资源路径
+    private final static String NEW_BUNDLE_VERSION = "NEW_BUNDLE_VERSION";// 用来记录最新的rn资源版本号
 
-    private SuccessListener successListener;
+    private String sourceUrl = "";                                  // 热更新rn资源下载路径
+    private String jsMainModuleName = "index";                      // 启动文件名
+    private String bundleName = "index.jsbundle";                   // rn bundle文件名
+    private Activity currentActivity;                               // 当前activity
+    private SuccessListener successListener;                        // 成功监听
+    private FailListener failListener;                              // 失败监听
 
-    public SuccessListener getSuccessListener() {
-        return successListener;
-    }
-
-    public void setSuccessListener(SuccessListener successListener) {
-        this.successListener = successListener;
-    }
-
-    public FailListener getFailListener() {
-        return failListener;
-    }
-
-    public void setFailListener(FailListener failListener) {
-        this.failListener = failListener;
-    }
-
-    private FailListener failListener;
-
+    private Call<ResponseBody> configCall;                          // 用于请求配置文件
+    private Call<ResponseBody> bundleCall;                          // 用于请求rn资源文件
+    private String sourceDir = null;                                // rn资源的本地存储路径
+    private String localDataVersion = "0";                          // 记录本地rn资源包版本号
+    private String type = null;                                     // 用来临时记录增量还是全量
+    private boolean isAll = false;                                  // 是否使用全量更新
+    private String rnZipName = "";                                  // 下载下来的zip包名
+    private String apkVersion = "1.0";                              // 用来临时标记本地apk版本号
+    private String md5Value = "";                                   // 用来临时记录zip包的md5值
+    private Application application = null;                         // application
+    private ReactInstanceManager rnInstanceManager;                 // ReactInstanceManager
+    private String businessName;                                    // 业务名
     /**
      * The enum Np react manager task.
      * 用于通知有新的资源包
      */
     public enum NPReactManagerTask {
-        /**
-         * Get new react version source np react manager task.
-         */
-        GetNewReactVersionSource,
         GetConfigFail,
         GetSourceFail,
         Md5VerifyFail
     }
-
     private static ReactManager instance = null;
 
     /**
@@ -168,15 +96,6 @@ public class ReactManager {
 
     private ReactManager() {
 
-    }
-
-    /**
-     * Gets rn instance manager.
-     *
-     * @return the rn instance manager
-     */
-    public ReactInstanceManager getRnInstanceManager() {
-        return rnInstanceManager;
     }
 
     /**
@@ -201,6 +120,7 @@ public class ReactManager {
             PackageInfo pi = application.getPackageManager().getPackageInfo(application.getPackageName(), 0);
             Log.d(TAG, String.valueOf(pi.versionCode));
             int appVersionCode = pi.versionCode;
+            apkVersion = pi.versionName;
             int localRNVersionCode = ReactPreference.getInstance().getInt(APP_VERSIONCODE);
             if (localRNVersionCode == 0 || localRNVersionCode < appVersionCode) {
                 //说明没有储存过appversionCode或者包发生了更新，需要将asset目录下的rn资源copy到沙盒目录
@@ -286,9 +206,6 @@ public class ReactManager {
      * 后台执行热更新逻辑
      */
     public void loadBundleBehind() {
-
-        if (USE_LOCAL) return;
-
         //获取本地rn资源的sdk版本号、资源数据迭代版本号
         localDataVersion = ReactPreference.getInstance().getString(businessName + BUNDLE_VERSION);
 
@@ -362,7 +279,7 @@ public class ReactManager {
                         type = infos[3];
                         md5Value = infos[4];
                     }
-                    if (remoteSdkVersion.equals(SDK_VERSION)) {
+                    if (remoteSdkVersion.equals(apkVersion)) {
                         //如果新版本字典存在,说明是已下载还没有使用的资源,如果跟线上的版本号相同也不必要下载了
                         String needUpdateVersion = ReactPreference.getInstance().getString(businessName + NEW_BUNDLE_VERSION);
                         if (TextUtils.isEmpty(needUpdateVersion)) {// 没有新资源
@@ -399,11 +316,11 @@ public class ReactManager {
         ReactService service = new ReactService();
         String rnSourceUrl = "";
         if (isAll) {
-            rnZipName = "rn_" + SDK_VERSION + "_" + remoteDataVersion + ".zip";
-            rnSourceUrl = sourceUrl + "all/" + SDK_VERSION + "/" + rnZipName;
-        } else {
-            rnZipName = "rn_" + SDK_VERSION + "_" + remoteDataVersion + "_" + localDataVersion + "_" + type + ".zip";
-            rnSourceUrl = sourceUrl + "increment/" + SDK_VERSION + "/" + remoteDataVersion + "/" + rnZipName;
+            rnZipName = "rn_" + apkVersion + "_" + remoteDataVersion + ".zip";
+            rnSourceUrl = sourceUrl + "all/" + apkVersion + "/" + rnZipName;
+        }else {
+            rnZipName = "rn_" + apkVersion + "_" + remoteDataVersion + "_" + localDataVersion + "_" + type + ".zip";
+            rnSourceUrl = sourceUrl + "increment/" + apkVersion + "/" + rnZipName;
         }
         bundleCall = service.downloadFile(rnSourceUrl, new Callback<ResponseBody>() {
             @Override
@@ -654,6 +571,15 @@ public class ReactManager {
     }
 
     /**
+     * Gets rn instance manager.
+     *
+     * @return the rn instance manager
+     */
+    public ReactInstanceManager getRnInstanceManager() {
+        return rnInstanceManager;
+    }
+
+    /**
      * 设置资源请求路径
      *
      * @param sourceUrl 请求路径
@@ -697,6 +623,23 @@ public class ReactManager {
     public void setBundleName(String bundleName) {
         this.bundleName = bundleName;
     }
+
+    public SuccessListener getSuccessListener() {
+        return successListener;
+    }
+
+    public void setSuccessListener(SuccessListener successListener) {
+        this.successListener = successListener;
+    }
+
+    public FailListener getFailListener() {
+        return failListener;
+    }
+
+    public void setFailListener(FailListener failListener) {
+        this.failListener = failListener;
+    }
+
 
     /**
      * 获取业务名
@@ -752,9 +695,9 @@ public class ReactManager {
     public String getReactVersion() {
         String dataVersion = ReactPreference.getInstance().getString(businessName + BUNDLE_VERSION);
         if (TextUtils.isEmpty(dataVersion)) {
-            return SDK_VERSION;
+            return apkVersion;
         }
-        return SDK_VERSION + "_" + dataVersion;
+        return apkVersion + "_" + dataVersion;
     }
 
     public interface SuccessListener {

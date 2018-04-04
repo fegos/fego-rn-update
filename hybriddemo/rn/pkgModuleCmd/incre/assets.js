@@ -62,11 +62,11 @@ module.exports = function (oldVer, newVer, sdkVer, platform, isIncrement, busine
 				if (platform === 'android' && resultNew[i].search('drawable-') !== -1) {
 					resultNew[i] = resultNew[i].substring(resultNew[i].indexOf('drawable-'));
 					mkDir(resultNew[i]);
-					fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]));
+					fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]));
 				} else if (platform === 'ios' && resultNew[i].search('assets') !== -1) {
 					resultNew[i] = resultNew[i].substring(resultNew[i].indexOf('assets'));
 					mkDir(resultNew[i]);
-					fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]));
+					fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]));
 				} else {
 					//删除不是drawable下的文件
 					resultNew.splice(i, 1);
@@ -113,7 +113,7 @@ module.exports = function (oldVer, newVer, sdkVer, platform, isIncrement, busine
 
 	function mkDir(newPath) {
 		let path = newPath.split('/');
-		let sumPath = incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/';
+		let sumPath = incrementPathPrefix + sdkVer + '/' + incrementName + '/';
 		for (let i = 0; i < path.length - 1; i++) {
 			if (!fs.existsSync(sumPath + path[i])) {
 				fs.mkdirSync(sumPath + path[i]);
@@ -150,14 +150,14 @@ module.exports = function (oldVer, newVer, sdkVer, platform, isIncrement, busine
 					console.log(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]);
 					addArray.push(resultNew[i]);
 					mkDir(resultNew[i]);
-					fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]));
+					fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]));
 				}
 			} else {
 				// 不同元素    
 				addArray.push(resultNew[i])
 				mkDir(resultNew[i]);
 				let tmp = fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]);
-				fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + resultNew[i], tmp);
+				fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + incrementName + '/' + resultNew[i], tmp);
 			}
 		}
 		for (let i = 0, max = resultOld.length; i < max; i++) {
@@ -183,7 +183,7 @@ module.exports = function (oldVer, newVer, sdkVer, platform, isIncrement, busine
 				fileString = fileString + delArray[i] + ',';
 			}
 		}
-		fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/assetsConfig.txt', fileString);
+		fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + incrementName + '/assetsConfig.txt', fileString);
 	}
 
 	generateIncrement();

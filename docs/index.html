@@ -14,6 +14,13 @@
 	<link rel="stylesheet" href="assets/css/main.css" />
 	<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 	<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+	<link rel="apple-touch-icon" sizes="120x120" href="images/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="mask-icon" href="images/safari-pinned-tab.svg" color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#ffffff">
 </head>
 
 <body class="landing">
@@ -110,10 +117,11 @@
 		│   └── jsbundle.js     # bundle增量生成脚本
 		├── incregen.js         # 增量包生成脚本
 		├── md5.js				# 生成全量更新config
-		├── pack.sh             # 全量包打包脚本
-		└── third               # 依赖的第三方脚本
-			├── diff_match_patch_uncompressed.js    # 文件差异生成脚本
-			└── file_list.js    # 列出目录下所有的文件</code></pre>
+		├── allPkg.sh           # 全量包打包脚本
+		├── third               # 依赖的第三方脚本
+		│   ├── diff_match_patch_uncompressed.js    # 文件差异生成脚本
+		│   └── file_list.js    # 列出目录下所有的文件
+		└── Utils				# 公共方法</code></pre>
 				<h1 id="安装">安装</h1>
 				<pre><code>$ npm install fego-rn-update --save</code></pre>
 				<h2 id="手动安装">手动安装</h2>
@@ -333,7 +341,7 @@ manager.noJsServer = YES;
 							<code>node_modules同级目录</code>下</p>
 					</li>
 					<li>
-						<p>在想要生成包的地方创建包存储目录</p>
+						<p>在想要生成包的地方创建包存储目录（其内部是android和ios目录均是自动生成的）</p>
 					</li>
 				</ol>
 				<p>存储目录可以参考
@@ -360,7 +368,7 @@ manager.noJsServer = YES;
 					<li>修改配置文件
 						<code>config.js</code>中的
 						<code>path</code>和
-						<code>sdk</code>（config.js文件位于pkgCmd/下）
+						<code>apkVer</code>（config.js文件位于pkgCmd/下）
 					</li>
 					<p>path：生成包存储路径 sdk：跟apk版本号一致</p>
 				</ol>
@@ -381,7 +389,7 @@ let username = os.userInfo().username;
 console.log(map[username]);
 module.exports = {
 	path: map[username],//在此处可以直接更改为自己要生成包的位置
-	sdkVer: &#39;1.0&#39;//需跟apk版本保持一致
+	apkVer: &#39;1.0&#39;//需跟apk版本保持一致
 }</code></pre>
 				<ol start="4" type="1">
 					<li>更新字体文件</li>
@@ -394,7 +402,7 @@ module.exports = {
 						<code>pkg.sh</code>
 					</li>
 				</ol>
-				<pre><code>sh pkg.sh 			// 默认是android平台下进行增量更新
+				<pre><code>sh pkg.sh 			// 默认是两个平台下均进行增量更新
 sh pkg.sh platform  	// 其中platform为android/ios，进行生成包工作，默认使用增量更新
 sh pkg.sh type			// 其中type为increment（增量）、all（全量），设置该参数时，只会进行增量和全量选择操作，不会进行包生成
 sh pkg.sh platform type	// 选在平台上的更新方式</code></pre>

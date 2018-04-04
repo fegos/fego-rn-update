@@ -1,24 +1,26 @@
 # 使用方式
-# 在终端中执行脚本 sh pack.android.sh platform
-# platform可选，ios/android，默认情况下为android
+# 在终端中执行脚本 sh pack.android.sh platform path apkVer
+# platform可选，ios/android，默认情况下为android；path为包路径；apkVer：应用版本
 platform=$1
-#临时变量记录当前rn资源数据对应sdk的版本号
-newVer=1
-#生成的最终rn zip包的名称
-zipName=''
 path=$2
-sdkVer=$3
+apkVer=$3
 echo $platform
 echo $path
-echo $sdkVer
-configDir=$path$platform/all/$sdkVer/
+echo $apkVer
+
+# 创建生成包目录
+configDir=$path$platform/all/$apkVer/
 hotConfigDir=$path$platform/all/
-if [ ! -e "$configDir" ]; then 
-	mkdir $configDir
-fi
+incrementDir=$path$platform/increment/$apkVer/
+tempDir=$path$platform/all/temp/$apkVer/
+mkdir -p $configDir
+mkdir -p $incrementDir
+mkdir -p $tempDir
+
 #config文件路径
-configPath=$configDir"config"
+configPath=$configDir"unzipVer"
 hotConfigPath=$hotConfigDir"config"
+
 # 判断是否是新一期版本第一次开发
 isexist=0
 if [ ! -e "$configPath" ]; then 
@@ -44,10 +46,10 @@ if [ $isexist = 1 ];then
 		newVer=1
 	fi
 fi
-content=$sdkVer"_"$newVer
+content=$apkVer"_"$newVer
 # echo $content>$hotConfigPath
 #压缩包的名字
-zipName="rn_"$sdkVer"_"$newVer".zip"
+zipName="rn_"$apkVer"_"$newVer".zip"
 echo $newVer
 echo $zipName
 #拷贝字体文件到打包文件夹中
@@ -69,10 +71,10 @@ cp deploy/$zipName $configDir
 currentPath=`pwd`
 echo $currentPath
 
-node ./pkgCmd/md5.js $path$platform/all/ $sdkVer $zipName $content
+node ./pkgCmd/md5.js $path$platform/all/ $apkVer $zipName $content
 #推送到git
 # cd $configDir
 # git add .
-# git commit -m "V-"$platform"-"$sdkVer"-"$newVer
+# git commit -m "V-"$platform"-"$apkVer"-"$newVer
 # git push
 # cd $currentPath

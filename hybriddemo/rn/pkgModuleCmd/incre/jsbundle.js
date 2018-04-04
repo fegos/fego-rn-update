@@ -103,7 +103,7 @@ module.exports = function (oldVer, newVer, sdkVer, platform, businessName, commo
 
 			// 生成到的指定路径如果不存在，则一一生成指定目录
 			incrementName = 'rn_' + sdkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement;
-			let path = sdkVer + '/' + newVer + '/' + incrementName + '/' + incrementBundleName;
+			let path = sdkVer + '/' + incrementName + '/' + incrementBundleName;
 			path = path.split('/');
 			let sumPath = incrementPathPrefix;
 			for (let i = 0; i < path.length - 1; i++) {
@@ -116,7 +116,7 @@ module.exports = function (oldVer, newVer, sdkVer, platform, businessName, commo
 			// 将生成的增量内容存储到指定路径下的bundle文件中
 			let text = isIncrement === '0' ? patch_text : text2;
 			let finalName = isIncrement === '0' ? incrementBundleName : bundleName;
-			fs.writeFile(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + finalName, text, function (err) {
+			fs.writeFile(incrementPathPrefix + sdkVer + '/' + incrementName + '/' + finalName, text, function (err) {
 				if (err) {
 					console.log('生成增量包failure' + err);
 					reject(err);
@@ -134,7 +134,7 @@ module.exports = function (oldVer, newVer, sdkVer, platform, businessName, commo
 	 * 在bundle和assets均生成增量后进行压缩，并更新config文件
 	 */
 	function zipIncrement() {
-		let zipPath = incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName;
+		let zipPath = incrementPathPrefix + sdkVer + '/' + incrementName;
 		zipper.zip(zipPath, function (error, zipped) {
 			if (!error) {
 				zipped.save(zipPath + '.zip', function (error) {
@@ -196,7 +196,7 @@ module.exports = function (oldVer, newVer, sdkVer, platform, businessName, commo
 			if (fileList[i].search('.ttf') !== -1) {
 				let tmp = fileList[i].split('/');
 				let name = tmp[tmp.length - 1];
-				fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + name, fs.readFileSync(fileList[i]));
+				fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + incrementName + '/' + name, fs.readFileSync(fileList[i]));
 			}
 		}
 		let assetsIncrement = new assets(oldVer, newVer, sdkVer, platform, value, businessName);
