@@ -344,7 +344,7 @@ module.exports = {
 sh pkg.sh 				// 默认是两个平台下均进行增量更新
 sh pkg.sh platform  	// 其中platform为android/ios，进行生成包工作，默认使用增量更新
 sh pkg.sh type			// 其中type为increment（增量）、all（全量），设置该参数时，只会进行增量和全量选择操作，不会进行包生成
-sh pkg.sh platform type	// 选在平台上的更新方式
+sh pkg.sh platform type	// 选在平台上的更新方式，设置该参数时，只会进行增量和全量选择操作，不会进行包生成
 ```
 **注意**：
 

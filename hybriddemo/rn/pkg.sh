@@ -36,5 +36,10 @@ if [ $type = 'test' ]; then
 else 
 	# 全量包和增量包生成之后将最终的config更新，可根据脚本参数确定使用增量还是全量，increment/all，
 	# 此时需将上述两条注释，打开下面的注释
-	cp $path$platform/$type/config $path$platform
+	if [ $platform = 'no' ]; then
+		cp ${path}android/$type/config $path$platform
+		cp ${path}ios/$type/config $path$platform
+	else
+		cp $path$platform/$type/config $path$platform
+	fi
 fi
