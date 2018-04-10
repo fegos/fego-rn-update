@@ -411,6 +411,12 @@ public class ReactManager {
                 checkAssetconfigFile(configDetail, rnDir);
                 FileUtils.deleteFile(rnDir + "increment.jsbundle");
                 FileUtils.deleteFile(rnDir + "assetsConfig.txt");
+            } else {
+                if (!TextUtils.isEmpty(businessName)) {
+                    String patchStr = getJsBundle(rnDir + bundleName, false);
+                    String assetsBundle = getJsBundle(sourceDir + "common/" + bundleName, false);
+                    merge(patchStr, assetsBundle, rnDir);
+                }
             }
             updateReactFonts();
             FileUtils.delete(file);
