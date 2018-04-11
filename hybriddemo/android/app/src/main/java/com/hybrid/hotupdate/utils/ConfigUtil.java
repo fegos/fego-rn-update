@@ -35,7 +35,6 @@ public class ConfigUtil {
         ReactManager.getInstance().setJsMainModuleName(mainModuleName);
         // 设置加载的文件名
         ReactManager.getInstance().setBundleName(bundleName);
-        ReactManager.getInstance().setBusinessName(businessName);
         // 设置热更新路径
         if (businessName.equals("")) {
             ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/dev_module/hybriddemo/rn/bao/android/");
@@ -45,7 +44,7 @@ public class ConfigUtil {
         List<ReactPackage> reactPackages = new ArrayList<>();
         // 添加额外的package
         reactPackages.add(new HotUpdatePackage());
-        ReactManager.getInstance().init(application, reactPackages, BuildConfig.DEBUG);
+        ReactManager.getInstance().init(application, reactPackages, BuildConfig.DEBUG, businessName);
 //        }
     }
 }

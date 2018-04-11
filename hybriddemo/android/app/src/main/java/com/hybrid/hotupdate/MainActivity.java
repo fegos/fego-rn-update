@@ -13,7 +13,7 @@ import com.hybrid.hotupdate.rn.RNHelloActivity;
 import com.hybrid.hotupdate.rn.RNWorldActivity;
 import com.hybrid.hotupdate.utils.ConfigUtil;
 
-public class MainActivity extends Activity implements View.OnClickListener, ReactManager.SuccessListener {
+public class MainActivity extends Activity implements View.OnClickListener {
 
     Button btnRn1, btnRn2;
     @Override
@@ -21,7 +21,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Reac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-        ReactManager.getInstance().setSuccessListener(this);
         updateData();
     }
 
@@ -33,7 +32,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Reac
 
     private void updateData () {
         ConfigUtil.getInstance().initReactManager(getApplication(), "index","index.jsbundle","common");
-        ReactManager.getInstance().loadBundleBehind();
     }
 
     private void initViews() {
@@ -58,37 +56,5 @@ public class MainActivity extends Activity implements View.OnClickListener, Reac
             intent.putExtras(bundle);
             startActivity(intent);
         }
-    }
-
-    @Override
-    public void onSuccess() {
-        questionUpdateReactSource();
-    }
-
-    /**
-     * 询问是否更新最新包提示
-     */
-    protected void questionUpdateReactSource() {
-        //此处标记已经下载了新的rn资源包,提示用户是否进行更新
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("温馨提示")
-                .setMessage("有新的资源包可以更新，是否立即更新?")
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                })
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ReactManager.getInstance().unzipBundle();
-                        ReactManager.getInstance().doReloadBundle();
-                        // 下次启动应用时更新
-                        // ReactManager.getInstance().unzipBundle();
-                    }
-                })
-                .create();
-        dialog.show();
     }
 }
