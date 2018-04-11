@@ -87,10 +87,20 @@ zipName="rn_"$apkVer"_"$newVer".zip"
 echo $newVer
 echo $zipName
 #拷贝字体文件到打包文件夹中
-if [ ! -e "resource/" ]; then 
-	echo 'resource not exist'
-else
-	cp -rf resource/ deploy/
+if [ $businessName = 'no' ]; then
+	if [ ! -e "resource/" ]; then 
+		echo 'resource not exist'
+	else
+		cp -rf resource/ deploy/
+	fi
+else 
+	ttfDir=resource/$businessName/
+	echo $ttfDir
+	if [ ! -e $ttfDir ]; then 
+		echo 'resource not exist'
+	else
+		cp -rf $ttfDir deploy/
+	fi
 fi
 
 if [ $businessName = 'no' ]; then
