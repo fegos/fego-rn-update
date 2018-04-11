@@ -312,7 +312,9 @@ public class ReactManager {
                             }
                         } else {// 资源已经下载好，但是还未被重新load
                             if (remoteDataVersion.equals(needUpdateVersion)) {
-                                doReloadBundle(businessName);
+                                if (sucListener != null) {
+                                    sucListener.onSuccess();
+                                }
                             } else {
                                 loadRNSource(remoteDataVersion, businessName, localDataVersion, isAll, type, md5Value,sucListener, failListener);
                             }
@@ -333,6 +335,11 @@ public class ReactManager {
      * @param remoteDataVersion 远程sdk版本号
      */
     private void loadRNSource(final String remoteDataVersion, final String businessName, final String localDataVersion, final boolean isAll, final String type, final String md5Value, final SuccessListener sucListener, final FailListener failListener) {
+        String tmpDir = application.getFilesDir().getAbsolutePath() + File.separator + businessName + File.separator;
+        File tmpFile = new File(tmpDir);
+        if (tmpFile.exists()) {
+            FileUtils.delete(tmpFile);
+        }
         ReactService service = new ReactService();
         String rnSourceUrl = "";
         String rnZipName = "";                                  // 下载下来的zip包名
@@ -353,7 +360,17 @@ public class ReactManager {
                     }else {
                         rnZipName = "rn_" + apkVersion + "_" + remoteDataVersion + "_" + localDataVersion + "_" + type + ".zip";
                     }
-                    String downloadFilePath = application.getFilesDir().getAbsolutePath() + File.separator + rnZipName;
+                    String downloadFilePath;
+                    if (TextUtils.isEmpty(businessName)) {
+                        downloadFilePath = application.getFilesDir().getAbsolutePath() + File.separator + rnZipName;
+                    } else {
+                        String tmpDir = application.getFilesDir().getAbsolutePath() + File.separator + businessName + File.separator;
+                        File tmpFile = new File(tmpDir);
+                        if (!tmpFile.exists()) {
+                            tmpFile.mkdir();
+                        }
+                        downloadFilePath = tmpDir + rnZipName;
+                    }
                     File file = new File(downloadFilePath);
                     boolean writtenToDisk = FileUtils.writeResponseBodyToDisk(response.body(), file);
                     if (writtenToDisk) {
@@ -362,10 +379,10 @@ public class ReactManager {
                             ReactPreference.getInstance().save(businessName + NEW_BUNDLE_PATH, downloadFilePath);
                             ReactPreference.getInstance().save(businessName + NEW_BUNDLE_VERSION, remoteDataVersion);
                             if (sucListener != null) {
-                                unzipBundle(businessName, isAll, type);
                                 sucListener.onSuccess();
                             } else {
-                                if (!businessName.equals("common") && businessName.equals(curBusinessName)) {
+                                unzipBundle(businessName);
+                                if (currentActivity !=null && !businessName.equals("common") && businessName.equals(curBusinessName)) {
                                     doReloadBundle(businessName);
                                 }
                             }
@@ -399,7 +416,7 @@ public class ReactManager {
     /**
      * 解压
      */
-    public void unzipBundle(String businessName, boolean isAll, String type) {
+    public void unzipBundle(String businessName) {
         String downloadFilePath = ReactPreference.getInstance().getString(businessName + NEW_BUNDLE_PATH);
         String rnDir = TextUtils.isEmpty(businessName) ? sourceDir : sourceDir + businessName + "/";
         File fileRNDir = new File(rnDir);
@@ -411,17 +428,19 @@ public class ReactManager {
             //a、解压到rnSourceDir下
             FileUtils.upZipFile(file, rnDir);
             //b、type为"0"，bundle合并；否则继续
-            if (type.equals("0")) {
+            File increFile = new File(rnDir + "increment.jsbundle");
+            if (increFile.exists()) {
                 String patchStr = getJsBundle(rnDir + "increment.jsbundle", false);
                 String assetsBundle = getJsBundle(rnDir + bundleName, false);
                 merge(patchStr, assetsBundle, rnDir);
+                FileUtils.deleteFile(rnDir + "increment.jsbundle");
             }
             //c、解析assetsConfig.txt，获取到需要删除的资源文件，进而删除
-            if (!isAll) {
+            File assetsFile = new File(rnDir + "assetsConfig.txt");
+            if (assetsFile.exists()) {
                 byte[] bytes = FileUtils.readFile(rnDir + "assetsConfig.txt");
                 String configDetail = new String(bytes);
                 checkAssetconfigFile(configDetail, rnDir);
-                FileUtils.deleteFile(rnDir + "increment.jsbundle");
                 FileUtils.deleteFile(rnDir + "assetsConfig.txt");
             } else {
                 if (!TextUtils.isEmpty(businessName)) {

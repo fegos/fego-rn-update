@@ -183,7 +183,9 @@ public class RNHelloActivity extends Activity implements DefaultHardwareBackBtnH
 
     @Override
     public void onSuccess() {
-        questionUpdateReactSource();
+        if (isFinishing()) {
+            questionUpdateReactSource();
+        }
     }
 
     /**
@@ -203,9 +205,10 @@ public class RNHelloActivity extends Activity implements DefaultHardwareBackBtnH
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        ReactManager.getInstance().unzipBundle(businessName);
                         ReactManager.getInstance().doReloadBundle(businessName);
                         // 下次启动应用时更新
-                        // ReactManager.getInstance().unzipBundle();
+                        // ReactManager.getInstance().unzipBundle(businessName);
                     }
                 })
                 .create();
