@@ -27,8 +27,8 @@ elif [ $# = 2 ]; then
 	fi
 elif [ $# = 3 ]; then
 	platform=$1
-	businessName=$2
-	type=$3
+	type=$2
+	businessName=$3
 fi
 echo $platform
 echo $type
