@@ -200,7 +200,7 @@ public class ReactManager {
             pathList.add(tempPath);
             pathList.add(commonPath);
         }
-        for (int k = 1; k < pathList.size(); k++) {
+        for (int k = 0; k < pathList.size(); k++) {
             File rnSourceDirFile = new File(pathList.get(k));
             FilenameFilter fileNameFilter = new FilenameFilter() {
                 @Override
