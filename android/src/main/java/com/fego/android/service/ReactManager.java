@@ -335,10 +335,12 @@ public class ReactManager {
      * @param remoteDataVersion 远程sdk版本号
      */
     private void loadRNSource(final String remoteDataVersion, final String businessName, final String localDataVersion, final boolean isAll, final String type, final String md5Value, final SuccessListener sucListener, final FailListener failListener) {
-        String tmpDir = application.getFilesDir().getAbsolutePath() + File.separator + businessName + File.separator;
-        File tmpFile = new File(tmpDir);
-        if (tmpFile.exists()) {
-            FileUtils.delete(tmpFile);
+        if (!TextUtils.isEmpty(businessName)) {
+            String tmpDir = application.getFilesDir().getAbsolutePath() + File.separator + businessName + File.separator;
+            File tmpFile = new File(tmpDir);
+            if (tmpFile.exists()) {
+                FileUtils.delete(tmpFile);
+            }
         }
         ReactService service = new ReactService();
         String rnSourceUrl = "";
