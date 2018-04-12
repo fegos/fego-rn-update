@@ -22,11 +22,12 @@ import com.hybrid.hotupdate.utils.ConfigUtil;
  * Created by sxiaoxia on 2018/3/8.
  */
 
-public class RNActivity extends Activity implements DefaultHardwareBackBtnHandler, ReactManager.SuccessListener {
+public class RNHelloActivity extends Activity implements DefaultHardwareBackBtnHandler, ReactManager.SuccessListener {
 
     ReactRootView mReactRootView;
     ReactInstanceManager mReactInstanceManager;
     String moduleName;
+    String businessName;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +40,10 @@ public class RNActivity extends Activity implements DefaultHardwareBackBtnHandle
     }
 
     private void initData() {
+        businessName = "Hello";
         Bundle bundle = getIntent().getExtras();
         moduleName = bundle.getString("moduleName", "First");
-        ConfigUtil.getInstance().initReactManager(getApplication());
+        ConfigUtil.getInstance().initReactManager(getApplication(), "index", "index.jsbundle", businessName);
     }
 
     /**
@@ -55,6 +57,7 @@ public class RNActivity extends Activity implements DefaultHardwareBackBtnHandle
             mReactRootView = ReactManager.getInstance().getReactViewByModuleName(moduleName, this, null);
             setContentView(mReactRootView);
         }
+        ReactManager.getInstance().loadBundleBehind(businessName, this, null);
     }
 
     /**
@@ -180,7 +183,9 @@ public class RNActivity extends Activity implements DefaultHardwareBackBtnHandle
 
     @Override
     public void onSuccess() {
-        questionUpdateReactSource();
+        if (isFinishing()) {
+            questionUpdateReactSource();
+        }
     }
 
     /**
@@ -200,10 +205,10 @@ public class RNActivity extends Activity implements DefaultHardwareBackBtnHandle
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ReactManager.getInstance().unzipBundle();
-                        ReactManager.getInstance().doReloadBundle();
+                        ReactManager.getInstance().unzipBundle(businessName);
+                        ReactManager.getInstance().doReloadBundle(businessName);
                         // 下次启动应用时更新
-                        // ReactManager.getInstance().unzipBundle();
+                        // ReactManager.getInstance().unzipBundle(businessName);
                     }
                 })
                 .create();

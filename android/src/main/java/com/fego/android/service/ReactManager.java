@@ -32,6 +32,7 @@ import java.io.InputStream;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -54,21 +55,16 @@ public class ReactManager {
     private String sourceUrl = "";                                  // 热更新rn资源下载路径
     private String jsMainModuleName = "index";                      // 启动文件名
     private String bundleName = "index.jsbundle";                   // rn bundle文件名
-    private Activity currentActivity;                               // 当前activity
-    private SuccessListener successListener;                        // 成功监听
-    private FailListener failListener;                              // 失败监听
-
-    private Call<ResponseBody> configCall;                          // 用于请求配置文件
-    private Call<ResponseBody> bundleCall;                          // 用于请求rn资源文件
     private String sourceDir = null;                                // rn资源的本地存储路径
-    private String localDataVersion = "0";                          // 记录本地rn资源包版本号
-    private String type = null;                                     // 用来临时记录增量还是全量
-    private boolean isAll = false;                                  // 是否使用全量更新
-    private String rnZipName = "";                                  // 下载下来的zip包名
     private String apkVersion = "1.0";                              // 用来临时标记本地apk版本号
-    private String md5Value = "";                                   // 用来临时记录zip包的md5值
     private Application application = null;                         // application
     private ReactInstanceManager rnInstanceManager;                 // ReactInstanceManager
+
+    private Activity currentActivity;                               // 当前activity
+    private Call<ResponseBody> configCall;                          // 用于请求配置文件
+    private Call<ResponseBody> bundleCall;                          // 用于请求rn资源文件
+
+    private String curBusinessName = "";                               // 业务名
     /**
      * The enum Np react manager task.
      * 用于通知有新的资源包
@@ -105,13 +101,14 @@ public class ReactManager {
      * @param reactPackages reactPackages
      * @param useDevelop    是否开发模式
      */
-    public <T extends ReactPackage> void init(Application application, List<T> reactPackages, boolean useDevelop) {
+    public <T extends ReactPackage> void init(Application application, List<T> reactPackages, boolean useDevelop, String businessName) {
 
         this.application = application;
         ReactPreference.getInstance().setContext(application.getApplicationContext());
 
         //获取app的沙盒目录
         sourceDir = this.application.getFilesDir().getAbsolutePath() + File.separator + "rn" + File.separator;
+        curBusinessName = businessName;
 
         //添加versionCode的校验，确保每次发的包能够区分开
         //获取android versioncode
@@ -131,41 +128,57 @@ public class ReactManager {
                 //完了后设置本地的appversioncode
                 ReactPreference.getInstance().saveInt(APP_VERSIONCODE, appVersionCode);
             }
-            //rn manager初始化，仅使用位于沙盒目录下的bundle资源
-            ReactInstanceManagerBuilder builder = ReactInstanceManager.builder()
-                    .setApplication(application);
-            Class<?> clazz = builder.getClass();
-            Method method = null;
-            try {
-                method = clazz.getMethod("setJSMainModuleName", String.class);
-            } catch (Exception ex) {
+            if (!businessName.equals("common")) {
+                //rn manager初始化，仅使用位于沙盒目录下的bundle资源
+                ReactInstanceManagerBuilder builder = ReactInstanceManager.builder()
+                        .setApplication(application);
+                if (!TextUtils.isEmpty(businessName)) {
+                    if (ReactPreference.getInstance().getInt(businessName) != 1) {
+                        String patchStr = getJsBundle(sourceDir + businessName + "/" + bundleName, false);
+                        String assetsBundle = getJsBundle(sourceDir + "common/" + bundleName, false);
+                        merge(patchStr, assetsBundle, sourceDir + businessName + "/");
+                    }
+                    ReactPreference.getInstance().saveInt(businessName, 1);
+                } else {
+                    businessName = "";
+                }
+
+                Class<?> clazz = builder.getClass();
+                Method method = null;
                 try {
-                    method = clazz.getMethod("setJSMainModulePath", String.class);
+                    method = clazz.getMethod("setJSMainModuleName", String.class);
+                } catch (Exception ex) {
+                    try {
+                        method = clazz.getMethod("setJSMainModulePath", String.class);
 
-                } catch (Exception ex0) {
+                    } catch (Exception ex0) {
 
+                    }
                 }
-            }
-            if (method != null) {
-                method.invoke(builder, jsMainModuleName);
-            }
-
-            builder.addPackage(new MainReactPackage())
-                    .setUseDeveloperSupport(useDevelop)
-                    .setInitialLifecycleState(LifecycleState.BEFORE_CREATE);
-
-            if (reactPackages != null && reactPackages.size() > 0) {
-                for (ReactPackage reactPackage : reactPackages) {
-                    builder.addPackage(reactPackage);
+                if (method != null) {
+                    method.invoke(builder, jsMainModuleName);
                 }
-            }
-            //直接读取该bundle资源
-            builder.setJSBundleFile(sourceDir + bundleName);
-            //更新字体文件
-            updateReactFonts();
-            rnInstanceManager = builder.build();
-            rnInstanceManager.createReactContextInBackground();
 
+                builder.addPackage(new MainReactPackage())
+                        .setUseDeveloperSupport(useDevelop)
+                        .setInitialLifecycleState(LifecycleState.BEFORE_CREATE);
+
+                if (reactPackages != null && reactPackages.size() > 0) {
+                    for (ReactPackage reactPackage : reactPackages) {
+                        builder.addPackage(reactPackage);
+                    }
+                }
+                //直接读取该bundle资源
+                if (TextUtils.isEmpty(businessName)) {
+                    builder.setJSBundleFile(sourceDir + bundleName);
+                } else {
+                    builder.setJSBundleFile(sourceDir + businessName + "/" + bundleName);
+                }
+                //更新字体文件
+                updateReactFonts(businessName);
+                rnInstanceManager = builder.build();
+                rnInstanceManager.createReactContextInBackground();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -174,21 +187,35 @@ public class ReactManager {
     /**
      * 更新字体文件
      */
-    private void updateReactFonts() {
-        File rnSourceDirFile = new File(sourceDir);
-        FilenameFilter fileNameFilter = new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String filename) {
-                return filename.endsWith(".ttf");
-            }
-        };
-        String[] fontsFiles = rnSourceDirFile.list(fileNameFilter);
-        for (int i = 0; i < fontsFiles.length; i++) {
-            String[] fontsNames = fontsFiles[i].split("\\.");
-            File fontFile = new File(sourceDir + fontsFiles[i]);
-            if (fontFile.exists()) {
-                Typeface tf = Typeface.createFromFile(sourceDir + fontsFiles[i]);
-                ReactFontManager.getInstance().setTypeface(fontsNames[0], 0, tf);
+    private void updateReactFonts(String businessName) {
+        String tempPath = "";
+        String commonPath = "";
+        ArrayList<String> pathList = new ArrayList<>();
+        if (TextUtils.isEmpty(businessName)) {
+            tempPath = sourceDir;
+            pathList.add(tempPath);
+        } else {
+            tempPath = sourceDir + businessName + '/';
+            commonPath = sourceDir + "common" + '/';
+            pathList.add(tempPath);
+            pathList.add(commonPath);
+        }
+        for (int k = 1; k < pathList.size(); k++) {
+            File rnSourceDirFile = new File(pathList.get(k));
+            FilenameFilter fileNameFilter = new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String filename) {
+                    return filename.endsWith(".ttf");
+                }
+            };
+            String[] fontsFiles = rnSourceDirFile.list(fileNameFilter);
+            for (int i = 0; i < fontsFiles.length; i++) {
+                String[] fontsNames = fontsFiles[i].split("\\.");
+                File fontFile = new File(tempPath + fontsFiles[i]);
+                if (fontFile.exists()) {
+                    Typeface tf = Typeface.createFromFile(tempPath + fontsFiles[i]);
+                    ReactFontManager.getInstance().setTypeface(fontsNames[0], 0, tf);
+                }
             }
         }
     }
@@ -196,13 +223,7 @@ public class ReactManager {
     /**
      * 后台执行热更新逻辑
      */
-    public void loadBundleBehind() {
-        //获取本地rn资源的sdk版本号、资源数据迭代版本号
-        localDataVersion = ReactPreference.getInstance().getString(BUNDLE_VERSION);
-
-        if (this.localDataVersion.equals("")) {
-            this.localDataVersion = "0";
-        }
+    public void loadBundleBehind(final String businessName, final SuccessListener sucListener, final FailListener failListener) {
         //请求远程的rn资源最新的配置文件,获取rn最新的对应sdk的数据迭代版本号
         ReactService service = new ReactService();
         String rnConfigSourceUrl = sourceUrl + "config";
@@ -211,14 +232,20 @@ public class ReactManager {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Log.d(TAG, "load react data behind success!");
-                    String downloadFilePath = application.getFilesDir().getAbsolutePath() + File.separator + "rn_config";
+                    String temp = TextUtils.isEmpty(businessName) ? "" : businessName + "_";
+                    String downloadFilePath = application.getFilesDir().getAbsolutePath() + File.separator + "rn_" + temp + "config";
                     File file = new File(downloadFilePath);
                     boolean writtenToDisk = FileUtils.writeResponseBodyToDisk(response.body(), file);
                     if (writtenToDisk) {
                         byte[] bytes = FileUtils.readFile(downloadFilePath);
                         String configDetail = new String(bytes);
                         Log.d(TAG, configDetail);
-                        checkRNConfigFile(configDetail);
+                        //获取本地rn资源的sdk版本号、资源数据迭代版本号
+                        String localDataVersion = ReactPreference.getInstance().getString(businessName + BUNDLE_VERSION);
+                        if (localDataVersion.equals("")) {
+                            localDataVersion = "0";
+                        }
+                        checkRNConfigFile(configDetail, businessName, localDataVersion, sucListener, failListener);
                     } else {
                         if (failListener != null) {
                             failListener.onFail(NPReactManagerTask.GetConfigFail);
@@ -247,16 +274,19 @@ public class ReactManager {
      *
      * @param configDetail 配置文件内容
      */
-    private void checkRNConfigFile(String configDetail) {
+    private void checkRNConfigFile(String configDetail, String businessName, String localDataVersion, SuccessListener sucListener, FailListener failListener) {
         try {
             String[] lines = configDetail.split(",");
             for (String line : lines) {
                 String[] infos = line.split("_");
                 if (infos.length > 1) {
                     String remoteSdkVersion = "";
-                    String remoteDataVersion ="";
+                    String remoteDataVersion = "";
                     remoteSdkVersion = infos[0];
                     remoteDataVersion = infos[1];
+                    String type = null;                                     // 用来临时记录增量还是全量
+                    boolean isAll = false;                                  // 是否使用全量更新
+                    String md5Value = "";                                   // 用来临时记录zip包的md5值
                     if (infos.length == 3) {
                         isAll = true;
                         md5Value = infos[2];
@@ -272,20 +302,21 @@ public class ReactManager {
                     }
                     if (remoteSdkVersion.equals(apkVersion)) {
                         //如果新版本字典存在,说明是已下载还没有使用的资源,如果跟线上的版本号相同也不必要下载了
-                        String needUpdateVersion = ReactPreference.getInstance().getString(NEW_BUNDLE_VERSION);
+                        String needUpdateVersion = ReactPreference.getInstance().getString(businessName + NEW_BUNDLE_VERSION);
                         if (TextUtils.isEmpty(needUpdateVersion)) {// 没有新资源
                             // 远程版本不为""；远程版本与本地版本不一致；
                             if (!remoteDataVersion.equals("") && !remoteDataVersion.equals(localDataVersion)) {
-                                loadRNSource(remoteDataVersion);
+                                loadRNSource(remoteDataVersion, businessName, localDataVersion, isAll, type, md5Value, sucListener, failListener);
                             } else {
                                 Log.d(TAG, "version is same,no need load rn data!");
                             }
                         } else {// 资源已经下载好，但是还未被重新load
                             if (remoteDataVersion.equals(needUpdateVersion)) {
-                                unzipBundle();
-                                doReloadBundle();
+                                if (sucListener != null) {
+                                    sucListener.onSuccess();
+                                }
                             } else {
-                                loadRNSource(remoteDataVersion);
+                                loadRNSource(remoteDataVersion, businessName, localDataVersion, isAll, type, md5Value,sucListener, failListener);
                             }
                         }
                         break;
@@ -303,9 +334,15 @@ public class ReactManager {
      *
      * @param remoteDataVersion 远程sdk版本号
      */
-    private void loadRNSource(final String remoteDataVersion) {
+    private void loadRNSource(final String remoteDataVersion, final String businessName, final String localDataVersion, final boolean isAll, final String type, final String md5Value, final SuccessListener sucListener, final FailListener failListener) {
+        String tmpDir = application.getFilesDir().getAbsolutePath() + File.separator + businessName + File.separator;
+        File tmpFile = new File(tmpDir);
+        if (tmpFile.exists()) {
+            FileUtils.delete(tmpFile);
+        }
         ReactService service = new ReactService();
         String rnSourceUrl = "";
+        String rnZipName = "";                                  // 下载下来的zip包名
         if (isAll) {
             rnZipName = "rn_" + apkVersion + "_" + remoteDataVersion + ".zip";
             rnSourceUrl = sourceUrl + "all/" + apkVersion + "/" + rnZipName;
@@ -317,19 +354,37 @@ public class ReactManager {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    String downloadFilePath = application.getFilesDir().getAbsolutePath() + File.separator + rnZipName;
+                    String rnZipName = "";
+                    if (isAll) {
+                        rnZipName = "rn_" + apkVersion + "_" + remoteDataVersion + ".zip";
+                    }else {
+                        rnZipName = "rn_" + apkVersion + "_" + remoteDataVersion + "_" + localDataVersion + "_" + type + ".zip";
+                    }
+                    String downloadFilePath;
+                    if (TextUtils.isEmpty(businessName)) {
+                        downloadFilePath = application.getFilesDir().getAbsolutePath() + File.separator + rnZipName;
+                    } else {
+                        String tmpDir = application.getFilesDir().getAbsolutePath() + File.separator + businessName + File.separator;
+                        File tmpFile = new File(tmpDir);
+                        if (!tmpFile.exists()) {
+                            tmpFile.mkdir();
+                        }
+                        downloadFilePath = tmpDir + rnZipName;
+                    }
                     File file = new File(downloadFilePath);
                     boolean writtenToDisk = FileUtils.writeResponseBodyToDisk(response.body(), file);
                     if (writtenToDisk) {
                         String tmpValue = FileUtils.getMd5ByFile(file);
                         if (tmpValue.equals(md5Value)) {
-                            ReactPreference.getInstance().save(NEW_BUNDLE_PATH, downloadFilePath);
-                            ReactPreference.getInstance().save(NEW_BUNDLE_VERSION, remoteDataVersion);
-                            if (successListener != null) {
-                                successListener.onSuccess();
+                            ReactPreference.getInstance().save(businessName + NEW_BUNDLE_PATH, downloadFilePath);
+                            ReactPreference.getInstance().save(businessName + NEW_BUNDLE_VERSION, remoteDataVersion);
+                            if (sucListener != null) {
+                                sucListener.onSuccess();
                             } else {
-                                unzipBundle();
-                                doReloadBundle();
+                                unzipBundle(businessName);
+                                if (currentActivity !=null && !businessName.equals("common") && businessName.equals(curBusinessName)) {
+                                    doReloadBundle(businessName);
+                                }
                             }
                         } else {
                             if (failListener != null) {
@@ -361,9 +416,9 @@ public class ReactManager {
     /**
      * 解压
      */
-    public void unzipBundle() {
-        String downloadFilePath = ReactPreference.getInstance().getString(NEW_BUNDLE_PATH);
-        String rnDir = sourceDir;
+    public void unzipBundle(String businessName) {
+        String downloadFilePath = ReactPreference.getInstance().getString(businessName + NEW_BUNDLE_PATH);
+        String rnDir = TextUtils.isEmpty(businessName) ? sourceDir : sourceDir + businessName + "/";
         File fileRNDir = new File(rnDir);
         if (!fileRNDir.exists()) {
             fileRNDir.mkdirs();
@@ -373,20 +428,28 @@ public class ReactManager {
             //a、解压到rnSourceDir下
             FileUtils.upZipFile(file, rnDir);
             //b、type为"0"，bundle合并；否则继续
-            if (type.equals("0")) {
+            File increFile = new File(rnDir + "increment.jsbundle");
+            if (increFile.exists()) {
                 String patchStr = getJsBundle(rnDir + "increment.jsbundle", false);
-                String assetsBundle = getJsBundle(rnDir + "index.jsbundle", false);
+                String assetsBundle = getJsBundle(rnDir + bundleName, false);
                 merge(patchStr, assetsBundle, rnDir);
+                FileUtils.deleteFile(rnDir + "increment.jsbundle");
             }
             //c、解析assetsConfig.txt，获取到需要删除的资源文件，进而删除
-            if (!isAll) {
+            File assetsFile = new File(rnDir + "assetsConfig.txt");
+            if (assetsFile.exists()) {
                 byte[] bytes = FileUtils.readFile(rnDir + "assetsConfig.txt");
                 String configDetail = new String(bytes);
                 checkAssetconfigFile(configDetail, rnDir);
-                FileUtils.deleteFile(rnDir + "increment.jsbundle");
                 FileUtils.deleteFile(rnDir + "assetsConfig.txt");
+            } else {
+                if (!TextUtils.isEmpty(businessName)) {
+                    String patchStr = getJsBundle(rnDir + bundleName, false);
+                    String assetsBundle = getJsBundle(sourceDir + "common/" + bundleName, false);
+                    merge(patchStr, assetsBundle, rnDir);
+                }
             }
-            updateReactFonts();
+            updateReactFonts(businessName);
             FileUtils.delete(file);
         }
     }
@@ -394,9 +457,9 @@ public class ReactManager {
     /**
      * 重新加载指定目录的rn的bundle资源
      */
-    public void doReloadBundle() {
-        String remoteDataVersion = ReactPreference.getInstance().getString(NEW_BUNDLE_VERSION);
-        String rnDir = sourceDir;
+    public void doReloadBundle(String businessName) {
+        String remoteDataVersion = ReactPreference.getInstance().getString(businessName + NEW_BUNDLE_VERSION);
+        String rnDir = TextUtils.isEmpty(businessName) ? sourceDir : sourceDir + businessName + "/";
         File file = new File(rnDir + File.separator + bundleName);
         if (file == null || !file.exists()) {
             Log.i(TAG, "js bundle file download error, check URL or network state");
@@ -424,7 +487,7 @@ public class ReactManager {
                 Class jsConfigFactoryClass = Class.forName("com.facebook.react.bridge.JSCJavaScriptExecutor$Factory");
                 method.invoke(rnInstanceManager,
                         jsConfigFactoryClass.getDeclaredConstructor(WritableNativeMap.class).newInstance(jsConfigMap),
-                        com.facebook.react.bridge.JSBundleLoader.createFileLoader(rnDir + File.separator + bundleName));
+                        com.facebook.react.bridge.JSBundleLoader.createFileLoader(rnDir + bundleName));
             } catch (Exception ex) {
 
                 Field f = rnManagerClazz.getDeclaredField("mJavaScriptExecutorFactory");
@@ -438,16 +501,16 @@ public class ReactManager {
 
                 method.invoke(rnInstanceManager,
                         jscConfig,
-                        com.facebook.react.bridge.JSBundleLoader.createFileLoader(rnDir + File.separator + bundleName));
+                        com.facebook.react.bridge.JSBundleLoader.createFileLoader(rnDir + bundleName));
             }
 
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ReactPreference.getInstance().save(BUNDLE_VERSION, remoteDataVersion);
-        ReactPreference.getInstance().delete(NEW_BUNDLE_PATH);
-        ReactPreference.getInstance().delete(NEW_BUNDLE_VERSION);
+        ReactPreference.getInstance().save(businessName + BUNDLE_VERSION, remoteDataVersion);
+        ReactPreference.getInstance().delete(businessName + NEW_BUNDLE_PATH);
+        ReactPreference.getInstance().delete(businessName + NEW_BUNDLE_VERSION);
     }
 
     /******************************tools*******************************/
@@ -613,22 +676,23 @@ public class ReactManager {
         this.bundleName = bundleName;
     }
 
-    public SuccessListener getSuccessListener() {
-        return successListener;
-    }
+    /**
+     * 获取业务名
+     *
+     * @return
+     */
+//    public String getBusinessName() {
+//        return businessName;
+//    }
 
-    public void setSuccessListener(SuccessListener successListener) {
-        this.successListener = successListener;
-    }
-
-    public FailListener getFailListener() {
-        return failListener;
-    }
-
-    public void setFailListener(FailListener failListener) {
-        this.failListener = failListener;
-    }
-
+    /**
+     * 设置业务名
+     *
+     * @param businessName 业务名
+     */
+//    public void setBusinessName(String businessName) {
+//        this.businessName = businessName;
+//    }
 
     /**
      * 获取ReactRootView
@@ -653,8 +717,8 @@ public class ReactManager {
      *
      * @return boolean true为有，false为没有
      */
-    public boolean hasNewVersion() {
-        String newVersion = ReactPreference.getInstance().getString(NEW_BUNDLE_VERSION);
+    public boolean hasNewVersion(String businessName) {
+        String newVersion = ReactPreference.getInstance().getString(businessName + NEW_BUNDLE_VERSION);
         return !TextUtils.isEmpty(newVersion);
     }
 
@@ -663,8 +727,8 @@ public class ReactManager {
      *
      * @return String 包含rn资源版本号的的版本号
      */
-    public String getReactVersion() {
-        String dataVersion = ReactPreference.getInstance().getString(BUNDLE_VERSION);
+    public String getReactVersion(String businessName) {
+        String dataVersion = ReactPreference.getInstance().getString(businessName + BUNDLE_VERSION);
         if (TextUtils.isEmpty(dataVersion)) {
             return apkVersion;
         }

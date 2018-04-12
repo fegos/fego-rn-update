@@ -1,5 +1,5 @@
-import Hello from './src/Hello';
-import World from './src/World';
+import Hello from './Hello';
+import World from './World';
 export {
 	Hello,
 	World
