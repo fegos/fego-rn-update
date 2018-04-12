@@ -200,14 +200,25 @@
  */
 - (void)requestRemoteJSBundleConfigWithName:(NSString *)JSBundleName {
     __weak __typeof(self) weakSelf = self;
-    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/config", self.remoteJSBundleRootPath, JSBundleName]];
+    NSString *remoteConfigPath = nil;
+    if ([JSBundleName isEqualToString:RN_DEFAULT_BUNDLE_NAME]) {
+        remoteConfigPath = [NSString stringWithFormat:@"%@config", self.remoteJSBundleRootPath];
+    } else {
+        remoteConfigPath = [NSString stringWithFormat:@"%@%@/config", self.remoteJSBundleRootPath, JSBundleName];
+    }
+    NSURL *URL = [NSURL URLWithString:remoteConfigPath];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
     NSURLSessionDownloadTask *task = [_httpSession downloadTaskWithRequest:request
                                                                   progress:nil
                                                                destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
-                                                                   NSString *tempFilePath = [weakSelf getConfigFileDirForJSBundle:JSBundleName];
-                                                                   NSURL *tempFileURL = [NSURL URLWithString:tempFilePath];
-                                                                   return [tempFileURL URLByAppendingPathComponent:[response suggestedFilename]];
+                                                                   [weakSelf getConfigFileDirForJSBundle:JSBundleName];
+//                                                                   NSURL *tempFileURL = [NSURL URLWithString:[self.localJSBundleRootPath stringByDeletingLastPathComponent]];
+//                                                                   return [tempFileURL URLByAppendingPathComponent:[response suggestedFilename]];
+                                                                   NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:nil];
+                                                                   NSURL *configURL = [documentsDirectoryURL URLByAppendingPathComponent:RN_JSBUNDLE_CONFIG_SUBPATH];
+                                                                   NSURL *bundleConfigURL = [configURL URLByAppendingPathComponent:JSBundleName];
+                                                                   
+                                                                   return [bundleConfigURL URLByAppendingPathComponent:[response suggestedFilename]];
                                                                }
                                                          completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
                                                              __strong __typeof(weakSelf) strongSelf = weakSelf;
@@ -264,41 +275,43 @@
     BOOL needDownload = NO;
     for (NSString *configItem in configItems) {
         NSArray *items = [configItem componentsSeparatedByString:@"_"];
-        NSString *remoteAppVersion = items[0];
-        NSString *remoteBundleVersion = items[1];
-        if (items.count == 3) {
-            if ([localAppVersion isEqualToString:remoteAppVersion] &&
-                [localBundleVersion compare:remoteBundleVersion] == NSOrderedAscending) {
-                needDownload = YES;
-            }
-            if (needDownload) {
-                NSDictionary *JSBundleInfo = @{
-                                               REMOTE_APP_VERSION : remoteAppVersion,
-                                               REMOTE_BUNDLE_VERSION : remoteBundleVersion,
-                                               REMOTE_BUNDLE_MD5 : items[2]
-                                               };
-                self.remoteJSBundleInfoDic[JSBundleName] = JSBundleInfo;
-                [self downloadRemoteJSBundleWithName:JSBundleName];
-                break;
-            }
-        } else if (items.count == 5) {
-            NSString *remoteLowBundleVersion = items[2];
-            if ([localAppVersion isEqualToString:remoteAppVersion] &&
-                [localBundleVersion compare:remoteBundleVersion] == NSOrderedAscending &&
-                [localJSBundleInfo[LOCAL_APP_VERSION] isEqualToString:remoteLowBundleVersion]) {
-                needDownload = YES;
-            }
-            if (needDownload) {
-                NSDictionary *remoteJSBundleInfo = @{
-                                                     REMOTE_APP_VERSION : remoteAppVersion,
-                                                     REMOTE_BUNDLE_VERSION : remoteBundleVersion,
-                                                     REMOTE_BUNDLE_LOW_VERSION : remoteLowBundleVersion,
-                                                     REMOTE_BUNDLE_INCREMENT_FLAG : items[3],
-                                                     REMOTE_BUNDLE_MD5 : items[4]
-                                                     };
-                self.remoteJSBundleInfoDic[JSBundleName] = remoteJSBundleInfo;
-                [self downloadIncrementRemoteJSBundleForName:JSBundleName];
-                break;
+        if (items.count > 1) {
+            NSString *remoteAppVersion = items[0];
+            NSString *remoteBundleVersion = items[1];
+            if (items.count == 3) {
+                if ([localAppVersion isEqualToString:remoteAppVersion] &&
+                    [localBundleVersion compare:remoteBundleVersion] == NSOrderedAscending) {
+                    needDownload = YES;
+                }
+                if (needDownload) {
+                    NSDictionary *JSBundleInfo = @{
+                                                   REMOTE_APP_VERSION : remoteAppVersion,
+                                                   REMOTE_BUNDLE_VERSION : remoteBundleVersion,
+                                                   REMOTE_BUNDLE_MD5 : items[2]
+                                                   };
+                    self.remoteJSBundleInfoDic[JSBundleName] = JSBundleInfo;
+                    [self downloadRemoteJSBundleWithName:JSBundleName];
+                    break;
+                }
+            } else if (items.count == 5) {
+                NSString *remoteLowBundleVersion = items[2];
+                if ([localAppVersion isEqualToString:remoteAppVersion] &&
+                    [localBundleVersion compare:remoteBundleVersion] == NSOrderedAscending &&
+                    [localJSBundleInfo[LOCAL_APP_VERSION] isEqualToString:remoteLowBundleVersion]) {
+                    needDownload = YES;
+                }
+                if (needDownload) {
+                    NSDictionary *remoteJSBundleInfo = @{
+                                                         REMOTE_APP_VERSION : remoteAppVersion,
+                                                         REMOTE_BUNDLE_VERSION : remoteBundleVersion,
+                                                         REMOTE_BUNDLE_LOW_VERSION : remoteLowBundleVersion,
+                                                         REMOTE_BUNDLE_INCREMENT_FLAG : items[3],
+                                                         REMOTE_BUNDLE_MD5 : items[4]
+                                                         };
+                    self.remoteJSBundleInfoDic[JSBundleName] = remoteJSBundleInfo;
+                    [self downloadIncrementRemoteJSBundleForName:JSBundleName];
+                    break;
+                }
             }
         }
     }
@@ -316,7 +329,12 @@
  */
 - (void)downloadRemoteJSBundleWithName:(NSString *)JSBundleName {
     NSDictionary *remoteJSBundleInfo = self.remoteJSBundleInfoDic[JSBundleName];
-    NSString *remoteJSBundlePath = [NSString stringWithFormat:@"%@/%@/all/%@_%@_rn.zip", [NIPRnManager sharedManager].remoteJSBundleRootPath, JSBundleName, remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_VERSION]];
+    NSString *remoteJSBundlePath = nil;
+    if ([JSBundleName isEqualToString:RN_DEFAULT_BUNDLE_NAME]) {
+         remoteJSBundlePath = [NSString stringWithFormat:@"%@all/%@/rn_%@_%@.zip", [NIPRnManager sharedManager].remoteJSBundleRootPath, remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_VERSION]];
+    } else {
+         remoteJSBundlePath = [NSString stringWithFormat:@"%@%@/all/%@/rn_%@_%@.zip", [NIPRnManager sharedManager].remoteJSBundleRootPath, JSBundleName, remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_VERSION]];
+    }
     NSURL *requestURL = [NSURL URLWithString:remoteJSBundlePath];
     [self downloadJSBundleForName:JSBundleName withURL:requestURL];
 }
@@ -328,7 +346,12 @@
  */
 - (void)downloadIncrementRemoteJSBundleForName:(NSString *)JSBundleName {
     NSDictionary *remoteJSBundleInfo = self.remoteJSBundleInfoDic[JSBundleName];
-    NSString *remoteJSBundlePath = [NSString stringWithFormat:@"%@/%@/increment/%@_%@_%@_%@_rn.zip", [NIPRnManager sharedManager].remoteJSBundleRootPath, JSBundleName, remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_LOW_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_INCREMENT_FLAG]];
+    NSString *remoteJSBundlePath = nil;
+    if ([JSBundleName isEqualToString:RN_DEFAULT_BUNDLE_NAME]) {
+        remoteJSBundlePath = [NSString stringWithFormat:@"%@increment/%@/rn_%@_%@_%@_%@.zip", [NIPRnManager sharedManager].remoteJSBundleRootPath, remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_LOW_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_INCREMENT_FLAG]];
+    } else {
+        remoteJSBundlePath = [NSString stringWithFormat:@"%@%@/increment/%@/rn_%@_%@_%@_%@.zip", [NIPRnManager sharedManager].remoteJSBundleRootPath, JSBundleName, remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_LOW_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_INCREMENT_FLAG]];
+    }
     NSURL *requestURL = [NSURL URLWithString:remoteJSBundlePath];
     [self downloadJSBundleForName:JSBundleName withURL:requestURL];
 }
@@ -345,10 +368,15 @@
     NSURLSessionDownloadTask *task = [_httpSession downloadTaskWithRequest:request
                                                                   progress:nil
                                                                destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
-                                                                   NSString *tempFilePath = [weakSelf getZipFileDirForJSBundle:JSBundleName];
+                                                                   [weakSelf getZipFileDirForJSBundle:JSBundleName];
+//
+//                                                                   NSURL *tempFileURL = [NSURL URLWithString:tempFilePath];
+//                                                                   return [tempFileURL URLByAppendingPathComponent:[response suggestedFilename]];
+                                                                   NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:nil];
+                                                                   NSURL *configURL = [documentsDirectoryURL URLByAppendingPathComponent:RN_JSBUNDLE_ZIP_SUBPATH];
+                                                                   NSURL *bundleConfigURL = [configURL URLByAppendingPathComponent:JSBundleName];
                                                                    
-                                                                   NSURL *tempFileURL = [NSURL URLWithString:tempFilePath];
-                                                                   return [tempFileURL URLByAppendingPathComponent:[response suggestedFilename]];
+                                                                   return [bundleConfigURL URLByAppendingPathComponent:[response suggestedFilename]];
                                                                }
                                                          completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
                                                              __strong __typeof(weakSelf) strongSelf = weakSelf;
@@ -410,7 +438,8 @@
     if ([NIPRnHotReloadHelper folderExistAtPath:JSBundleZipDir]) {
         NSArray *filePathArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:JSBundleZipDir error:&err];
         if (!err && filePathArray.count) {
-            NSString *zipFilePath = filePathArray.lastObject;
+            NSString *zipFileName = filePathArray.lastObject;
+            NSString *zipFilePath = [JSBundleZipDir stringByAppendingPathComponent:zipFileName];
             ZipArchive *miniZip = [[ZipArchive alloc] init];
             if ([miniZip UnzipOpenFile:zipFilePath]) {
                 NSString *targetFilePath = [self.localJSBundleRootPath stringByAppendingPathComponent:JSBundleName];

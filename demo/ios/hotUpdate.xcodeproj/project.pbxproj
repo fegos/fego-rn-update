@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* hotUpdateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* hotUpdateTests.m */; };
+		07D3C56F207F930B004294A6 /* RNJSBundles in Resources */ = {isa = PBXBuildFile; fileRef = 07D3C56E207F930B004294A6 /* RNJSBundles */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -16,8 +17,6 @@
 		60DAC0356F29E5D1643176D4 /* libPods-hotUpdate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B84E6176BC2CCAEE113B4C /* libPods-hotUpdate.a */; };
 		B05FBC9B200F5E5400FDEDDC /* ip.txt in Resources */ = {isa = PBXBuildFile; fileRef = B05FBC9A200F5E5400FDEDDC /* ip.txt */; };
 		B0C8305D1FDFB714002E1E9F /* NIPModules.m in Sources */ = {isa = PBXBuildFile; fileRef = B0C8305C1FDFB714002E1E9F /* NIPModules.m */; };
-		B0C830641FDFC1C0002E1E9F /* index.jsbundle.meta in Resources */ = {isa = PBXBuildFile; fileRef = B0C830621FDFC1C0002E1E9F /* index.jsbundle.meta */; };
-		B0C830651FDFC1C0002E1E9F /* index.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = B0C830631FDFC1C0002E1E9F /* index.jsbundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +34,7 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* hotUpdateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = hotUpdateTests.m; sourceTree = "<group>"; };
 		044BAAE5B14AF38688CC245D /* libPods-hotUpdateTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hotUpdateTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		07D3C56E207F930B004294A6 /* RNJSBundles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = RNJSBundles; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* hotUpdate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hotUpdate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = hotUpdate/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = hotUpdate/AppDelegate.m; sourceTree = "<group>"; };
@@ -51,8 +51,6 @@
 		B05FBC9A200F5E5400FDEDDC /* ip.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ip.txt; sourceTree = "<group>"; };
 		B0C8305B1FDFB714002E1E9F /* NIPModules.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NIPModules.h; sourceTree = "<group>"; };
 		B0C8305C1FDFB714002E1E9F /* NIPModules.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NIPModules.m; sourceTree = "<group>"; };
-		B0C830621FDFC1C0002E1E9F /* index.jsbundle.meta */ = {isa = PBXFileReference; lastKnownFileType = text; path = index.jsbundle.meta; sourceTree = "<group>"; };
-		B0C830631FDFC1C0002E1E9F /* index.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = index.jsbundle; sourceTree = "<group>"; };
 		B5D2947A3E97F49948E4C0AC /* Pods-hotUpdateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hotUpdateTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-hotUpdateTests/Pods-hotUpdateTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FDE7E326F5FCC292F60A4615 /* Pods-hotUpdate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hotUpdate.debug.xcconfig"; path = "Pods/Target Support Files/Pods-hotUpdate/Pods-hotUpdate.debug.xcconfig"; sourceTree = "<group>"; };
 		FE18B302433EAC611CA5BE70 /* Pods-hotUpdateTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hotUpdateTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-hotUpdateTests/Pods-hotUpdateTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -99,7 +97,6 @@
 			isa = PBXGroup;
 			children = (
 				B0C8303D1FDFB2E4002E1E9F /* modules */,
-				AFB010341FDA9AFC00E10C87 /* rn */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -133,6 +130,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				07D3C56E207F930B004294A6 /* RNJSBundles */,
 				B05FBC9A200F5E5400FDEDDC /* ip.txt */,
 				13B07FAE1A68108700A75B9A /* hotUpdate */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -153,16 +151,6 @@
 				00E356EE1AD99517003FC87E /* hotUpdateTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		AFB010341FDA9AFC00E10C87 /* rn */ = {
-			isa = PBXGroup;
-			children = (
-				B0C830631FDFC1C0002E1E9F /* index.jsbundle */,
-				B0C830621FDFC1C0002E1E9F /* index.jsbundle.meta */,
-			);
-			name = rn;
-			path = hotUpdate/rn;
 			sourceTree = "<group>";
 		};
 		B07ACAD7F559D3BE9EA3AE23 /* Pods */ = {
@@ -282,10 +270,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B05FBC9B200F5E5400FDEDDC /* ip.txt in Resources */,
-				B0C830641FDFC1C0002E1E9F /* index.jsbundle.meta in Resources */,
+				07D3C56F207F930B004294A6 /* RNJSBundles in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				B0C830651FDFC1C0002E1E9F /* index.jsbundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

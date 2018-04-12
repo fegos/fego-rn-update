@@ -7,6 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "NIPRnManager.h"
 
 @interface FEGORNUpdateServiceTests : XCTestCase
 
@@ -43,21 +44,20 @@
     XCTAssertEqualObjects(manager,manager2,@"获取对象非单例");
 }
 -(void)testGetRnController{
-    NIPRnController *controller = [[NIPRnManager managerWithBundleUrl:@"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/increment" noHotUpdate:NO noJsServer:YES] loadControllerWithModel:@"hotUpdate"];
+    NIPRnController *controller = [[NIPRnManager managerWithRemoteJSBundleRoot:@"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/increment" useHotUpdate:YES andUseJSServer:NO] loadRNControllerWithModule:@"hotUpdate"];
     XCTAssertNotNil(controller,@"获取不成功");
 }
 -(void)testManagerRequest{
     
     //声明XCTestExpectation对象
     XCTestExpectation *exception = [self expectationWithDescription:@"des"];
-    self.exception = exception;
     
     //发起网络请求
     NIPRnManager *manager = [NIPRnManager sharedManager];
-    manager.bundleUrl=@"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/increment";
-    manager.noHotUpdate = NO;
-    manager.noJsServer = YES;
-    [manager requestRCTAssetsBehind];
+    manager.remoteJSBundleRootPath=@"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/increment";
+    manager.useHotUpdate = YES;
+    manager.useJSServer = NO;
+    [manager requestRemoteJSBundleWithName:@"index" success:nil failure:nil];
     
     //十秒后检查是否有zip文件
     [self performSelector:@selector(checkZipFile) withObject:self afterDelay:10];
@@ -74,7 +74,7 @@
     [files enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([[(NSString*)obj pathExtension] isEqualToString:@"zip"]) {
             //有zip文件则实现处理处理，否则报超时异常test fail
-            [self.exception fulfill];
+//            [self.exception fulfill];
         }
     }];
 }

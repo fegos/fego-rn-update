@@ -112,13 +112,22 @@ static NSFileManager *fileManager;
             return NO;
         }
     }
+    NSString *dstPathParentDir = [dstPath stringByDeletingLastPathComponent];
     NSFileManager *fileManager = [self fileManager];
     NSError *err = nil;
-    [fileManager copyItemAtPath:srcPath
-                         toPath:dstPath
-                          error:&err];
-    if (!err) {
-        return YES;
+    if (![self folderExistAtPath:dstPathParentDir]) {
+        [fileManager createDirectoryAtPath:dstPathParentDir
+               withIntermediateDirectories:YES
+                                attributes:nil
+                                     error:&err];
+    }
+    if(!err) {
+        [fileManager copyItemAtPath:srcPath
+                             toPath:dstPath
+                              error:&err];
+        if (!err) {
+            return YES;
+        }
     }
     return NO;
 }

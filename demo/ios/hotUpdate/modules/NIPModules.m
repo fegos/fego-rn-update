@@ -14,7 +14,7 @@
 RCT_EXPORT_MODULE(FegoRnUpdate)
 
 RCT_EXPORT_METHOD(hotReload) {
-  [[NIPRnManager sharedManager] requestRCTAssetsBehind];
+//  [[NIPRnManager sharedManager] requestRemoteJSBundleWithName:@"index" success:nil failure:nil];
 }
 
 @end

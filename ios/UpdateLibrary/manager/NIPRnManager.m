@@ -11,6 +11,7 @@
 #import "NIPRnUpdateService.h"
 #import "NIPRnDefines.h"
 #import "NIPRnHotReloadHelper.h"
+#import "DiffMatchPatch.h"
 
 #if __has_include(<React/RCTAssert.h>)
 #import <React/RCTBridge.h>
@@ -63,7 +64,7 @@ RCT_EXPORT_MODULE()
  * @return obj
  */
 + (instancetype)sharedManager {
-    return [self managerWithRemoteJSBundleRoot:nil useHotUpdate:YES andUseJSServer:YES];
+    return [self managerWithRemoteJSBundleRoot:nil useHotUpdate:YES andUseJSServer:NO];
 }
 
 /**
@@ -87,6 +88,12 @@ RCT_EXPORT_MODULE()
         }
         [manager initJSBundle];
     });
+    manager.useHotUpdate = useHotUpdate;
+    manager.useJSServer = useJSServer;
+    if (noEmptyString(remoteJSBundleRootPath)) {
+        manager.remoteJSBundleRootPath = remoteJSBundleRootPath;
+        manager.updateService.remoteJSBundleRootPath = remoteJSBundleRootPath;
+    }
     return manager;
 }
 
@@ -165,10 +172,41 @@ RCT_EXPORT_MODULE()
 - (void)copyJSBundleToDocumentDiretoryWithName:(NSString *)JSBundleName {
     NSString *srcBundlePath = [[NSBundle mainBundle] pathForResource:JSBundleName ofType:nil inDirectory:RN_JSBUNDLE_SUBPATH];
     NSString *dstBundlePath =  [self.localJSBundleRootPath stringByAppendingPathComponent:JSBundleName];
-    BOOL bundleCopySuccess = [NIPRnHotReloadHelper copyFolderAtPath:srcBundlePath toPath:dstBundlePath];
-    
-    if (bundleCopySuccess) {
-        [self updateLocalJSBundleInfoWithName:JSBundleName];
+    NSString *commonBundlePath = [[NSBundle mainBundle] pathForResource:COMMON ofType:nil inDirectory:RN_JSBUNDLE_SUBPATH];
+    if ([NIPRnHotReloadHelper folderExistAtPath:commonBundlePath]) {
+        if (![JSBundleName isEqualToString:COMMON]) {
+            NSString *commonBundleFilePath = [commonBundlePath stringByAppendingPathComponent:@"index.jsbundle"];
+            NSString *commonBundleText = [NSString stringWithContentsOfFile:commonBundleFilePath encoding:NSUTF8StringEncoding error:nil];
+            NSString *increBundlePath = [srcBundlePath stringByAppendingPathComponent:@"index.jsbundle"];
+            NSString *increBundleText = [NSString stringWithContentsOfFile:increBundlePath encoding:NSUTF8StringEncoding error:nil];
+            
+            DiffMatchPatch *patch = [[DiffMatchPatch alloc] init];
+            NSError *error = nil;
+            NSMutableArray *patches = [patch patch_fromText:increBundleText error:&error];
+            if (!error) {
+                NSArray *result = [patch patch_apply:patches toString:commonBundleText];
+                if (result.count) {
+                    NSString *content = result[0];
+                    NSData *data = [content dataUsingEncoding: NSUTF8StringEncoding];
+                    BOOL success = [[NSFileManager defaultManager] createFileAtPath:increBundlePath
+                                                                           contents:data
+                                                                         attributes:nil];
+                    if (success) {
+                        BOOL bundleCopySuccess = [NIPRnHotReloadHelper copyFolderAtPath:srcBundlePath toPath:dstBundlePath];
+                        
+                        if (bundleCopySuccess) {
+                            [self updateLocalJSBundleInfoWithName:JSBundleName];
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        BOOL bundleCopySuccess = [NIPRnHotReloadHelper copyFolderAtPath:srcBundlePath toPath:dstBundlePath];
+        
+        if (bundleCopySuccess) {
+            [self updateLocalJSBundleInfoWithName:JSBundleName];
+        }
     }
 }
 
@@ -276,7 +314,7 @@ RCT_EXPORT_MODULE()
  * @return NIPRnController
  */
 - (NIPRnController *)loadRNControllerWithModule:(NSString *)moduleName {
-    return [self loadRNControllerWithJSBridgeName:@"index"
+    return [self loadRNControllerWithJSBridgeName:RN_DEFAULT_BUNDLE_NAME
                                     andModuleName:moduleName];
 }
 
@@ -323,7 +361,7 @@ RCT_EXPORT_MODULE()
 #pragma mark - Getters && Setters
 
 - (NIPRnUpdateService *)updateService {
-    if (_updateService) {
+    if (!_updateService) {
         _updateService = [NIPRnUpdateService sharedService];
     }
     return _updateService;

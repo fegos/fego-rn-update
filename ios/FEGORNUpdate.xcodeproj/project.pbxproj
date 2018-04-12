@@ -16,17 +16,16 @@
 		07C4D1B6207C658600A7995A /* FEGORNUpdateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1B5207C658600A7995A /* FEGORNUpdateTests.m */; };
 		07C4D1C1207C660E00A7995A /* FEGORNUpdateHelpersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1C0207C660E00A7995A /* FEGORNUpdateHelpersTests.m */; };
 		07C4D1C3207C663100A7995A /* FEGORNUpdateServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1C2207C663100A7995A /* FEGORNUpdateServiceTests.m */; };
-		07C4D1E2207C66D900A7995A /* NIPRnUpdateService.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1C6207C66D800A7995A /* NIPRnUpdateService.m */; };
-		07C4D1E3207C66D900A7995A /* DiffMatchPatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1CB207C66D800A7995A /* DiffMatchPatch.m */; };
-		07C4D1E4207C66D900A7995A /* DiffMatchPatchCFUtilities.c in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1CC207C66D800A7995A /* DiffMatchPatchCFUtilities.c */; };
-		07C4D1E5207C66D900A7995A /* NSMutableDictionary+DMPExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1D2207C66D800A7995A /* NSMutableDictionary+DMPExtensions.m */; };
-		07C4D1E6207C66D900A7995A /* NSString+JavaSubstring.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1D4207C66D800A7995A /* NSString+JavaSubstring.m */; };
-		07C4D1E7207C66D900A7995A /* NSString+UnicharUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1D6207C66D800A7995A /* NSString+UnicharUtilities.m */; };
-		07C4D1E8207C66D900A7995A /* NSString+UriCompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1D8207C66D800A7995A /* NSString+UriCompatibility.m */; };
-		07C4D1E9207C66D900A7995A /* NIPRnHotReloadHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1DB207C66D900A7995A /* NIPRnHotReloadHelper.m */; };
-		07C4D1EA207C66D900A7995A /* NIPRnController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1DE207C66D900A7995A /* NIPRnController.m */; };
-		07C4D1EB207C66D900A7995A /* NIPRnManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1E1207C66D900A7995A /* NIPRnManager.m */; };
-		07C4D200207D04E300A7995A /* index.jsbundle in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1FF207D04E300A7995A /* index.jsbundle */; };
+		07D3C55D207F89DF004294A6 /* DiffMatchPatchCFUtilities.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C541207F89DF004294A6 /* DiffMatchPatchCFUtilities.c */; };
+		07D3C55E207F89DF004294A6 /* NSString+UnicharUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C546207F89DF004294A6 /* NSString+UnicharUtilities.m */; };
+		07D3C55F207F89DF004294A6 /* DiffMatchPatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C549207F89DF004294A6 /* DiffMatchPatch.m */; };
+		07D3C560207F89DF004294A6 /* NSString+JavaSubstring.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C54A207F89DF004294A6 /* NSString+JavaSubstring.m */; };
+		07D3C561207F89DF004294A6 /* NSString+UriCompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C54B207F89DF004294A6 /* NSString+UriCompatibility.m */; };
+		07D3C562207F89DF004294A6 /* NSMutableDictionary+DMPExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C54E207F89DF004294A6 /* NSMutableDictionary+DMPExtensions.m */; };
+		07D3C563207F89DF004294A6 /* NIPRnController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C551207F89DF004294A6 /* NIPRnController.m */; };
+		07D3C564207F89DF004294A6 /* NIPRnManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C554207F89DF004294A6 /* NIPRnManager.m */; };
+		07D3C565207F89DF004294A6 /* NIPRnUpdateService.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C559207F89DF004294A6 /* NIPRnUpdateService.m */; };
+		07D3C566207F89DF004294A6 /* NIPRnHotReloadHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C55B207F89DF004294A6 /* NIPRnHotReloadHelper.m */; };
 		18A98A7AEF30C6DC0F8B4C95 /* libPods-FEGORNUpdate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA6D1A5CCA9DABC5D83F5EFC /* libPods-FEGORNUpdate.a */; };
 		D47B9845BF2E1D72C497ADFC /* libPods-FEGORNUpdateTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 315E6AC83C7B73CAA1EE4BFC /* libPods-FEGORNUpdateTests.a */; };
 /* End PBXBuildFile section */
@@ -57,31 +56,30 @@
 		07C4D1B7207C658600A7995A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		07C4D1C0207C660E00A7995A /* FEGORNUpdateHelpersTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FEGORNUpdateHelpersTests.m; sourceTree = "<group>"; };
 		07C4D1C2207C663100A7995A /* FEGORNUpdateServiceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FEGORNUpdateServiceTests.m; sourceTree = "<group>"; };
-		07C4D1C5207C66D800A7995A /* NIPRnUpdateService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPRnUpdateService.h; sourceTree = "<group>"; };
-		07C4D1C6207C66D800A7995A /* NIPRnUpdateService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPRnUpdateService.m; sourceTree = "<group>"; };
-		07C4D1C8207C66D800A7995A /* NIPRnDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPRnDefines.h; sourceTree = "<group>"; };
-		07C4D1CA207C66D800A7995A /* DiffMatchPatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiffMatchPatch.h; sourceTree = "<group>"; };
-		07C4D1CB207C66D800A7995A /* DiffMatchPatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiffMatchPatch.m; sourceTree = "<group>"; };
-		07C4D1CC207C66D800A7995A /* DiffMatchPatchCFUtilities.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = DiffMatchPatchCFUtilities.c; sourceTree = "<group>"; };
-		07C4D1CD207C66D800A7995A /* DiffMatchPatchCFUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiffMatchPatchCFUtilities.h; sourceTree = "<group>"; };
-		07C4D1CE207C66D800A7995A /* JXArcCompatibilityMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXArcCompatibilityMacros.h; sourceTree = "<group>"; };
-		07C4D1CF207C66D800A7995A /* MinMaxMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinMaxMacros.h; sourceTree = "<group>"; };
-		07C4D1D0207C66D800A7995A /* nip_rn_utils_diff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nip_rn_utils_diff.h; sourceTree = "<group>"; };
-		07C4D1D1207C66D800A7995A /* NSMutableDictionary+DMPExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+DMPExtensions.h"; sourceTree = "<group>"; };
-		07C4D1D2207C66D800A7995A /* NSMutableDictionary+DMPExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+DMPExtensions.m"; sourceTree = "<group>"; };
-		07C4D1D3207C66D800A7995A /* NSString+JavaSubstring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JavaSubstring.h"; sourceTree = "<group>"; };
-		07C4D1D4207C66D800A7995A /* NSString+JavaSubstring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JavaSubstring.m"; sourceTree = "<group>"; };
-		07C4D1D5207C66D800A7995A /* NSString+UnicharUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+UnicharUtilities.h"; sourceTree = "<group>"; };
-		07C4D1D6207C66D800A7995A /* NSString+UnicharUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+UnicharUtilities.m"; sourceTree = "<group>"; };
-		07C4D1D7207C66D800A7995A /* NSString+UriCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+UriCompatibility.h"; sourceTree = "<group>"; };
-		07C4D1D8207C66D800A7995A /* NSString+UriCompatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+UriCompatibility.m"; sourceTree = "<group>"; };
-		07C4D1DA207C66D900A7995A /* NIPRnHotReloadHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPRnHotReloadHelper.h; sourceTree = "<group>"; };
-		07C4D1DB207C66D900A7995A /* NIPRnHotReloadHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPRnHotReloadHelper.m; sourceTree = "<group>"; };
-		07C4D1DD207C66D900A7995A /* NIPRnController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPRnController.h; sourceTree = "<group>"; };
-		07C4D1DE207C66D900A7995A /* NIPRnController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPRnController.m; sourceTree = "<group>"; };
-		07C4D1E0207C66D900A7995A /* NIPRnManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPRnManager.h; sourceTree = "<group>"; };
-		07C4D1E1207C66D900A7995A /* NIPRnManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPRnManager.m; sourceTree = "<group>"; };
-		07C4D1FF207D04E300A7995A /* index.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = index.jsbundle; sourceTree = "<group>"; };
+		07D3C540207F89DF004294A6 /* DiffMatchPatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiffMatchPatch.h; sourceTree = "<group>"; };
+		07D3C541207F89DF004294A6 /* DiffMatchPatchCFUtilities.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = DiffMatchPatchCFUtilities.c; sourceTree = "<group>"; };
+		07D3C542207F89DF004294A6 /* JXArcCompatibilityMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXArcCompatibilityMacros.h; sourceTree = "<group>"; };
+		07D3C543207F89DF004294A6 /* NSString+UriCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+UriCompatibility.h"; sourceTree = "<group>"; };
+		07D3C544207F89DF004294A6 /* NSString+JavaSubstring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JavaSubstring.h"; sourceTree = "<group>"; };
+		07D3C545207F89DF004294A6 /* NSMutableDictionary+DMPExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+DMPExtensions.h"; sourceTree = "<group>"; };
+		07D3C546207F89DF004294A6 /* NSString+UnicharUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+UnicharUtilities.m"; sourceTree = "<group>"; };
+		07D3C547207F89DF004294A6 /* DiffMatchPatchCFUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiffMatchPatchCFUtilities.h; sourceTree = "<group>"; };
+		07D3C548207F89DF004294A6 /* nip_rn_utils_diff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nip_rn_utils_diff.h; sourceTree = "<group>"; };
+		07D3C549207F89DF004294A6 /* DiffMatchPatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiffMatchPatch.m; sourceTree = "<group>"; };
+		07D3C54A207F89DF004294A6 /* NSString+JavaSubstring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JavaSubstring.m"; sourceTree = "<group>"; };
+		07D3C54B207F89DF004294A6 /* NSString+UriCompatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+UriCompatibility.m"; sourceTree = "<group>"; };
+		07D3C54C207F89DF004294A6 /* NSString+UnicharUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+UnicharUtilities.h"; sourceTree = "<group>"; };
+		07D3C54D207F89DF004294A6 /* MinMaxMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinMaxMacros.h; sourceTree = "<group>"; };
+		07D3C54E207F89DF004294A6 /* NSMutableDictionary+DMPExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+DMPExtensions.m"; sourceTree = "<group>"; };
+		07D3C550207F89DF004294A6 /* NIPRnController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPRnController.h; sourceTree = "<group>"; };
+		07D3C551207F89DF004294A6 /* NIPRnController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPRnController.m; sourceTree = "<group>"; };
+		07D3C553207F89DF004294A6 /* NIPRnManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPRnManager.h; sourceTree = "<group>"; };
+		07D3C554207F89DF004294A6 /* NIPRnManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPRnManager.m; sourceTree = "<group>"; };
+		07D3C556207F89DF004294A6 /* NIPRnDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPRnDefines.h; sourceTree = "<group>"; };
+		07D3C558207F89DF004294A6 /* NIPRnUpdateService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPRnUpdateService.h; sourceTree = "<group>"; };
+		07D3C559207F89DF004294A6 /* NIPRnUpdateService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPRnUpdateService.m; sourceTree = "<group>"; };
+		07D3C55B207F89DF004294A6 /* NIPRnHotReloadHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPRnHotReloadHelper.m; sourceTree = "<group>"; };
+		07D3C55C207F89DF004294A6 /* NIPRnHotReloadHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPRnHotReloadHelper.h; sourceTree = "<group>"; };
 		315E6AC83C7B73CAA1EE4BFC /* libPods-FEGORNUpdateTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FEGORNUpdateTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		94EB730046F23CB08136E17A /* Pods-FEGORNUpdateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FEGORNUpdateTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FEGORNUpdateTests/Pods-FEGORNUpdateTests.debug.xcconfig"; sourceTree = "<group>"; };
 		AA6D1A5CCA9DABC5D83F5EFC /* libPods-FEGORNUpdate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FEGORNUpdate.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -113,6 +111,7 @@
 		07C4D190207C658600A7995A = {
 			isa = PBXGroup;
 			children = (
+				07D3C53E207F89DF004294A6 /* UpdateLibrary */,
 				07C4D19B207C658600A7995A /* FEGORNUpdate */,
 				07C4D1B4207C658600A7995A /* FEGORNUpdateTests */,
 				07C4D19A207C658600A7995A /* Products */,
@@ -133,13 +132,6 @@
 		07C4D19B207C658600A7995A /* FEGORNUpdate */ = {
 			isa = PBXGroup;
 			children = (
-				07C4D1F8207D047B00A7995A /* RNJSBundles */,
-				07C4D1DC207C66D900A7995A /* controller */,
-				07C4D1C9207C66D800A7995A /* diff */,
-				07C4D1D9207C66D900A7995A /* helpers */,
-				07C4D1C7207C66D800A7995A /* macros */,
-				07C4D1DF207C66D900A7995A /* manager */,
-				07C4D1C4207C66D800A7995A /* service */,
 				07C4D19C207C658600A7995A /* AppDelegate.h */,
 				07C4D19D207C658600A7995A /* AppDelegate.m */,
 				07C4D19F207C658600A7995A /* ViewController.h */,
@@ -164,126 +156,83 @@
 			path = FEGORNUpdateTests;
 			sourceTree = "<group>";
 		};
-		07C4D1C4207C66D800A7995A /* service */ = {
+		07D3C53E207F89DF004294A6 /* UpdateLibrary */ = {
 			isa = PBXGroup;
 			children = (
-				07C4D1C5207C66D800A7995A /* NIPRnUpdateService.h */,
-				07C4D1C6207C66D800A7995A /* NIPRnUpdateService.m */,
+				07D3C53F207F89DF004294A6 /* diff */,
+				07D3C54F207F89DF004294A6 /* controller */,
+				07D3C552207F89DF004294A6 /* manager */,
+				07D3C555207F89DF004294A6 /* macros */,
+				07D3C557207F89DF004294A6 /* service */,
+				07D3C55A207F89DF004294A6 /* helpers */,
 			);
-			path = service;
+			path = UpdateLibrary;
 			sourceTree = "<group>";
 		};
-		07C4D1C7207C66D800A7995A /* macros */ = {
+		07D3C53F207F89DF004294A6 /* diff */ = {
 			isa = PBXGroup;
 			children = (
-				07C4D1C8207C66D800A7995A /* NIPRnDefines.h */,
-			);
-			path = macros;
-			sourceTree = "<group>";
-		};
-		07C4D1C9207C66D800A7995A /* diff */ = {
-			isa = PBXGroup;
-			children = (
-				07C4D1CA207C66D800A7995A /* DiffMatchPatch.h */,
-				07C4D1CB207C66D800A7995A /* DiffMatchPatch.m */,
-				07C4D1CC207C66D800A7995A /* DiffMatchPatchCFUtilities.c */,
-				07C4D1CD207C66D800A7995A /* DiffMatchPatchCFUtilities.h */,
-				07C4D1CE207C66D800A7995A /* JXArcCompatibilityMacros.h */,
-				07C4D1CF207C66D800A7995A /* MinMaxMacros.h */,
-				07C4D1D0207C66D800A7995A /* nip_rn_utils_diff.h */,
-				07C4D1D1207C66D800A7995A /* NSMutableDictionary+DMPExtensions.h */,
-				07C4D1D2207C66D800A7995A /* NSMutableDictionary+DMPExtensions.m */,
-				07C4D1D3207C66D800A7995A /* NSString+JavaSubstring.h */,
-				07C4D1D4207C66D800A7995A /* NSString+JavaSubstring.m */,
-				07C4D1D5207C66D800A7995A /* NSString+UnicharUtilities.h */,
-				07C4D1D6207C66D800A7995A /* NSString+UnicharUtilities.m */,
-				07C4D1D7207C66D800A7995A /* NSString+UriCompatibility.h */,
-				07C4D1D8207C66D800A7995A /* NSString+UriCompatibility.m */,
+				07D3C540207F89DF004294A6 /* DiffMatchPatch.h */,
+				07D3C541207F89DF004294A6 /* DiffMatchPatchCFUtilities.c */,
+				07D3C542207F89DF004294A6 /* JXArcCompatibilityMacros.h */,
+				07D3C543207F89DF004294A6 /* NSString+UriCompatibility.h */,
+				07D3C544207F89DF004294A6 /* NSString+JavaSubstring.h */,
+				07D3C545207F89DF004294A6 /* NSMutableDictionary+DMPExtensions.h */,
+				07D3C546207F89DF004294A6 /* NSString+UnicharUtilities.m */,
+				07D3C547207F89DF004294A6 /* DiffMatchPatchCFUtilities.h */,
+				07D3C548207F89DF004294A6 /* nip_rn_utils_diff.h */,
+				07D3C549207F89DF004294A6 /* DiffMatchPatch.m */,
+				07D3C54A207F89DF004294A6 /* NSString+JavaSubstring.m */,
+				07D3C54B207F89DF004294A6 /* NSString+UriCompatibility.m */,
+				07D3C54C207F89DF004294A6 /* NSString+UnicharUtilities.h */,
+				07D3C54D207F89DF004294A6 /* MinMaxMacros.h */,
+				07D3C54E207F89DF004294A6 /* NSMutableDictionary+DMPExtensions.m */,
 			);
 			path = diff;
 			sourceTree = "<group>";
 		};
-		07C4D1D9207C66D900A7995A /* helpers */ = {
+		07D3C54F207F89DF004294A6 /* controller */ = {
 			isa = PBXGroup;
 			children = (
-				07C4D1DA207C66D900A7995A /* NIPRnHotReloadHelper.h */,
-				07C4D1DB207C66D900A7995A /* NIPRnHotReloadHelper.m */,
-			);
-			path = helpers;
-			sourceTree = "<group>";
-		};
-		07C4D1DC207C66D900A7995A /* controller */ = {
-			isa = PBXGroup;
-			children = (
-				07C4D1DD207C66D900A7995A /* NIPRnController.h */,
-				07C4D1DE207C66D900A7995A /* NIPRnController.m */,
+				07D3C550207F89DF004294A6 /* NIPRnController.h */,
+				07D3C551207F89DF004294A6 /* NIPRnController.m */,
 			);
 			path = controller;
 			sourceTree = "<group>";
 		};
-		07C4D1DF207C66D900A7995A /* manager */ = {
+		07D3C552207F89DF004294A6 /* manager */ = {
 			isa = PBXGroup;
 			children = (
-				07C4D1E0207C66D900A7995A /* NIPRnManager.h */,
-				07C4D1E1207C66D900A7995A /* NIPRnManager.m */,
+				07D3C553207F89DF004294A6 /* NIPRnManager.h */,
+				07D3C554207F89DF004294A6 /* NIPRnManager.m */,
 			);
 			path = manager;
 			sourceTree = "<group>";
 		};
-		07C4D1F8207D047B00A7995A /* RNJSBundles */ = {
+		07D3C555207F89DF004294A6 /* macros */ = {
 			isa = PBXGroup;
 			children = (
-				07C4D1FB207D049F00A7995A /* common */,
-				07C4D1FA207D049900A7995A /* world */,
-				07C4D1F9207D048600A7995A /* hello */,
+				07D3C556207F89DF004294A6 /* NIPRnDefines.h */,
 			);
-			path = RNJSBundles;
+			path = macros;
 			sourceTree = "<group>";
 		};
-		07C4D1F9207D048600A7995A /* hello */ = {
+		07D3C557207F89DF004294A6 /* service */ = {
 			isa = PBXGroup;
 			children = (
-				07C4D1FE207D04C500A7995A /* assets */,
+				07D3C558207F89DF004294A6 /* NIPRnUpdateService.h */,
+				07D3C559207F89DF004294A6 /* NIPRnUpdateService.m */,
 			);
-			path = hello;
+			path = service;
 			sourceTree = "<group>";
 		};
-		07C4D1FA207D049900A7995A /* world */ = {
+		07D3C55A207F89DF004294A6 /* helpers */ = {
 			isa = PBXGroup;
 			children = (
-				07C4D1FD207D04B100A7995A /* assets */,
-				07C4D1FF207D04E300A7995A /* index.jsbundle */,
+				07D3C55B207F89DF004294A6 /* NIPRnHotReloadHelper.m */,
+				07D3C55C207F89DF004294A6 /* NIPRnHotReloadHelper.h */,
 			);
-			path = world;
-			sourceTree = "<group>";
-		};
-		07C4D1FB207D049F00A7995A /* common */ = {
-			isa = PBXGroup;
-			children = (
-				07C4D1FC207D04AA00A7995A /* assets */,
-			);
-			path = common;
-			sourceTree = "<group>";
-		};
-		07C4D1FC207D04AA00A7995A /* assets */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = assets;
-			sourceTree = "<group>";
-		};
-		07C4D1FD207D04B100A7995A /* assets */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = assets;
-			sourceTree = "<group>";
-		};
-		07C4D1FE207D04C500A7995A /* assets */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = assets;
+			path = helpers;
 			sourceTree = "<group>";
 		};
 		992508DAE8FE5162B123B687 /* Pods */ = {
@@ -514,19 +463,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				07C4D1A1207C658600A7995A /* ViewController.m in Sources */,
-				07C4D1E6207C66D900A7995A /* NSString+JavaSubstring.m in Sources */,
+				07D3C560207F89DF004294A6 /* NSString+JavaSubstring.m in Sources */,
+				07D3C55E207F89DF004294A6 /* NSString+UnicharUtilities.m in Sources */,
+				07D3C561207F89DF004294A6 /* NSString+UriCompatibility.m in Sources */,
+				07D3C564207F89DF004294A6 /* NIPRnManager.m in Sources */,
 				07C4D1AC207C658600A7995A /* main.m in Sources */,
-				07C4D1E8207C66D900A7995A /* NSString+UriCompatibility.m in Sources */,
-				07C4D200207D04E300A7995A /* index.jsbundle in Sources */,
-				07C4D1E2207C66D900A7995A /* NIPRnUpdateService.m in Sources */,
-				07C4D1EB207C66D900A7995A /* NIPRnManager.m in Sources */,
-				07C4D1E9207C66D900A7995A /* NIPRnHotReloadHelper.m in Sources */,
-				07C4D1E5207C66D900A7995A /* NSMutableDictionary+DMPExtensions.m in Sources */,
-				07C4D1EA207C66D900A7995A /* NIPRnController.m in Sources */,
-				07C4D1E4207C66D900A7995A /* DiffMatchPatchCFUtilities.c in Sources */,
-				07C4D1E3207C66D900A7995A /* DiffMatchPatch.m in Sources */,
-				07C4D1E7207C66D900A7995A /* NSString+UnicharUtilities.m in Sources */,
+				07D3C563207F89DF004294A6 /* NIPRnController.m in Sources */,
+				07D3C562207F89DF004294A6 /* NSMutableDictionary+DMPExtensions.m in Sources */,
 				07C4D19E207C658600A7995A /* AppDelegate.m in Sources */,
+				07D3C55D207F89DF004294A6 /* DiffMatchPatchCFUtilities.c in Sources */,
+				07D3C565207F89DF004294A6 /* NIPRnUpdateService.m in Sources */,
+				07D3C55F207F89DF004294A6 /* DiffMatchPatch.m in Sources */,
+				07D3C566207F89DF004294A6 /* NIPRnHotReloadHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

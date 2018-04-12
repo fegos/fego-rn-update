@@ -9,6 +9,7 @@
 #define JSBUNDLE @"jsbundle"
 #define ZIP @"zip"
 #define COMMON @"common"
+#define RN_DEFAULT_BUNDLE_NAME @"default_bundle"
 #define RN_JSBUNDLE_SUBPATH @"RNJSBundles"
 #define RN_JSBUNDLE_ZIP_SUBPATH @"RNJSBundleZips"
 #define RN_JSBUNDLE_CONFIG_SUBPATH @"RNJSBundleConfigs"
