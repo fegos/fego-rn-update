@@ -48,7 +48,7 @@
 ├── docs					# api文档
 ├── hybriddemo				# 拆包demo
 │   ├── android				# android工程
-│	├── ios 				# ios工程
+│   ├── ios 				# ios工程
 │   └── rn					# js相关代码
 ├── increment               # 包生成目录
 ├── index.js                # js源码
@@ -63,19 +63,19 @@
 .
 ├── pkg.sh                  # 整体打包文件，包含全量打包和增量打包，主执行脚本文件
 └── pkgCmd                  # 辅助脚本文件夹
-	├── allPkg.sh           # 全量包打包脚本
-	├── bundleDiff.js		# 拆包时bundle的diff
+    ├── allPkg.sh           # 全量包打包脚本
+    ├── bundleDiff.js		# 拆包时bundle的diff
     ├── config.js           # 配置文件，主要配置生成包的存储位置
     ├── incre               # bundle和assets增量生成脚本
     │   ├── assets.js       # 资源assets增量生成脚本
     │   └── jsbundle.js     # bundle增量生成脚本
     ├── incregen.js         # 增量包生成脚本
-	├── md5.js				# 生成全量更新config
+    ├── md5.js				# 生成全量更新config
     ├── third               # 依赖的第三方脚本
     │   ├── diff_match_patch_uncompressed.js    # 文件差异生成脚本
     │   └── file_list.js    # 列出目录下所有的文件
     ├── unpack.js			# 拆包
-	└── Utils				# 公共方法
+    └── Utils				# 公共方法
 ```
 
 # 安装
@@ -318,12 +318,12 @@ manager.noJsServer = YES;
 │           └── README.md
 └── ios                 	# 存放ios生成的包
 	└── businessName
-		├── all             # 存放全量包
-		│   └── README.md
-		│   └── temp		# 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
-		├── config			# 最终的config，该文件会自动生成，默认为增量
-		└── increment       # 存放增量包
-			└── README.md
+        ├── all             # 存放全量包
+        │   └── README.md
+        │   └── temp		# 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
+        ├── config			# 最终的config，该文件会自动生成，默认为增量
+        └── increment       # 存放增量包
+            └── README.md
 ```
 3. 修改配置文件`config.js`中的`path`和`apkVer`（config.js文件位于pkgCmd/下）
 
