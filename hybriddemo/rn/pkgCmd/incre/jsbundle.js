@@ -18,7 +18,7 @@ let Utils = require('../Utils');
  * @param {*} apkVer sdk版本号
  * @param {*} platform 平台，android/ios
  */
-module.exports = function (oldVer, newVer, apkVer, platform) {
+module.exports = function (oldVer, newVer, apkVer, platform, businessName, commonText) {
 	// 旧包内容
 	var bunOld = '';
 	// 新包内容
@@ -27,7 +27,12 @@ module.exports = function (oldVer, newVer, apkVer, platform) {
 	var patch_text = '';
 
 	// 包路径前缀
-	var pathPrefix = configs.path + platform;
+	var pathPrefix = '';
+	if (businessName === 'no') {
+		pathPrefix = configs.path + platform;
+	} else {
+		pathPrefix = configs.path + platform + '/' + businessName;
+	}
 	// 增量包路径前缀；
 	var incrementPathPrefix = pathPrefix + '/increment/';
 	// 全量包路径前缀：
@@ -75,6 +80,14 @@ module.exports = function (oldVer, newVer, apkVer, platform) {
 			// 生成增量内容
 			var text1 = bunOld;
 			var text2 = bunNew;
+			if (businessName !== 'no' && businessName !== 'common') {
+				var patches1 = dmp.patch_fromText(text1);
+				var results1 = dmp.patch_apply(patches1, commonText);
+				text1 = results1[0];
+				var patches2 = dmp.patch_fromText(text2);
+				var results2 = dmp.patch_apply(patches2, commonText);
+				text2 = results2[0];
+			}
 			var diff = dmp.diff_main(text1, text2, true);
 			if (diff.length > 2) {
 				dmp.diff_cleanupSemantic(diff);
@@ -138,7 +151,6 @@ module.exports = function (oldVer, newVer, apkVer, platform) {
 				});
 			}
 		});
-
 	}
 
 	let promise = Promise.all(promises).then(function (posts) {
@@ -157,7 +169,7 @@ module.exports = function (oldVer, newVer, apkVer, platform) {
 				fs.writeFileSync(incrementPathPrefix + apkVer + '/' + incrementName + '/' + name, fs.readFileSync(fileList[i]));
 			}
 		}
-		let assetsIncrement = new assets(oldVer, newVer, apkVer, platform, value);
+		let assetsIncrement = new assets(oldVer, newVer, apkVer, platform, value, businessName);
 		//3、将生成的增量包进行压缩操作，并删除之前生成的文件夹即其下的所有内容
 		zipIncrement();
 		return true;

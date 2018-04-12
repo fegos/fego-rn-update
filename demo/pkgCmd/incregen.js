@@ -14,10 +14,19 @@ var apkVer = configs.apkVer;
 var newVer = 0;
 // ios/android, 执行本脚本时可以作为参数传入
 var platform = 'android';
-if (3 == process.argv.length) {
+var businessName = '';
+if (process.argv.length === 3) {
+	if (process.argv[2] === 'android' || process.argv[2] === 'ios') {
+		platform = process.argv[2];
+	} else {
+		businessName = process.argv[2];
+	}
+} else if (process.argv.length === 4) {
 	platform = process.argv[2];
+	businessName = process.argv[3];
 }
 console.log(platform);
+console.log(businessName);
 // 包路径前缀
 var pathPrefix = '';
 // 增量包路径前缀；
@@ -35,7 +44,11 @@ const incrementBundleName = 'increment.jsbundle';
  * @param {*} platform 平台，android/ios
  */
 function unzipAll() {
-	pathPrefix = configs.path + platform;
+	if (businessName === 'no') {
+		pathPrefix = configs.path + platform;
+	} else {
+		pathPrefix = configs.path + platform + '/' + businessName;
+	}
 	incrementPathPrefix = pathPrefix + '/increment/';
 	allPathPrefix = pathPrefix + '/all/';
 
@@ -88,10 +101,32 @@ function unzipAll() {
  * @param {*} platform 平台，android/ios
  */
 function generateIncrement() {
+	// 如果是非common模块，需要事先读取common bundle包内容
+	let commonText = '';
+	if (businessName !== 'no' && businessName !== 'common') {
+		let commonAllPath = configs.path + platform + '/common/all/';
+		if (!fs.existsSync(commonAllPath + apkVer + '/unzipVer')) {
+			console.log("还没有common包，请先生成包");
+			newVer = 0;
+			return;
+		}
+		// 读取全量包中config文件，获取最新版本号
+		let unzipVer = fs.readFileSync(commonAllPath + apkVer + '/unzipVer');
+		let commonNewVer = Number.parseInt(unzipVer);
+		var zipName = '';
+		if (commonNewVer === 0) {// 如果取到的值为0，则说明这是首次生成增量包
+			zipName = 'rn_' + apkVer + '_' + commonNewVer;
+			if (!fs.existsSync(commonAllPath + 'temp/' + apkVer + '/' + zipName)) {
+				fs.mkdirSync(commonAllPath + 'temp/' + apkVer + '/' + zipName);
+			}
+			zipper.sync.unzip(commonAllPath + apkVer + '/' + zipName + ".zip").save(commonAllPath + 'temp/' + apkVer + '/' + zipName);
+		} else {
+			zipName = 'rn_' + apkVer + '_' + (commonNewVer - 1);
+		}
+		commonText = fs.readFileSync(commonAllPath + 'temp/' + apkVer + '/' + zipName + '/' + bundleName);
+	}
 	for (let i = newVer - 1; i >= 0; i--) {
-		let bundleIncrement = new Promise(function (resolve, reject) {
-			new jsbundle(i, newVer, apkVer, platform);
-		})
+		new jsbundle(i, newVer, apkVer, platform, businessName, commonText);
 	}
 }
 

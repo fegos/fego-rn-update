@@ -1,8 +1,12 @@
 // 写个用户名跟路径对应的字典
 let map = {
-	sxiaoxia: '/Users/sxiaoxia/Desktop/work/kaiyuan/fego-rn-update/demo/increment/',
-	zramals: '/Users/zramals/Documents/fego/fego-rn-update/demo/increment/',
-	zhaosong: '/Users/zhaosong/Documents/github/fego-rn-hotUpdate/demo/increment/'
+	/**
+	 * 注意：
+	 * 1、username为电脑用户名；
+	 * 2、path为包存储位置，末尾需要加“/”，否则会报路径错误
+	 */
+	username1: 'path1',
+	username2: 'path2'
 }
 // 获取系统信息
 let os = require('os');

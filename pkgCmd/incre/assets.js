@@ -17,7 +17,7 @@ let Utils = require('../Utils');
  * @param {*} platform 平台，android/ios
  * @param {*} isIncrement 是否增量
  */
-module.exports = function (oldVer, newVer, apkVer, platform, isIncrement) {
+module.exports = function (oldVer, newVer, apkVer, platform, isIncrement, businessName) {
 
 	var resultOld = [];//旧版本下的所有文件数组
 	var resultNew = [];//新版本下所有的文件数组
@@ -29,7 +29,12 @@ module.exports = function (oldVer, newVer, apkVer, platform, isIncrement) {
 	var addArray = [];//增加的文件数组
 
 	//包路径前缀
-	var pathPrefix = configs.path + platform;
+	var pathPrefix = '';
+	if (businessName === 'no') {
+		pathPrefix = configs.path + platform;
+	} else {
+		pathPrefix = configs.path + platform + '/' + businessName;
+	}
 	//增量包路径前缀；
 	var incrementPathPrefix = pathPrefix + '/increment/';
 	//全量包路径前缀：
