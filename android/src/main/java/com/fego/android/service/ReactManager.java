@@ -460,6 +460,11 @@ public class ReactManager {
             //c、解析assetsConfig.txt，获取到需要删除的资源文件，进而删除
             File assetsFile = new File(rnDir + "assetsConfig.txt");
             if (assetsFile.exists()) {
+                if (!increFile.exists() && !TextUtils.isEmpty(businessName)) {
+                    String patchStr = getJsBundle(rnDir + bundleName, false);
+                    String assetsBundle = getJsBundle(sourceDir + "common/" + bundleName, false);
+                    merge(patchStr, assetsBundle, rnDir);
+                }
                 byte[] bytes = FileUtils.readFile(rnDir + "assetsConfig.txt");
                 String configDetail = new String(bytes);
                 checkAssetconfigFile(configDetail, rnDir);
