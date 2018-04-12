@@ -227,7 +227,7 @@ public class FileUtils {
             MessageDigest md5 = MessageDigest.getInstance("MD5");
             md5.update(byteBuffer);
             BigInteger bi = new BigInteger(1, md5.digest());
-            value = bi.toString(16);
+            value = String.format("%032x", bi);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -79,7 +79,7 @@ if [ $businessName = 'no' ]; then
 elif [ $businessName = "common" ]; then
 	echo 'COMMON'
 else 
-	node pkgModuleCmd/unpack.js $businessName $currentPath/deploy/
+	node pkgCmd/unpack.js $businessName $currentPath/deploy/
 fi
 
 #压缩包的名字
@@ -133,4 +133,4 @@ else
 	cd ../../
 	cp deploy/$businessName/$zipName $configDir
 fi
-node ./pkgModuleCmd/md5.js $hotConfigDir $apkVer $zipName $content
+node ./pkgCmd/md5.js $hotConfigDir $apkVer $zipName $content
