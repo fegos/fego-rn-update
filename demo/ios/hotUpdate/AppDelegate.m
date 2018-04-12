@@ -34,7 +34,7 @@
 //  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadRnController) name:@"RNHotReloadRequestSuccess" object:nil];
   NIPRnManager *manager = [NIPRnManager sharedManager];
   manager.delegate = self;
-  manager.bundleUrl = @"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/increment";
+  manager.bundleUrl = @"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/";
   manager.noHotUpdate = NO;
   manager.noJsServer = YES;
   
