@@ -183,7 +183,7 @@ public class RNHelloActivity extends Activity implements DefaultHardwareBackBtnH
 
     @Override
     public void onSuccess() {
-        if (isFinishing()) {
+        if (!isFinishing()) {
             questionUpdateReactSource();
         }
     }
