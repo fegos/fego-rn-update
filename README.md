@@ -34,48 +34,48 @@
 
 ```
 .
-├── FegoRnUpdate.podspec    # ios pod库的描述文件
-├── android                 # android原生源码
-├── demo                    # demo示例
-│   ├── App.js              # js主代码
-│   ├── android             # android工程
-│   ├── increment           # 增量包、全量包存储路径
-│   ├── index.js            # js入口文件
-│   ├── ios                 # ios工程
-│   ├── pkg.sh              # 主打包脚本文件
-│   ├── pkgCmd              # 辅助脚本文件夹
-│   └── resource            # 存放字体文件
-├── docs					# api文档
-├── hybriddemo				# 拆包demo
-│   ├── android				# android工程
-│   ├── ios 				# ios工程
-│   └── rn					# js相关代码
-├── increment               # 包生成目录
-├── index.js                # js源码
-├── ios                     # ios源码
-├── package.json            # 项目描述文件
-├── pkg.sh                  # 打包文件
-└── pkgCmd                  # 辅助脚本文件夹
+├── FegoRnUpdate.podspec      # ios pod库的描述文件
+├── android                   # android原生源码
+├── demo                      # demo示例
+│   ├── App.js                # js主代码
+│   ├── android               # android工程
+│   ├── increment             # 增量包、全量包存储路径
+│   ├── index.js              # js入口文件
+│   ├── ios                   # ios工程
+│   ├── pkg.sh                # 主打包脚本文件
+│   ├── pkgCmd                # 辅助脚本文件夹
+│   └── resource              # 存放字体文件
+├── docs                      # api文档
+├── hybriddemo                # 拆包demo
+│   ├── android               # android工程
+│   ├── ios                   # ios工程
+│   └── rn                    # js相关代码
+├── increment                 # 包生成目录
+├── index.js                  # js源码
+├── ios                       # ios源码
+├── package.json              # 项目描述文件
+├── pkg.sh                    # 打包文件
+└── pkgCmd                    # 辅助脚本文件夹
 ```
 + 打包脚本目录
 
 ```
 .
-├── pkg.sh                  # 整体打包文件，包含全量打包和增量打包，主执行脚本文件
-└── pkgCmd                  # 辅助脚本文件夹
-    ├── allPkg.sh           # 全量包打包脚本
-    ├── bundleDiff.js		# 拆包时bundle的diff
-    ├── config.js           # 配置文件，主要配置生成包的存储位置
-    ├── incre               # bundle和assets增量生成脚本
-    │   ├── assets.js       # 资源assets增量生成脚本
-    │   └── jsbundle.js     # bundle增量生成脚本
-    ├── incregen.js         # 增量包生成脚本
-    ├── md5.js				# 生成全量更新config
-    ├── third               # 依赖的第三方脚本
-    │   ├── diff_match_patch_uncompressed.js    # 文件差异生成脚本
-    │   └── file_list.js    # 列出目录下所有的文件
-    ├── unpack.js			# 拆包
-    └── Utils				# 公共方法
+├── pkg.sh                    # 整体打包文件，包含全量打包和增量打包，主执行脚本文件
+└── pkgCmd                    # 辅助脚本文件夹
+    ├── allPkg.sh             # 全量包打包脚本
+    ├── bundleDiff.js         # 拆包时bundle的diff
+    ├── config.js             # 配置文件，主要配置生成包的存储位置
+    ├── incre                 # bundle和assets增量生成脚本
+    │   ├── assets.js         # 资源assets增量生成脚本
+    │   └── jsbundle.js       # bundle增量生成脚本
+    ├── incregen.js           # 增量包生成脚本
+    ├── md5.js                # 生成全量更新config
+    ├── third                 # 依赖的第三方脚本
+    │   ├── diff_match_patch_uncompressed.js      # 文件差异生成脚本
+    │   └── file_list.js      # 列出目录下所有的文件
+    ├── unpack.js             # 拆包
+    └── Utils                 # 公共方法
 ```
 
 # 安装
@@ -308,20 +308,20 @@ manager.noJsServer = YES;
 ```
 .
 ├── React-Native 热更新目录
-├── android             	# 存放android生成的包
-│   └── businessName		# 如果是拆包的情况，会多这一级目录，非拆包的情况，不存在这一级目录
+├── android                 # 存放android生成的包
+│   └── businessName        # 如果是拆包的情况，会多这一级目录，非拆包的情况，不存在这一级目录
 │   	├── all             # 存放全量包
 │       │   ├── README.md   
-│       │   └── temp		# 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
-│    	├── config			# 最终的config，该文件会自动生成，默认为增量
+│       │   └── temp        # 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
+│    	├── config          # 最终的config，该文件会自动生成，默认为增量
 │       └── increment       # 存放增量包
 │           └── README.md
-└── ios                 	# 存放ios生成的包
+└── ios                     # 存放ios生成的包
 	└── businessName
         ├── all             # 存放全量包
         │   └── README.md
-        │   └── temp		# 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
-        ├── config			# 最终的config，该文件会自动生成，默认为增量
+        │   └── temp        # 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
+        ├── config          # 最终的config，该文件会自动生成，默认为增量
         └── increment       # 存放增量包
             └── README.md
 ```

@@ -64,7 +64,7 @@ public class ReactManager {
     private Call<ResponseBody> configCall;                          // 用于请求配置文件
     private Call<ResponseBody> bundleCall;                          // 用于请求rn资源文件
 
-    private String curBusinessName = "";                               // 业务名
+    private String curBusinessName = "";                            // 当前业务名
     /**
      * The enum Np react manager task.
      * 用于通知有新的资源包
@@ -100,6 +100,7 @@ public class ReactManager {
      * @param application   application
      * @param reactPackages reactPackages
      * @param useDevelop    是否开发模式
+     * @param businessName  业务名
      */
     public <T extends ReactPackage> void init(Application application, List<T> reactPackages, boolean useDevelop, String businessName) {
 
@@ -186,6 +187,8 @@ public class ReactManager {
 
     /**
      * 更新字体文件
+     * 
+     * @param businessName 业务名
      */
     private void updateReactFonts(String businessName) {
         String tempPath = "";
@@ -222,6 +225,10 @@ public class ReactManager {
 
     /**
      * 后台执行热更新逻辑
+     *
+     * @param businessName  业务名
+     * @param sucListener   成功回调
+     * @param failListener  失败回调
      */
     public void loadBundleBehind(final String businessName, final SuccessListener sucListener, final FailListener failListener) {
         //请求远程的rn资源最新的配置文件,获取rn最新的对应sdk的数据迭代版本号
@@ -272,7 +279,11 @@ public class ReactManager {
     /**
      * 下载rn配置文件后,在本地读取配置文件来决定是否下载线上的rn资源包
      *
-     * @param configDetail 配置文件内容
+     * @param configDetail  配置文件内容
+     * @param businessName  业务名
+     * @param localDataVersion  本地rn包版本
+     * @param sucListener   成功回调
+     * @param failListener  失败回调
      */
     private void checkRNConfigFile(String configDetail, String businessName, String localDataVersion, SuccessListener sucListener, FailListener failListener) {
         try {
@@ -332,7 +343,14 @@ public class ReactManager {
     /**
      * 根据获取的远程的当前sdk版本的资源迭代版本号,下载指定的资源
      *
-     * @param remoteDataVersion 远程sdk版本号
+     * @param remoteDataVersion 远程rn版本号
+     * @param businessName  业务名
+     * @param localDataVersion  本地rn版本号
+     * @param isAll 是否全量
+     * @param type  增量更新bundle类型
+     * @param md5Value  zip包md5值
+     * @param sucListener   成功回调
+     * @param failListener  失败回调
      */
     private void loadRNSource(final String remoteDataVersion, final String businessName, final String localDataVersion, final boolean isAll, final String type, final String md5Value, final SuccessListener sucListener, final FailListener failListener) {
         if (!TextUtils.isEmpty(businessName)) {
@@ -417,6 +435,8 @@ public class ReactManager {
 
     /**
      * 解压
+     *
+     * @param businessName  解压
      */
     public void unzipBundle(String businessName) {
         String downloadFilePath = ReactPreference.getInstance().getString(businessName + NEW_BUNDLE_PATH);
@@ -458,6 +478,8 @@ public class ReactManager {
 
     /**
      * 重新加载指定目录的rn的bundle资源
+     *
+     * @param businessName  业务名
      */
     public void doReloadBundle(String businessName) {
         String remoteDataVersion = ReactPreference.getInstance().getString(businessName + NEW_BUNDLE_VERSION);
@@ -679,24 +701,6 @@ public class ReactManager {
     }
 
     /**
-     * 获取业务名
-     *
-     * @return
-     */
-//    public String getBusinessName() {
-//        return businessName;
-//    }
-
-    /**
-     * 设置业务名
-     *
-     * @param businessName 业务名
-     */
-//    public void setBusinessName(String businessName) {
-//        this.businessName = businessName;
-//    }
-
-    /**
      * 获取ReactRootView
      *
      * @param moduleName moudule名
@@ -715,8 +719,9 @@ public class ReactManager {
     }
 
     /**
-     * 是否有最新的rn资源版本
+     * 是否有最新的rn版本
      *
+     * @param businessName
      * @return boolean true为有，false为没有
      */
     public boolean hasNewVersion(String businessName) {
@@ -737,10 +742,16 @@ public class ReactManager {
         return apkVersion + "_" + dataVersion;
     }
 
+    /**
+     * 成功回调接口
+     */
     public interface SuccessListener {
         abstract void onSuccess();
     }
 
+    /**
+     * 失败回调接口
+     */
     public interface FailListener {
         abstract void onFail(NPReactManagerTask task);
     }
