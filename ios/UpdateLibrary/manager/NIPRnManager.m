@@ -231,7 +231,7 @@ RCT_EXPORT_MODULE()
  * @return NIPRnController
  */
 - (NIPRnController *)loadRNControllerWithModule:(NSString *)moduleName {
-    return [self loadRNControllerWithJSBridgeName:RN_DEFAULT_BUNDLE_NAME
+    return [self loadRNControllerWithJSBundleName:RN_DEFAULT_BUNDLE_NAME
                                     andModuleName:moduleName];
 }
 
@@ -242,7 +242,7 @@ RCT_EXPORT_MODULE()
  * @param moduleName moduleName
  * @return NIPRnController
  */
-- (NIPRnController *)loadRNControllerWithJSBridgeName:(NSString *)JSBundleName
+- (NIPRnController *)loadRNControllerWithJSBundleName:(NSString *)JSBundleName
                                         andModuleName:(NSString *)moduleName {
     [self loadJSBundleWithName:JSBundleName];
     NIPRnController *controller = [[NIPRnController alloc] initWithBundleName:JSBundleName

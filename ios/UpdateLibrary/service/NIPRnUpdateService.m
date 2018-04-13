@@ -239,7 +239,7 @@
                 NSString *remoteLowBundleVersion = items[2];
                 if ([localAppVersion isEqualToString:remoteAppVersion] &&
                     [localBundleVersion compare:remoteBundleVersion] == NSOrderedAscending &&
-                    [localJSBundleInfo[RN_APP_VERSION] isEqualToString:remoteLowBundleVersion]) {
+                    [localBundleVersion isEqualToString:remoteLowBundleVersion]) {
                     needDownload = YES;
                 }
                 if (needDownload) {

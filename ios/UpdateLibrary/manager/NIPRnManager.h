@@ -144,7 +144,7 @@ typedef void (^NIPRNUpdateFailureBlock)(NSString *JSBundleName, NIPHotUpdateStat
  *
  * @return NIPRnController
  */
-- (NIPRnController *)loadRNControllerWithJSBridgeName:(NSString *)JSBundleName
+- (NIPRnController *)loadRNControllerWithJSBundleName:(NSString *)JSBundleName
                                         andModuleName:(NSString *)moduleName;
 
 /**
