@@ -180,7 +180,7 @@
     if (!successBlock) {
         self.forceUpdateBundleDic[JSBundleName] = @YES;
     }
-    [self requestRemoteJSBundleConfigWithName:JSBundleName];
+    [self downloadRemoteJSBundleConfigFileWithName:JSBundleName];
 }
 
 /**
@@ -304,7 +304,7 @@
 /**
  *  下载远程配置文件
  */
-- (void)requestRemoteJSBundleConfigWithName:(NSString *)JSBundleName {
+- (void)downloadRemoteJSBundleConfigFileWithName:(NSString *)JSBundleName {
     __weak __typeof(self) weakSelf = self;
     NSString *remoteConfigPath = nil;
     if ([JSBundleName isEqualToString:RN_DEFAULT_BUNDLE_NAME]) {
@@ -317,14 +317,10 @@
     NSURLSessionDownloadTask *task = [_httpSession downloadTaskWithRequest:request
                                                                   progress:nil
                                                                destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
-                                                                   [weakSelf getConfigFileDirForJSBundle:JSBundleName];
-                                                                   //                                                                   NSURL *tempFileURL = [NSURL URLWithString:[self.localJSBundleRootPath stringByDeletingLastPathComponent]];
-                                                                   //                                                                   return [tempFileURL URLByAppendingPathComponent:[response suggestedFilename]];
-                                                                   NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:nil];
-                                                                   NSURL *configURL = [documentsDirectoryURL URLByAppendingPathComponent:RN_JSBUNDLE_CONFIG_SUBPATH];
-                                                                   NSURL *bundleConfigURL = [configURL URLByAppendingPathComponent:JSBundleName];
-                                                                   
-                                                                   return [bundleConfigURL URLByAppendingPathComponent:[response suggestedFilename]];
+                                                                   NSString *JSBundleConfigFileDir = [weakSelf getConfigFileDirForJSBundle:JSBundleName];
+                                                                   NSString *fileStyleDir = [NSString stringWithFormat:@"file://%@", JSBundleConfigFileDir];
+                                                                   NSURL *finalURL = [NSURL URLWithString:fileStyleDir];
+                                                                   return [finalURL URLByAppendingPathComponent:[response suggestedFilename]];
                                                                }
                                                          completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
                                                              __strong __typeof(weakSelf) strongSelf = weakSelf;
@@ -358,15 +354,10 @@
     NSURLSessionDownloadTask *task = [_httpSession downloadTaskWithRequest:request
                                                                   progress:nil
                                                                destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
-                                                                   [weakSelf getZipFileDirForJSBundle:JSBundleName];
-                                                                   //
-                                                                   //                                                                   NSURL *tempFileURL = [NSURL URLWithString:tempFilePath];
-                                                                   //                                                                   return [tempFileURL URLByAppendingPathComponent:[response suggestedFilename]];
-                                                                   NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:nil];
-                                                                   NSURL *configURL = [documentsDirectoryURL URLByAppendingPathComponent:RN_JSBUNDLE_ZIP_SUBPATH];
-                                                                   NSURL *bundleConfigURL = [configURL URLByAppendingPathComponent:JSBundleName];
-                                                                   
-                                                                   return [bundleConfigURL URLByAppendingPathComponent:[response suggestedFilename]];
+                                                                   NSString *JSBundleZipFileDir = [weakSelf getZipFileDirForJSBundle:JSBundleName];
+                                                                   NSString *fileStyleDir = [NSString stringWithFormat:@"file://%@", JSBundleZipFileDir];
+                                                                   NSURL *finalURL = [NSURL URLWithString:fileStyleDir];
+                                                                   return [finalURL URLByAppendingPathComponent:[response suggestedFilename]];
                                                                }
                                                          completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
                                                              __strong __typeof(weakSelf) strongSelf = weakSelf;
