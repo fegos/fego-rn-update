@@ -34,17 +34,8 @@
 }
 
 - (void)loadRnController {
-  NIPRnManager *manager = [NIPRnManager sharedManager];
-  NIPRnController *controller = [[NIPRnManager managerWithRemoteJSBundleRoot:@"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/"
-                                                                useHotUpdate:YES
-                                                              andUseJSServer:NO] loadRNControllerWithModule:@"hotUpdate"];
-  [manager requestRemoteJSBundleWithName:RN_DEFAULT_BUNDLE_NAME
-                                 success:^(NSString *JSBundleName) {
-                                   [manager unzipJSBundleWithName:JSBundleName];
-                                   [controller.rctRootView.bridge reload];
-                                 } failure:^(NSString *JSBundleName, NIPHotUpdateStatus failStatus) {
-                                   [self failedHandlerWithStatus:failStatus];
-                                 }];
+  NIPRnController *controller = [[NIPRnManager sharedManager] loadRNControllerWithModule:@"hotUpdate"];
+  
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
   self.window.rootViewController = controller;

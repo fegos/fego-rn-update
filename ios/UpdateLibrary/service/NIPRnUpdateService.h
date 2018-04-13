@@ -40,8 +40,26 @@
 + (instancetype)sharedService;
 
 /**
- * 执行远程请求,请参数含有本地sdkversion、localDataVersion
- * 如果服务器的serverVersion==localVersion，则不抛回数据，否则返回服务器上的新包
+ * 检查ipa包版本更新
+ *
+ * @param JSBundleName JSBundleName
+ *
+ * @reture needUpdate
+ */
+- (BOOL)checkIPAVersionUpdateForJSBundleWithName:(NSString *)JSBundleName;
+
+/**
+ * 将RN数据从IPA包拷贝到沙盒路径下
+ *
+ * @param JSBundleName JSBundleName
+ *
+ * @return copySuccess
+ */
+- (BOOL)copyJSBundleFromIPAToDocumentDiretoryWithName:(NSString *)JSBundleName;
+
+/**
+ * 执行远程请求,请参数含有本地AppVersion、本地JSBundleVersion
+ * 假如没有新版本，则不请求数据，下载服务器上的新包
  *
  * @param JSBundleName JSBunldeName
  * @param successBlock successBlock
@@ -52,8 +70,31 @@
                               failure:(NIPRNUpdateFailureBlock)failureBlock;
 
 /**
- * 解压JSBundleZip文件
+ * 加载热更新之后的JSBundle文件
+ *
+ * @param JSBundleName 包名
+ *
  */
-- (void)unzipJSBundleWithName:(NSString *)JSBundleName;
+- (void)loadHotUpdatedJSBundleWithName:(NSString *)JSBundleName;
+
+/**
+ * 更新字体集
+ */
+- (void)registerFontFamiliesForJSBundle:(NSString *)JSBundleName;
+
+/**
+ * 将IPA包中JSBundle信息记录到本地
+ *
+ * @param JSBundleName 包名
+ */
+- (void)recordIPAJSBundleInfoToLocalWithName:(NSString *)JSBundleName;
+
+/**
+ * 将远端JSBundle信息记录到本地
+ *
+ * @param JSBundleName 包名
+ */
+- (void)recordRemoteJSBundleInfoToLocalWithName:(NSString *)JSBundleName;
+
 
 @end

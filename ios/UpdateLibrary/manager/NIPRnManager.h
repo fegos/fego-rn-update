@@ -10,8 +10,10 @@
 
 #if __has_include(<React/RCTAssert.h>)
 #import <React/RCTBridgeModule.h>
+#import <React/RCTBridge.h>
 #else
 #import "RCTBridgeModule.h"
+#import "RCTBridge.h"
 #endif
 
 @class NIPRnController;
@@ -89,36 +91,47 @@ typedef void (^NIPRNUpdateFailureBlock)(NSString *JSBundleName, NIPHotUpdateStat
  * @param useJSServer 是否启用JSServer
  * @return obj
  */
-+ (instancetype)managerWithRemoteJSBundleRoot:(NSString *)remoteJSBundleRoot useHotUpdate:(BOOL)useHotUpdate andUseJSServer:(BOOL)useJSServer;
++ (instancetype)managerWithRemoteJSBundleRoot:(NSString *)remoteJSBundleRoot
+                                 useHotUpdate:(BOOL)useHotUpdate
+                               andUseJSServer:(BOOL)useJSServer;
 
 /**
- * 首次启动后根据当前app存放在Document目录和App自带的jsbundle文件初始化所有业务的bundle
+ * 加载所需JSBundle
+ * @param JSBundleName JSBundle名
+ *
+ * @return RCTBridge
  */
-- (void)initJSBundle;
+- (RCTBridge *)loadJSBundleWithName:(NSString *)JSBundleName;
+
+/**
+ * 加载所需JSBundles
+ * @param JSBundleNameArray JSBundle名称数组
+ *
+ * @return RCTBridge字典
+ */
+- (NSDictionary *)loadJSBundlesWithNames:(NSArray *)JSBundleNameArray;
+
+/**
+ * 加载所有JSBundles
+ *
+ * return RCTBridge字典
+ */
+- (NSDictionary *)loadAllJSBundles;
 
 /**
  * app与js联通的桥，在manager初始化的时候就生成
  *
- * @param JSBundleName JSBunlde的名字
+ * @param JSBundleName JSBundle的名字
  *
  * @return RCTBridge
  */
 - (RCTBridge *)getBridgeWithJSBundleName:(NSString *)JSBundleName;
 
 /**
- * 热更新完成后，加载存放在Document目录下的被更新的bundle文件
- */
-- (void)loadALLJSBundleInDocumentDirectory;
-
-/**
- * 热更新完成后，加载存放在Document目录下指定名字的bundle文件
- */
-- (void)loadALLJSBundleInDocumentDirectoryWithName:(NSString *)JSBundleName;
-
-/**
- * 加载默认main bundle的指定模块
+ * 加载默认JSBundle下的指定模块
  *
  * @param moduleName moduleName
+ *
  * @return NIPRnController
  */
 - (NIPRnController *)loadRNControllerWithModule:(NSString *)moduleName;
@@ -128,14 +141,15 @@ typedef void (^NIPRNUpdateFailureBlock)(NSString *JSBundleName, NIPHotUpdateStat
  *
  * @param JSBundleName JSBundleName
  * @param moduleName moduleName
+ *
  * @return NIPRnController
  */
 - (NIPRnController *)loadRNControllerWithJSBridgeName:(NSString *)JSBundleName
                                         andModuleName:(NSString *)moduleName;
 
 /**
- * 执行远程请求,请参数含有本地sdkversion、localDataVersion
- * 如果服务器的serverVersion==localVersion，则不抛回数据，否则返回服务器上的新包
+ * 执行远程请求,请参数含有本地AppVersion、本地JSBundleVersion
+ * 假如没有新版本，则不请求数据，下载服务器上的新包
  *
  * @param JSBundleName JSBunldeName
  * @param successBlock successBlock
@@ -147,9 +161,10 @@ typedef void (^NIPRNUpdateFailureBlock)(NSString *JSBundleName, NIPHotUpdateStat
 
 
 /**
- * 解压JSBundleZip文件
+ * 加载热更新JSBundle
+ * @param JSBundleName 包名
  */
-- (void)unzipJSBundleWithName:(NSString *)JSBundleName;
+- (void)loadNewHotUpdatedJSBundleWithName:(NSString *)JSBundleName;
 
 
 

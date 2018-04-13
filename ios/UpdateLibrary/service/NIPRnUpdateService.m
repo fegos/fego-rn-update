@@ -14,7 +14,6 @@
 #import "NIPRnDefines.h"
 
 
-
 @interface NIPRnUpdateService ()
 
 @property (nonatomic, strong) AFHTTPSessionManager *httpSession;
@@ -26,7 +25,7 @@
 @property (nonatomic, strong) NSString *curJSBundleName;
 
 /**
- * 本地资源包信息
+ * 本地JSBundle包信息
  */
 @property (nonatomic, strong) NSMutableDictionary *localJSBundleInfoDic;
 
@@ -46,9 +45,15 @@
 @property (nonatomic, strong) NSMutableDictionary *forceUpdateBundleDic;
 
 /**
- *
+ * 下载任务字典
  */
 @property (nonatomic, strong) NSMutableDictionary *downloadTaskDic;
+
+/**
+ * 用户偏好设置
+ */
+@property (nonatomic, strong) NSUserDefaults *userDefaults;
+
 
 @property (nonatomic, copy) NIPRNUpdateSuccessBlock successBlock;
 @property (nonatomic, copy) NIPRNUpdateFailureBlock failureBlock;
@@ -79,7 +84,8 @@
         self.remoteJSBundleInfoDic = [NSMutableDictionary dictionary];
         self.forceUpdateBundleDic = [NSMutableDictionary dictionary];
         self.downloadTaskDic = [NSMutableDictionary dictionary];
-        
+        [self loadJSBundleInfoFromUserDefauls];
+        [self loadJSBundleZipInfoFromUserDefauls];
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         self.httpSession = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:configuration];
         self.httpSession.requestSerializer.timeoutInterval = 20;
@@ -88,9 +94,76 @@
 }
 
 
+#pragma mark - IPA包更新模块
+
 /**
- * 执行远程请求,请参数含有本地sdkversion、localDataVersion
- * 如果服务器的serverVersion==localVersion，则不抛回数据，否则返回服务器上的新包
+ * 检查ipa包版本更新
+ *
+ * @param JSBundleName JSBundleName
+ *
+ * @reture needUpdate
+ */
+- (BOOL)checkIPAVersionUpdateForJSBundleWithName:(NSString *)JSBundleName {
+    BOOL isUpdated = NO;
+    NSDictionary *localJSBundleInfo = [self getLocalJSBundleInfoWithName:JSBundleName];
+    if (localJSBundleInfo) {
+        NSString *localAppVersion = localJSBundleInfo[RN_APP_VERSION];
+        NSString *localBuildVersion = localJSBundleInfo[RN_BUILD_VERSION];
+        if (!noEmptyString(localAppVersion) ||
+            [localAppVersion compare:APP_VERSION] == NSOrderedAscending) {
+            isUpdated = YES;
+        } else if (!noEmptyString(localBuildVersion) ||
+                   [localBuildVersion compare:APP_BUILD] == NSOrderedAscending) {
+            isUpdated = YES;
+        }
+    } else {
+        isUpdated = YES;
+    }
+    return isUpdated;
+}
+
+
+/**
+ * 将RN数据从IPA包拷贝到沙盒路径下
+ *
+ * @param JSBundleName JSBundleName
+ *
+ * @return copySuccess
+ */
+- (BOOL)copyJSBundleFromIPAToDocumentDiretoryWithName:(NSString *)JSBundleName {
+    BOOL copySuccess = NO;
+    NSString *srcBundlePath = [[NSBundle mainBundle] pathForResource:JSBundleName ofType:nil inDirectory:RN_JSBUNDLE_SUBPATH];
+    NSString *dstBundlePath =  [self.localJSBundleRootPath stringByAppendingPathComponent:JSBundleName];
+    NSString *commonBundlePath = [[NSBundle mainBundle] pathForResource:COMMON ofType:nil inDirectory:RN_JSBUNDLE_SUBPATH];
+    if ([NIPRnHotReloadHelper folderExistAtPath:commonBundlePath]) {
+        BOOL bundleCopySuccess = [NIPRnHotReloadHelper copyFolderAtPath:srcBundlePath toPath:dstBundlePath];
+        if (bundleCopySuccess) {
+            NSString *srcBundleFilePath = [srcBundlePath stringByAppendingPathComponent:@"index.jsbundle"];
+            NSString *dstBundleFilePath = [dstBundlePath stringByAppendingPathComponent:@"index.jsbundle"];
+            NSString *commonBundleFilePath = [commonBundlePath stringByAppendingPathComponent:@"index.jsbundle"];
+            NSString *tempBundleFilePath = [dstBundlePath stringByAppendingPathComponent:@"temp.jsbundle"];
+            BOOL mergeSuccess = [self mergeFileAtPath:srcBundleFilePath withFileAtPath:commonBundleFilePath toFileAtPath:tempBundleFilePath];
+            if (mergeSuccess) {
+                [NIPRnHotReloadHelper copyFileAtPath:tempBundleFilePath toPath:dstBundleFilePath];
+                [NIPRnHotReloadHelper removeFileAtPath:tempBundleFilePath];
+                copySuccess = YES;
+            }
+        }
+    } else {
+        BOOL bundleCopySuccess = [NIPRnHotReloadHelper copyFolderAtPath:srcBundlePath toPath:dstBundlePath];
+        if (bundleCopySuccess) {
+            copySuccess = YES;
+        }
+    }
+    return copySuccess;
+}
+
+
+#pragma mark - 热更新模块
+
+/**
+ * 执行远程请求,请参数含有本地AppVersion、本地JSBundleVersion
+ * 假如没有新版本，则不请求数据，下载服务器上的新包
  *
  * @param JSBundleName JSBunldeName
  * @param successBlock successBlock
@@ -98,7 +171,7 @@
  */
 - (void)requestRemoteJSBundleWithName:(NSString *)JSBundleName
                               success:(NIPRNUpdateSuccessBlock)successBlock
-                              failure:(NIPRNUpdateFailureBlock)failureBlock {
+                              failure:(NIPRNUpdateFailureBlock)failureBlock; {
     self.curJSBundleName = JSBundleName;
     self.successBlock = successBlock;
     self.failureBlock = failureBlock;
@@ -107,93 +180,126 @@
     if (!successBlock) {
         self.forceUpdateBundleDic[JSBundleName] = @YES;
     }
-    [self readLocalJSBundleInfoWithName:JSBundleName];
-    [self readLocalJSBundleZipInfoWithName:JSBundleName];
     [self requestRemoteJSBundleConfigWithName:JSBundleName];
 }
 
-
 /**
- * 读取本地JSBundle信息
+ * 读取配置文件
+ *
+ * @param configFilePath configFilePath
+ * @param JSBundleName JSBundleName
  */
-- (void)readLocalJSBundleInfoWithName:(NSString *)JSBundleName {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *localJSBundleInfoDic = [defaults objectForKey:LOCAL_JS_BUNDLE_INFO];
-    NSDictionary *localJSBundleInfo = localJSBundleInfoDic[JSBundleName];
-    if (localJSBundleInfo) {
-        self.localJSBundleInfoDic[JSBundleName] = localJSBundleInfo;
+- (void)readConfigFile:(NSString *)configFilePath withName:(NSString *)JSBundleName {
+    NSString *config = [NSString stringWithContentsOfFile:configFilePath
+                                                 encoding:NSUTF8StringEncoding
+                                                    error:nil];
+    NSArray *configItems = [config componentsSeparatedByString:@","];
+    
+    [NIPRnHotReloadHelper removeFileAtPath:configFilePath];
+    
+    NSDictionary *localJSBundleInfo = self.localJSBundleInfoDic[JSBundleName];
+    if (!localJSBundleInfo) {
+        return;
     }
-}
-
-/**
- * 读取本地JSBundle压缩包信息
- */
-- (void)readLocalJSBundleZipInfoWithName:(NSString *)JSBundleName {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *localJSBundleZipInfoDic = [defaults objectForKey:LOCAL_JS_BUNDLE_ZIP_INFO];
-    NSDictionary *localJSBundleZipInfo = localJSBundleZipInfoDic[JSBundleName];
+    NSDictionary *localJSBundleZipInfo = self.localJSBundleZipInfoDic[JSBundleName];
+    NSString *localAppVersion = localJSBundleInfo[RN_APP_VERSION];
+    NSString *localBundleVersion = localJSBundleInfo[RN_BUNDLE_VERSION];
     if (localJSBundleZipInfo) {
-        self.localJSBundleZipInfoDic[JSBundleName] = localJSBundleZipInfo;
-    }
-}
-
-/**
- * 记录本地JSBundle信息
- */
-- (void)recordLocalJSBundleInfoWithName:(NSString *)JSBundleName {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *localJSBundleInfoDic = [defaults objectForKey:LOCAL_JS_BUNDLE_ZIP_INFO];
-    NSDictionary *localJSBundleInfo = localJSBundleInfoDic[JSBundleName];
-    NSMutableDictionary *mutableJSBundleInfo = [localJSBundleInfo mutableCopy];
-    NSMutableDictionary *mutableJSBundleInfoDic = [localJSBundleInfoDic mutableCopy];
-    NSDictionary *remoteJSBundleInfo = self.remoteJSBundleInfoDic[JSBundleName];
-    
-    if (remoteJSBundleInfo) {
-        mutableJSBundleInfo[LOCAL_BUNDLE_VERSION] = remoteJSBundleInfo[REMOTE_BUNDLE_VERSION];
-        mutableJSBundleInfoDic[JSBundleName] = mutableJSBundleInfo;
-        [defaults setObject:mutableJSBundleInfoDic forKey:LOCAL_JS_BUNDLE_INFO];
-    }
-}
-
-/**
- * 记录本地JSBundle压缩包信息
- */
-- (void)recordLocalJSBundleZipInfoWithName:(NSString *)JSBundleName {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *localJSBundleZipInfoDic = [defaults objectForKey:LOCAL_JS_BUNDLE_ZIP_INFO];
-    NSDictionary *localJSBundleZipInfo = localJSBundleZipInfoDic[JSBundleName];
-    NSMutableDictionary *mutableJSBundleZipInfo = [localJSBundleZipInfo mutableCopy];
-    NSMutableDictionary *mutableJSBundleZipInfoDic = [localJSBundleZipInfoDic mutableCopy];
-    NSDictionary *remoteJSBundleInfo = self.remoteJSBundleInfoDic[JSBundleName];
-    if (!mutableJSBundleZipInfoDic) {
-        mutableJSBundleZipInfoDic = [NSMutableDictionary dictionary];
-    }
-    if (!mutableJSBundleZipInfo) {
-        mutableJSBundleZipInfo = [NSMutableDictionary dictionary];
+        if ([localAppVersion compare:localJSBundleZipInfo[RN_APP_VERSION]] == NSOrderedAscending) {
+            localAppVersion = localJSBundleZipInfo[RN_APP_VERSION];
+            localBundleVersion = localJSBundleZipInfo[RN_BUNDLE_VERSION];
+        } else if ([localAppVersion isEqualToString:localJSBundleZipInfo[RN_APP_VERSION]] &&
+                   [localBundleVersion compare:localJSBundleZipInfo[RN_BUNDLE_VERSION]] == NSOrderedAscending) {
+            localBundleVersion = localJSBundleZipInfo[RN_BUNDLE_VERSION];
+        }
     }
     
-    if (remoteJSBundleInfo) {
-        mutableJSBundleZipInfo[LOCAL_APP_VERSION] = remoteJSBundleInfo[REMOTE_APP_VERSION];
-        mutableJSBundleZipInfo[LOCAL_BUNDLE_VERSION] = remoteJSBundleInfo[REMOTE_BUNDLE_VERSION];
-        mutableJSBundleZipInfoDic[JSBundleName] = mutableJSBundleZipInfo;
-        [defaults setObject:mutableJSBundleZipInfoDic forKey:LOCAL_JS_BUNDLE_ZIP_INFO];
+    BOOL needDownload = NO;
+    for (NSString *configItem in configItems) {
+        NSArray *items = [configItem componentsSeparatedByString:@"_"];
+        if (items.count > 1) {
+            NSString *remoteAppVersion = items[0];
+            NSString *remoteBundleVersion = items[1];
+            if (items.count == 3) {
+                if ([localAppVersion isEqualToString:remoteAppVersion] &&
+                    [localBundleVersion compare:remoteBundleVersion] == NSOrderedAscending) {
+                    needDownload = YES;
+                }
+                if (needDownload) {
+                    NSDictionary *JSBundleInfo = @{
+                                                   RN_APP_VERSION : remoteAppVersion,
+                                                   RN_BUNDLE_VERSION : remoteBundleVersion,
+                                                   RN_BUNDLE_MD5 : items[2]
+                                                   };
+                    self.remoteJSBundleInfoDic[JSBundleName] = JSBundleInfo;
+                    [self downloadRemoteJSBundleWithName:JSBundleName];
+                    break;
+                }
+            } else if (items.count == 5) {
+                NSString *remoteLowBundleVersion = items[2];
+                if ([localAppVersion isEqualToString:remoteAppVersion] &&
+                    [localBundleVersion compare:remoteBundleVersion] == NSOrderedAscending &&
+                    [localJSBundleInfo[RN_APP_VERSION] isEqualToString:remoteLowBundleVersion]) {
+                    needDownload = YES;
+                }
+                if (needDownload) {
+                    NSDictionary *remoteJSBundleInfo = @{
+                                                         RN_APP_VERSION : remoteAppVersion,
+                                                         RN_BUNDLE_VERSION : remoteBundleVersion,
+                                                         RN_BUNDLE_LOW_VERSION : remoteLowBundleVersion,
+                                                         RN_BUNDLE_INCREMENT_FLAG : items[3],
+                                                         RN_BUNDLE_MD5 : items[4]
+                                                         };
+                    self.remoteJSBundleInfoDic[JSBundleName] = remoteJSBundleInfo;
+                    [self downloadIncrementRemoteJSBundleForName:JSBundleName];
+                    break;
+                }
+            }
+        }
+    }
+    if (!needDownload && localJSBundleZipInfo) { // 存在已经下载完成的JSBundle压缩包
+        if ([self.curJSBundleName isEqualToString:JSBundleName] && self.successBlock) {
+            self.successBlock(JSBundleName);
+        }
     }
 }
 
 /**
- * 删除本地JSBundle压缩包信息
+ * 下载全量包
+ *
+ * @param JSBundleName JSBundleName
  */
-- (void)removeLocalJSBundleZipInfoWithName:(NSString *)JSBundleName {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *localJSBundleZipInfoDic = [defaults objectForKey:LOCAL_JS_BUNDLE_ZIP_INFO];
-    NSDictionary *localJSBundleZipInfo = localJSBundleZipInfoDic[JSBundleName];
-    NSMutableDictionary *mutableJSBundleZipInfo = [localJSBundleZipInfo mutableCopy];
-    NSMutableDictionary *mutableJSBundleZipInfoDic = [localJSBundleZipInfoDic mutableCopy];
-    if (mutableJSBundleZipInfoDic && mutableJSBundleZipInfo) {
-        mutableJSBundleZipInfoDic[JSBundleName] = nil;
-        [defaults setObject:mutableJSBundleZipInfoDic forKey:LOCAL_JS_BUNDLE_ZIP_INFO];
+- (void)downloadRemoteJSBundleWithName:(NSString *)JSBundleName {
+    NSDictionary *remoteJSBundleInfo = self.remoteJSBundleInfoDic[JSBundleName];
+    NSString *remoteJSBundlePath = nil;
+    if ([JSBundleName isEqualToString:RN_DEFAULT_BUNDLE_NAME]) {
+        remoteJSBundlePath = [NSString stringWithFormat:@"%@all/%@/rn_%@_%@.zip", [NIPRnManager sharedManager].remoteJSBundleRootPath, remoteJSBundleInfo[RN_APP_VERSION], remoteJSBundleInfo[RN_APP_VERSION], remoteJSBundleInfo[RN_BUNDLE_VERSION]];
+    } else {
+        remoteJSBundlePath = [NSString stringWithFormat:@"%@%@/all/%@/rn_%@_%@.zip", [NIPRnManager sharedManager].remoteJSBundleRootPath, JSBundleName, remoteJSBundleInfo[RN_APP_VERSION], remoteJSBundleInfo[RN_APP_VERSION], remoteJSBundleInfo[RN_BUNDLE_VERSION]];
     }
+    NSURL *requestURL = [NSURL URLWithString:remoteJSBundlePath];
+    [self downloadJSBundleForName:JSBundleName withURL:requestURL];
 }
+
+/**
+ * 下载增量包
+ *
+ * @param JSBundleName JSBundleName
+ */
+- (void)downloadIncrementRemoteJSBundleForName:(NSString *)JSBundleName {
+    NSDictionary *remoteJSBundleInfo = self.remoteJSBundleInfoDic[JSBundleName];
+    NSString *remoteJSBundlePath = nil;
+    if ([JSBundleName isEqualToString:RN_DEFAULT_BUNDLE_NAME]) {
+        remoteJSBundlePath = [NSString stringWithFormat:@"%@increment/%@/rn_%@_%@_%@_%@.zip", [NIPRnManager sharedManager].remoteJSBundleRootPath, remoteJSBundleInfo[RN_APP_VERSION], remoteJSBundleInfo[RN_APP_VERSION], remoteJSBundleInfo[RN_BUNDLE_VERSION], remoteJSBundleInfo[RN_BUNDLE_LOW_VERSION], remoteJSBundleInfo[RN_BUNDLE_INCREMENT_FLAG]];
+    } else {
+        remoteJSBundlePath = [NSString stringWithFormat:@"%@%@/increment/%@/rn_%@_%@_%@_%@.zip", [NIPRnManager sharedManager].remoteJSBundleRootPath, JSBundleName, remoteJSBundleInfo[RN_APP_VERSION], remoteJSBundleInfo[RN_APP_VERSION], remoteJSBundleInfo[RN_BUNDLE_VERSION], remoteJSBundleInfo[RN_BUNDLE_LOW_VERSION], remoteJSBundleInfo[RN_BUNDLE_INCREMENT_FLAG]];
+    }
+    NSURL *requestURL = [NSURL URLWithString:remoteJSBundlePath];
+    [self downloadJSBundleForName:JSBundleName withURL:requestURL];
+}
+
+
+#pragma mark - 网络请求模块
 
 /**
  *  下载远程配置文件
@@ -212,8 +318,8 @@
                                                                   progress:nil
                                                                destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
                                                                    [weakSelf getConfigFileDirForJSBundle:JSBundleName];
-//                                                                   NSURL *tempFileURL = [NSURL URLWithString:[self.localJSBundleRootPath stringByDeletingLastPathComponent]];
-//                                                                   return [tempFileURL URLByAppendingPathComponent:[response suggestedFilename]];
+                                                                   //                                                                   NSURL *tempFileURL = [NSURL URLWithString:[self.localJSBundleRootPath stringByDeletingLastPathComponent]];
+                                                                   //                                                                   return [tempFileURL URLByAppendingPathComponent:[response suggestedFilename]];
                                                                    NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:nil];
                                                                    NSURL *configURL = [documentsDirectoryURL URLByAppendingPathComponent:RN_JSBUNDLE_CONFIG_SUBPATH];
                                                                    NSURL *bundleConfigURL = [configURL URLByAppendingPathComponent:JSBundleName];
@@ -240,122 +346,6 @@
     [task resume];
 }
 
-
-/**
- * 读取配置文件
- *
- * @param configFilePath configFilePath
- * @param JSBundleName JSBundleName
- */
-- (void)readConfigFile:(NSString *)configFilePath withName:(NSString *)JSBundleName {
-    NSString *config = [NSString stringWithContentsOfFile:configFilePath
-                                                 encoding:NSUTF8StringEncoding
-                                                    error:nil];
-    NSArray *configItems = [config componentsSeparatedByString:@","];
-    
-    [NIPRnHotReloadHelper removeFileAtPath:configFilePath];
-    
-    NSDictionary *localJSBundleInfo = self.localJSBundleInfoDic[JSBundleName];
-    if (!localJSBundleInfo) {
-        return;
-    }
-    NSDictionary *localJSBundleZipInfo = self.localJSBundleZipInfoDic[JSBundleName];
-    NSString *localAppVersion = localJSBundleInfo[LOCAL_APP_VERSION];
-    NSString *localBundleVersion = localJSBundleInfo[LOCAL_BUNDLE_VERSION];
-    if (localJSBundleZipInfo) {
-        if ([localAppVersion compare:localJSBundleZipInfo[LOCAL_APP_VERSION]] == NSOrderedAscending) {
-            localAppVersion = localJSBundleZipInfo[LOCAL_APP_VERSION];
-            localBundleVersion = localJSBundleZipInfo[LOCAL_BUNDLE_VERSION];
-        } else if ([localAppVersion isEqualToString:localJSBundleZipInfo[LOCAL_APP_VERSION]] &&
-                   [localBundleVersion compare:localJSBundleZipInfo[LOCAL_BUNDLE_VERSION]] == NSOrderedAscending) {
-            localBundleVersion = localJSBundleZipInfo[LOCAL_BUNDLE_VERSION];
-        }
-    }
-    
-    BOOL needDownload = NO;
-    for (NSString *configItem in configItems) {
-        NSArray *items = [configItem componentsSeparatedByString:@"_"];
-        if (items.count > 1) {
-            NSString *remoteAppVersion = items[0];
-            NSString *remoteBundleVersion = items[1];
-            if (items.count == 3) {
-                if ([localAppVersion isEqualToString:remoteAppVersion] &&
-                    [localBundleVersion compare:remoteBundleVersion] == NSOrderedAscending) {
-                    needDownload = YES;
-                }
-                if (needDownload) {
-                    NSDictionary *JSBundleInfo = @{
-                                                   REMOTE_APP_VERSION : remoteAppVersion,
-                                                   REMOTE_BUNDLE_VERSION : remoteBundleVersion,
-                                                   REMOTE_BUNDLE_MD5 : items[2]
-                                                   };
-                    self.remoteJSBundleInfoDic[JSBundleName] = JSBundleInfo;
-                    [self downloadRemoteJSBundleWithName:JSBundleName];
-                    break;
-                }
-            } else if (items.count == 5) {
-                NSString *remoteLowBundleVersion = items[2];
-                if ([localAppVersion isEqualToString:remoteAppVersion] &&
-                    [localBundleVersion compare:remoteBundleVersion] == NSOrderedAscending &&
-                    [localJSBundleInfo[LOCAL_APP_VERSION] isEqualToString:remoteLowBundleVersion]) {
-                    needDownload = YES;
-                }
-                if (needDownload) {
-                    NSDictionary *remoteJSBundleInfo = @{
-                                                         REMOTE_APP_VERSION : remoteAppVersion,
-                                                         REMOTE_BUNDLE_VERSION : remoteBundleVersion,
-                                                         REMOTE_BUNDLE_LOW_VERSION : remoteLowBundleVersion,
-                                                         REMOTE_BUNDLE_INCREMENT_FLAG : items[3],
-                                                         REMOTE_BUNDLE_MD5 : items[4]
-                                                         };
-                    self.remoteJSBundleInfoDic[JSBundleName] = remoteJSBundleInfo;
-                    [self downloadIncrementRemoteJSBundleForName:JSBundleName];
-                    break;
-                }
-            }
-        }
-    }
-    if (!needDownload && localJSBundleZipInfo) { // 存在已经下载完成的JSBundle压缩包
-        if ([self.curJSBundleName isEqualToString:JSBundleName] && self.successBlock) {
-            self.successBlock(JSBundleName);
-        }
-    }
-}
-
-/**
- * 下载全量包
- *
- * @param JSBundleName JSBundleName
- */
-- (void)downloadRemoteJSBundleWithName:(NSString *)JSBundleName {
-    NSDictionary *remoteJSBundleInfo = self.remoteJSBundleInfoDic[JSBundleName];
-    NSString *remoteJSBundlePath = nil;
-    if ([JSBundleName isEqualToString:RN_DEFAULT_BUNDLE_NAME]) {
-         remoteJSBundlePath = [NSString stringWithFormat:@"%@all/%@/rn_%@_%@.zip", [NIPRnManager sharedManager].remoteJSBundleRootPath, remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_VERSION]];
-    } else {
-         remoteJSBundlePath = [NSString stringWithFormat:@"%@%@/all/%@/rn_%@_%@.zip", [NIPRnManager sharedManager].remoteJSBundleRootPath, JSBundleName, remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_VERSION]];
-    }
-    NSURL *requestURL = [NSURL URLWithString:remoteJSBundlePath];
-    [self downloadJSBundleForName:JSBundleName withURL:requestURL];
-}
-
-/**
- * 下载增量包
- *
- * @param JSBundleName JSBundleName
- */
-- (void)downloadIncrementRemoteJSBundleForName:(NSString *)JSBundleName {
-    NSDictionary *remoteJSBundleInfo = self.remoteJSBundleInfoDic[JSBundleName];
-    NSString *remoteJSBundlePath = nil;
-    if ([JSBundleName isEqualToString:RN_DEFAULT_BUNDLE_NAME]) {
-        remoteJSBundlePath = [NSString stringWithFormat:@"%@increment/%@/rn_%@_%@_%@_%@.zip", [NIPRnManager sharedManager].remoteJSBundleRootPath, remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_LOW_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_INCREMENT_FLAG]];
-    } else {
-        remoteJSBundlePath = [NSString stringWithFormat:@"%@%@/increment/%@/rn_%@_%@_%@_%@.zip", [NIPRnManager sharedManager].remoteJSBundleRootPath, JSBundleName, remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_APP_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_LOW_VERSION], remoteJSBundleInfo[REMOTE_BUNDLE_INCREMENT_FLAG]];
-    }
-    NSURL *requestURL = [NSURL URLWithString:remoteJSBundlePath];
-    [self downloadJSBundleForName:JSBundleName withURL:requestURL];
-}
-
 /**
  * 下载JSBundle包
  *
@@ -369,9 +359,9 @@
                                                                   progress:nil
                                                                destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
                                                                    [weakSelf getZipFileDirForJSBundle:JSBundleName];
-//
-//                                                                   NSURL *tempFileURL = [NSURL URLWithString:tempFilePath];
-//                                                                   return [tempFileURL URLByAppendingPathComponent:[response suggestedFilename]];
+                                                                   //
+                                                                   //                                                                   NSURL *tempFileURL = [NSURL URLWithString:tempFilePath];
+                                                                   //                                                                   return [tempFileURL URLByAppendingPathComponent:[response suggestedFilename]];
                                                                    NSURL *documentsDirectoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:nil];
                                                                    NSURL *configURL = [documentsDirectoryURL URLByAppendingPathComponent:RN_JSBUNDLE_ZIP_SUBPATH];
                                                                    NSURL *bundleConfigURL = [configURL URLByAppendingPathComponent:JSBundleName];
@@ -395,7 +385,7 @@
                                                                  if (isValid) {
                                                                      [strongSelf recordLocalJSBundleZipInfoWithName:JSBundleName];
                                                                      if (strongSelf.forceUpdateBundleDic[JSBundleName]) {
-                                                                         [strongSelf unzipJSBundleWithName:JSBundleName];
+                                                                         [strongSelf loadHotUpdatedJSBundleWithName:JSBundleName];
                                                                          strongSelf.forceUpdateBundleDic[JSBundleName] = @NO;
                                                                      } else if ([strongSelf.curJSBundleName isEqualToString:JSBundleName] && strongSelf.successBlock) {
                                                                          strongSelf.successBlock(JSBundleName);
@@ -410,149 +400,6 @@
                                                          }];
     [self recordDownloadTask:task withType:@"config" forJSBundle:JSBundleName];
     [task resume];
-}
-
-
-#pragma mark - JSBundle包管理
-
-/**
- * 检查JSBundle包的合法性
- */
-- (BOOL)checkValidityOfJSBundleZipAtPath:(NSString *)JSBundleZipFilePath withName:(NSString *)JSBundleName {
-    NSString* MD5OfZip = [NIPRnHotReloadHelper generateMD5ForFileAtPath:JSBundleZipFilePath];
-    NSDictionary *remoteJSBundleInfo = self.remoteJSBundleInfoDic[JSBundleName];
-    NSString *remoteJSBundleZipMD5 = remoteJSBundleInfo[REMOTE_BUNDLE_MD5];
-    if (!remoteJSBundleZipMD5 || [remoteJSBundleZipMD5 isEqualToString: MD5OfZip]) {
-        return true;
-    }
-    return false;
-}
-
-/**
- * 解压JSBundleZip文件
- */
-- (void)unzipJSBundleWithName:(NSString *)JSBundleName {
-    NSString *JSBundleZipDir = [self.localJSBundleZipRootPath stringByAppendingPathComponent:JSBundleName];
-    
-    NSError *err;
-    if ([NIPRnHotReloadHelper folderExistAtPath:JSBundleZipDir]) {
-        NSArray *filePathArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:JSBundleZipDir error:&err];
-        if (!err && filePathArray.count) {
-            NSString *zipFileName = filePathArray.lastObject;
-            NSString *zipFilePath = [JSBundleZipDir stringByAppendingPathComponent:zipFileName];
-            ZipArchive *miniZip = [[ZipArchive alloc] init];
-            if ([miniZip UnzipOpenFile:zipFilePath]) {
-                NSString *targetFilePath = [self.localJSBundleRootPath stringByAppendingPathComponent:JSBundleName];
-                BOOL ret = [miniZip UnzipFileTo:targetFilePath overWrite:YES];
-                if (YES == ret) {
-                    [self updateFontFamiliesForJSBundle:JSBundleName];
-                    [self checkAndApplyIncrementForJSBundle:JSBundleName];
-                    [self checkAndApplyAssetsConfigForJSBundle:JSBundleName];
-                    [self recordLocalJSBundleInfoWithName:JSBundleName];
-                }
-                [miniZip UnzipCloseFile];
-            }
-            [NIPRnHotReloadHelper removeFileAtPath:zipFilePath];
-        }
-      
-    }
-   
-    if (self.localJSBundleZipInfoDic[JSBundleName]) {
-        self.localJSBundleZipInfoDic[JSBundleName] = nil;
-        [self removeLocalJSBundleZipInfoWithName:JSBundleName];
-    }
-}
-
-/**
- * 更新字体集
- */
-- (void)updateFontFamiliesForJSBundle:(NSString *)JSBundleName {
-    NSString *JSBundlePath = [self.localJSBundleRootPath stringByAppendingPathComponent:JSBundleName];
-    NSArray *fontNames = [NIPRnHotReloadHelper filenameArrayOfType:@"ttf" inDirectory:JSBundlePath];
-    [NIPRnHotReloadHelper registerFontFamilies:fontNames inDirectory:JSBundlePath];
-}
-
-/**
- * 更新JSBundle
- */
-- (void)checkAndApplyIncrementForJSBundle:(NSString *)JSBundleName {
-    NSString *JSBundleRootPath = [self.localJSBundleRootPath stringByAppendingPathComponent:JSBundleName];
-    NSArray *JSBundleNameArray = [NIPRnHotReloadHelper filenameArrayOfType:JSBUNDLE inDirectory:JSBundleRootPath];
-    
-    NSString *mainBundleText = nil;
-    NSString *increBundleText = nil;
-    NSString *mainBundlePath = nil;
-    NSString *increBundlePath = nil;
-    
-    BOOL hasIncrement = NO;
-    for (NSString *bundleName in JSBundleNameArray) {
-        NSString *bundlePath = [JSBundleRootPath stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@.%@", bundleName, JSBUNDLE]];
-        if ([bundleName isEqualToString:@"index"]) {
-            mainBundlePath = bundlePath;
-            mainBundleText = [NSString stringWithContentsOfFile:bundlePath encoding:NSUTF8StringEncoding error:nil];
-        }
-        if ([bundleName isEqualToString:@"increment"]) {
-            increBundlePath = bundlePath;
-            increBundleText = [NSString stringWithContentsOfFile:bundlePath encoding:NSUTF8StringEncoding error:nil];
-            hasIncrement = YES;
-        }
-    }
-    
-    if (hasIncrement) {
-        DiffMatchPatch *patch = [[DiffMatchPatch alloc] init];
-        NSError *error = nil;
-        NSMutableArray *patches = [patch patch_fromText:increBundleText error:&error];
-        if (!error) {
-            NSArray *result = [patch patch_apply:patches toString:mainBundleText];
-            if (result.count) {
-                NSString *content = result[0];
-                NSData *data = [content dataUsingEncoding: NSUTF8StringEncoding];
-                BOOL success = [[NSFileManager defaultManager] createFileAtPath:mainBundlePath
-                                                                       contents:data
-                                                                     attributes:nil];
-                if (success) {
-                    [NIPRnHotReloadHelper removeFileAtPath:increBundlePath];
-                }
-            }
-        }
-    } else {
-        NSString *commonBundleDir = [self.localJSBundleRootPath stringByAppendingPathComponent:COMMON];
-        NSString *commonBundlePath = [NSString stringWithFormat:@"%@/index.jsbundle", commonBundleDir];
-        NSString *commonBundleText = [NSString stringWithContentsOfFile:commonBundlePath
-                                                               encoding:NSUTF8StringEncoding
-                                                                  error:nil];
-        DiffMatchPatch *patch = [[DiffMatchPatch alloc] init];
-        NSError *error = nil;
-        NSMutableArray *patches = [patch patch_fromText:mainBundleText error:&error];
-        if (!error) {
-            NSArray *result = [patch patch_apply:patches toString:commonBundleText];
-            if (result.count) {
-                NSString *content = result[0];
-                NSData *data = [content dataUsingEncoding: NSUTF8StringEncoding];
-                [[NSFileManager defaultManager] createFileAtPath:mainBundlePath
-                                                                       contents:data
-                                                                     attributes:nil];
-            }
-        }
-    }
-}
-
-/**
- * 更新图片资源
- */
-- (void)checkAndApplyAssetsConfigForJSBundle:(NSString *)JSBundleName {
-    NSString *JSBundleRootPath = [self.localJSBundleRootPath stringByAppendingPathComponent:JSBundleName];
-    NSString *assetsConfigFilePath = [JSBundleRootPath stringByAppendingPathComponent:@"assetsConfig.txt"];
-    NSString *content = [NSString stringWithContentsOfFile:assetsConfigFilePath
-                                                  encoding:NSUTF8StringEncoding
-                                                     error:nil];
-    NSArray *array = [content componentsSeparatedByString:@","];
-    [NIPRnHotReloadHelper removeFileAtPath:assetsConfigFilePath];
-    for (NSString *path in array) {
-        if (path.length) {
-            [NIPRnHotReloadHelper removeFileAtPath:[JSBundleRootPath stringByAppendingPathComponent:path]];
-        }
-    }
 }
 
 
@@ -585,6 +432,296 @@
 }
 
 
+#pragma mark - JSBundle包管理
+
+/**
+ * 检查JSBundle包的合法性
+ */
+- (BOOL)checkValidityOfJSBundleZipAtPath:(NSString *)JSBundleZipFilePath withName:(NSString *)JSBundleName {
+    NSString* MD5OfZip = [NIPRnHotReloadHelper generateMD5ForFileAtPath:JSBundleZipFilePath];
+    NSDictionary *remoteJSBundleInfo = self.remoteJSBundleInfoDic[JSBundleName];
+    NSString *remoteJSBundleZipMD5 = remoteJSBundleInfo[RN_BUNDLE_MD5];
+    if (!remoteJSBundleZipMD5 || [remoteJSBundleZipMD5 isEqualToString: MD5OfZip]) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * 加载热更新之后的JSBundle文件
+ *
+ * @param JSBundleName 包名
+ *
+ */
+- (void)loadHotUpdatedJSBundleWithName:(NSString *)JSBundleName {
+    BOOL unzipSuccess = [self unzipJSBundleWithName:JSBundleName];
+    if (unzipSuccess) {
+        [self checkAndApplyIncrementForJSBundle:JSBundleName];
+        [self checkAndApplyAssetsConfigForJSBundle:JSBundleName];
+        [self registerFontFamiliesForJSBundle:JSBundleName];
+    }
+}
+
+/**
+ * 解压JSBundleZip文件，并删除原包
+ *
+ * @param JSBundleName 包名
+ *
+ * @reture unZipSuccess
+ */
+- (BOOL)unzipJSBundleWithName:(NSString *)JSBundleName {
+    BOOL unZipSuccess = NO;
+    NSString *JSBundleZipDir = [self.localJSBundleZipRootPath stringByAppendingPathComponent:JSBundleName];
+    NSError *err;
+    if ([NIPRnHotReloadHelper folderExistAtPath:JSBundleZipDir]) {
+        NSArray *filePathArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:JSBundleZipDir error:&err];
+        if (!err && filePathArray.count) {
+            NSString *zipFileName = filePathArray.lastObject;
+            NSString *zipFilePath = [JSBundleZipDir stringByAppendingPathComponent:zipFileName];
+            ZipArchive *miniZip = [[ZipArchive alloc] init];
+            if ([miniZip UnzipOpenFile:zipFilePath]) {
+                NSString *targetFilePath = [self.localJSBundleRootPath stringByAppendingPathComponent:JSBundleName];
+                BOOL ret = [miniZip UnzipFileTo:targetFilePath overWrite:YES];
+                if (YES == ret) {
+                    unZipSuccess = YES;
+                }
+                [miniZip UnzipCloseFile];
+            }
+            if (unZipSuccess) {
+                [NIPRnHotReloadHelper removeFileAtPath:zipFilePath];
+            }
+        }
+    }
+    
+    return unZipSuccess;
+}
+
+/**
+ * 检查是否需要对JSBundle做增量更新，如果需要则更新
+ *
+ * @param JSBundleName 包名
+ *
+ * @return updateSuccess
+ */
+- (BOOL)checkAndApplyIncrementForJSBundle:(NSString *)JSBundleName {
+    BOOL updateSucces = NO;
+    
+    NSString *JSBundleRootPath = [self.localJSBundleRootPath stringByAppendingPathComponent:JSBundleName];
+    NSArray *JSBundleNameArray = [NIPRnHotReloadHelper filenameArrayOfType:JSBUNDLE inDirectory:JSBundleRootPath];
+    
+    NSString *mainBundlePath = nil;
+    NSString *increBundlePath = nil;
+    
+    BOOL hasIncrement = NO;
+    for (NSString *bundleName in JSBundleNameArray) {
+        NSString *bundlePath = [JSBundleRootPath stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@.%@", bundleName, JSBUNDLE]];
+        if ([bundleName isEqualToString:@"index"]) {
+            mainBundlePath = bundlePath;
+        } else if ([bundleName isEqualToString:@"increment"]) {
+            increBundlePath = bundlePath;
+            hasIncrement = YES;
+        }
+    }
+    
+    if (hasIncrement) {
+        BOOL mergeSuccess = [self mergeFileAtPath:increBundlePath withFileAtPath:mainBundlePath toFileAtPath:mainBundlePath];
+        if (mergeSuccess) {
+            [NIPRnHotReloadHelper removeFileAtPath:increBundlePath];
+            updateSucces = YES;
+        }
+    } else {
+        NSString *commonBundleDir = [self.localJSBundleRootPath stringByAppendingPathComponent:COMMON];
+        NSString *commonBundlePath = [NSString stringWithFormat:@"%@/index.jsbundle", commonBundleDir];
+        if ([NIPRnHotReloadHelper fileExistAtPath:commonBundlePath]) {
+            BOOL mergeSuccess = [self mergeFileAtPath:mainBundlePath withFileAtPath:commonBundlePath toFileAtPath:mainBundlePath];
+            if (mergeSuccess) {
+                updateSucces = YES;
+            }
+        } else {
+            updateSucces = YES;
+        }
+    }
+    return updateSucces;
+}
+
+/**
+ * 根据assetsConfig文件删除多余图片资源
+ * @param JSBundleName 包名
+ */
+- (void)checkAndApplyAssetsConfigForJSBundle:(NSString *)JSBundleName {
+    NSString *JSBundleRootPath = [self.localJSBundleRootPath stringByAppendingPathComponent:JSBundleName];
+    NSString *assetsConfigFilePath = [JSBundleRootPath stringByAppendingPathComponent:@"assetsConfig.txt"];
+    NSString *configContent = [NSString stringWithContentsOfFile:assetsConfigFilePath
+                                                        encoding:NSUTF8StringEncoding
+                                                           error:nil];
+    [NIPRnHotReloadHelper removeFileAtPath:assetsConfigFilePath];
+    NSArray *uselessAssetsPathArray = [configContent componentsSeparatedByString:@","];
+    for (NSString *uselessAssetsPath in uselessAssetsPathArray) {
+        if (uselessAssetsPath.length) {
+            [NIPRnHotReloadHelper removeFileAtPath:[JSBundleRootPath stringByAppendingPathComponent:uselessAssetsPath]];
+        }
+    }
+}
+
+/**
+ * 更新字体集
+ */
+- (void)registerFontFamiliesForJSBundle:(NSString *)JSBundleName {
+    NSString *JSBundlePath = [self.localJSBundleRootPath stringByAppendingPathComponent:JSBundleName];
+    NSArray *fontNames = [NIPRnHotReloadHelper filenameArrayOfType:@"ttf" inDirectory:JSBundlePath];
+    [NIPRnHotReloadHelper registerFontFamilies:fontNames inDirectory:JSBundlePath];
+}
+
+/**
+ * 合包
+ *
+ * @param srcBundlePath 要合并的文件路径
+ * @param commonBundlePath 被合并的公共文件路径
+ * @param dstBundlePath 存放合成文件的路径
+ *
+ * @reture mergeSuccess
+ */
+- (BOOL)mergeFileAtPath:(NSString *)srcBundlePath withFileAtPath:(NSString *)commonBundlePath toFileAtPath:(NSString *)dstBundlePath {
+    NSString *srcBundleContent = [NSString stringWithContentsOfFile:srcBundlePath encoding:NSUTF8StringEncoding error:nil];
+    NSString *commonBundleContent = [NSString stringWithContentsOfFile:commonBundlePath encoding:NSUTF8StringEncoding error:nil];
+    
+    BOOL mergeSuccess = NO;
+    DiffMatchPatch *patch = [[DiffMatchPatch alloc] init];
+    NSError *err;
+    NSMutableArray *patches = [patch patch_fromText:srcBundleContent error:&err];
+    if (!err) {
+        NSArray *result = [patch patch_apply:patches toString:commonBundleContent];
+        if (result.count) {
+            NSString *content = result[0];
+            NSData *resultData = [content dataUsingEncoding: NSUTF8StringEncoding];
+            BOOL success = [[NSFileManager defaultManager] createFileAtPath:dstBundlePath
+                                                                   contents:resultData
+                                                                 attributes:nil];
+            if (success) {
+                mergeSuccess = YES;
+            }
+        }
+    }
+    return mergeSuccess;
+}
+
+
+#pragma mark - 本地JSBundle信息管理（解压好的包和等待解压的包）
+
+/**
+ * 将IPA包中JSBundle信息记录到本地
+ *
+ * @param JSBundleName 包名
+ */
+- (void)recordIPAJSBundleInfoToLocalWithName:(NSString *)JSBundleName {
+    NSMutableDictionary *localJSBundleInfo = [self getLocalJSBundleInfoWithName:JSBundleName];
+    if (!localJSBundleInfo) {
+        localJSBundleInfo = [NSMutableDictionary dictionary];
+    }
+    localJSBundleInfo[RN_APP_VERSION] = APP_VERSION;
+    localJSBundleInfo[RN_BUILD_VERSION] = APP_BUILD;
+    localJSBundleInfo[RN_BUNDLE_VERSION] = DEFAULT_BUNDLE_VERSION;
+    [self saveLocalJSBundleInfoToUserDefaults:localJSBundleInfo withName:JSBundleName];
+}
+
+/**
+ * 将远端JSBundle信息记录到本地
+ *
+ * @param JSBundleName 包名
+ */
+- (void)recordRemoteJSBundleInfoToLocalWithName:(NSString *)JSBundleName {
+    NSDictionary *remoteJSBundleInfo = self.remoteJSBundleInfoDic[JSBundleName];
+    if (remoteJSBundleInfo) {
+        NSMutableDictionary *localJSBundleInfo = [self getLocalJSBundleInfoWithName:JSBundleName];
+        
+        localJSBundleInfo[RN_BUNDLE_VERSION] = remoteJSBundleInfo[RN_BUNDLE_VERSION];
+        [self saveLocalJSBundleInfoToUserDefaults:localJSBundleInfo withName:JSBundleName];
+    }
+}
+
+/**
+ * 记录本地JSBundle压缩包信息
+ */
+- (void)recordLocalJSBundleZipInfoWithName:(NSString *)JSBundleName {
+    NSDictionary *remoteJSBundleInfo = self.remoteJSBundleInfoDic[JSBundleName];
+    if (remoteJSBundleInfo) {
+        NSMutableDictionary *localJSBundleZipInfo = [self getLocalJSBundleZipInfoWithName:JSBundleName];
+        if (!localJSBundleZipInfo) {
+            localJSBundleZipInfo = [NSMutableDictionary dictionary];
+        }
+        localJSBundleZipInfo[RN_APP_VERSION] = remoteJSBundleInfo[RN_APP_VERSION];
+        localJSBundleZipInfo[RN_BUNDLE_VERSION] = remoteJSBundleInfo[RN_BUNDLE_VERSION];
+        [self saveLocalJSBundleZipInfoToUserDefaults:localJSBundleZipInfo withName:JSBundleName];
+    }
+}
+
+/**
+ * 从用户偏好设置获取本地JSBundle信息
+ */
+- (void)loadJSBundleInfoFromUserDefauls {
+    NSDictionary *localJSBundleInfoDic = [self.userDefaults objectForKey:LOCAL_RN_BUNDLE_INFO];
+    if (localJSBundleInfoDic) {
+        self.localJSBundleInfoDic = [NSMutableDictionary dictionaryWithDictionary:localJSBundleInfoDic];
+    }
+}
+
+/**
+ * 从用户偏好设置获取指定名字的本地JSBundle信息
+ */
+- (NSMutableDictionary *)getLocalJSBundleInfoWithName:(NSString *)JSBundleName {
+    NSDictionary *localJSBundleInfo = self.localJSBundleInfoDic[JSBundleName];
+    return [localJSBundleInfo mutableCopy];
+}
+
+/**
+ * 将指定名字的本地JSBundle信息保存到用户偏好设置中
+ */
+- (void)saveLocalJSBundleInfoToUserDefaults:(NSDictionary *)JSBundleInfo
+                                   withName:(NSString *)JSBundleName {
+    if (JSBundleInfo && JSBundleName) {
+        self.localJSBundleInfoDic[JSBundleName] = JSBundleInfo;
+        [self.userDefaults setObject:self.localJSBundleInfoDic forKey:LOCAL_RN_BUNDLE_INFO];
+    }
+}
+
+/**
+ * 从用户偏好设置获取本地JSBundle压缩包信息
+ */
+- (void)loadJSBundleZipInfoFromUserDefauls {
+    NSDictionary *localJSBundleZipInfoDic = [self.userDefaults objectForKey:LOCAL_RN_BUNDLE_ZIP_INFO];
+    if (localJSBundleZipInfoDic) {
+        self.localJSBundleZipInfoDic = [NSMutableDictionary dictionaryWithDictionary:localJSBundleZipInfoDic];
+    }
+}
+
+/**
+ * 从用户偏好设置获取指定名字的本地JSBundle压缩包信息
+ */
+- (NSMutableDictionary *)getLocalJSBundleZipInfoWithName:(NSString *)JSBundleName {
+    NSDictionary *localJSBundleZipInfo = self.localJSBundleZipInfoDic[JSBundleName];
+    return [localJSBundleZipInfo mutableCopy];
+}
+
+/**
+ * 将指定名字的本地JSBundle压缩包信息保存到用户偏好设置中
+ */
+- (void)saveLocalJSBundleZipInfoToUserDefaults:(NSDictionary *)JSBundleInfo
+                                      withName:(NSString *)JSBundleName {
+    if (JSBundleInfo && JSBundleName) {
+        self.localJSBundleZipInfoDic[JSBundleName] = JSBundleInfo;
+        [self.userDefaults setObject:self.localJSBundleZipInfoDic forKey:LOCAL_RN_BUNDLE_ZIP_INFO];
+    }
+}
+
+/**
+ * 删除本地JSBundle压缩包信息
+ */
+- (void)removeLocalJSBundleZipInfoWithName:(NSString *)JSBundleName {
+    self.localJSBundleZipInfoDic[JSBundleName] = nil;
+    [self.userDefaults setObject:self.localJSBundleZipInfoDic forKey:LOCAL_RN_BUNDLE_ZIP_INFO];
+}
+
+
 #pragma mark - 文件目录管理
 
 /**
@@ -609,6 +746,16 @@
     }
     [[NSFileManager defaultManager] createDirectoryAtPath:zipFileDir withIntermediateDirectories:YES attributes:nil error:nil];
     return zipFileDir;
+}
+
+
+#pragma mark - Setters && Getters
+
+- (NSUserDefaults *)userDefaults {
+    if (!_userDefaults) {
+        _userDefaults = [NSUserDefaults standardUserDefaults];
+    }
+    return _userDefaults;
 }
 
 

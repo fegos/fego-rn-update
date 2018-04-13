@@ -86,33 +86,64 @@ RCT_EXPORT_MODULE()
             manager.remoteJSBundleRootPath = remoteJSBundleRootPath;
             manager.updateService.remoteJSBundleRootPath = remoteJSBundleRootPath;
         }
-        [manager initJSBundle];
     });
-    manager.useHotUpdate = useHotUpdate;
-    manager.useJSServer = useJSServer;
-    if (noEmptyString(remoteJSBundleRootPath)) {
-        manager.remoteJSBundleRootPath = remoteJSBundleRootPath;
-        manager.updateService.remoteJSBundleRootPath = remoteJSBundleRootPath;
-    }
     return manager;
 }
 
 /**
- *  获取当前app内存在的所有bundle
- *  首先获取位于docment沙盒目录下的jsbundle文件
- *  然后获取位于app包内的jsbundle文件
- *  将文件的路径放在一个字典里，如果有重复以document优先
+ * 加载所需JSBundle
+ * @param JSBundleName JSBundle名
+ *
+ * @return RCTBridge
  */
-- (void)initJSBundle {
-    NSArray *JSBundleNameArray = [self getJSBundleNameArray];
-    [self checkVersionUpdateForJSBundleWithNames:JSBundleNameArray];
-    [self loadJSBundleWithNames:JSBundleNameArray];
+- (RCTBridge *)loadJSBundleWithName:(NSString *)JSBundleName {
+    BOOL isUpdated = [self.updateService checkIPAVersionUpdateForJSBundleWithName:JSBundleName];
+    if (isUpdated) {
+        BOOL copySuccess = [self.updateService copyJSBundleFromIPAToDocumentDiretoryWithName:JSBundleName];
+        if (copySuccess) {
+            [self.updateService recordIPAJSBundleInfoToLocalWithName:JSBundleName];
+        }
+    }
+    RCTBridge *bridge = self.JSBundleDictionay[JSBundleName];
+    if (bridge) {
+        [bridge reload];
+    } else {
+        [self.updateService registerFontFamiliesForJSBundle:JSBundleName];
+        bridge = [self getBridgeForJSBundleWithName:JSBundleName];
+    }
+    return bridge;
 }
+
+/**
+ * 加载所需JSBundles
+ * @param JSBundleNameArray JSBundle名称数组
+ *
+ * @return RCTBridge字典
+ */
+- (NSDictionary *)loadJSBundlesWithNames:(NSArray *)JSBundleNameArray {
+    NSMutableDictionary *bridgeDic = [NSMutableDictionary dictionaryWithCapacity:JSBundleNameArray.count];
+    [JSBundleNameArray enumerateObjectsUsingBlock:^(NSString*  _Nonnull JSBundleName, NSUInteger idx, BOOL * _Nonnull stop) {
+        RCTBridge *bridge = [self loadJSBundleWithName:JSBundleName];
+        bridgeDic[JSBundleName] = bridge;
+    }];
+    return bridgeDic;
+}
+
+/**
+ * 加载所有JSBundles
+ *
+ * return RCTBridge字典
+ */
+- (NSDictionary *)loadAllJSBundles {
+    NSArray *allJSBundleNameArray = [self getAllJSBundleNameArray];
+    return [self loadJSBundlesWithNames:allJSBundleNameArray];
+}
+
 
 /**
  * 获取所有bundle名
  */
-- (NSArray *)getJSBundleNameArray {
+- (NSArray *)getAllJSBundleNameArray {
     NSArray *bundlePathArray = [[NSBundle mainBundle] pathsForResourcesOfType:nil inDirectory:RN_JSBUNDLE_SUBPATH];
     NSMutableArray *bundleNameArray = [NSMutableArray arrayWithCapacity:bundlePathArray.count];
     [bundlePathArray enumerateObjectsUsingBlock:^(NSString*  _Nonnull bundlePath, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -125,118 +156,30 @@ RCT_EXPORT_MODULE()
 }
 
 /**
- * 检查版本更新
+ * 初始化RCTBridge
  */
-- (void)checkVersionUpdateForJSBundleWithNames:(NSArray *)JSBundleNames {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *localRNBundleInfo = [userDefaults objectForKey:LOCAL_JS_BUNDLE_INFO];
-    [JSBundleNames enumerateObjectsUsingBlock:^(NSString*  _Nonnull bundleName, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSDictionary *bundleInfo = localRNBundleInfo[bundleName];
-         BOOL needCopyRNBundle = NO;
-        if (bundleInfo) {
-            NSString *localAppVersion = bundleInfo[LOCAL_APP_VERSION];
-            NSString *localBuildVersion = bundleInfo[LOCAL_BUILD_VERSION];
-            if (!noEmptyString(localAppVersion) ||
-                ![localAppVersion isEqualToString:APP_VERSION]) {
-                needCopyRNBundle = YES;
-            } else if (!noEmptyString(localBuildVersion) ||
-                       ![localBuildVersion isEqualToString:APP_BUILD]) {
-                needCopyRNBundle = YES;
-            }
-        } else {
-            needCopyRNBundle = YES;
-        }
-        if (needCopyRNBundle) {
-            [self copyJSBundleToDocumentDiretoryWithName:bundleName];
-        }
-    }];
-}
-
-/**
- * 更新本地RN资源版本信息
- */
-- (void)updateLocalJSBundleInfoWithName:(NSString *)JSBundleName {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSMutableDictionary *localJSBundleInfo = [NSMutableDictionary dictionaryWithDictionary:[userDefaults objectForKey:LOCAL_JS_BUNDLE_INFO]];
-    NSMutableDictionary *bundleInfo = [NSMutableDictionary dictionaryWithDictionary:localJSBundleInfo[JSBundleName]];
-    bundleInfo[LOCAL_APP_VERSION] = APP_VERSION;
-    bundleInfo[LOCAL_BUILD_VERSION] = APP_BUILD;
-    bundleInfo[LOCAL_BUNDLE_VERSION] = DEFAULT_BUNDLE_VERSION;
-    localJSBundleInfo[JSBundleName] = bundleInfo;
-    [userDefaults setObject:localJSBundleInfo forKey:LOCAL_JS_BUNDLE_INFO];
-}
-
-/**
- * 将RN数据从主bundle拷贝到沙盒路径下
- */
-- (void)copyJSBundleToDocumentDiretoryWithName:(NSString *)JSBundleName {
-    NSString *srcBundlePath = [[NSBundle mainBundle] pathForResource:JSBundleName ofType:nil inDirectory:RN_JSBUNDLE_SUBPATH];
-    NSString *dstBundlePath =  [self.localJSBundleRootPath stringByAppendingPathComponent:JSBundleName];
-    NSString *commonBundlePath = [[NSBundle mainBundle] pathForResource:COMMON ofType:nil inDirectory:RN_JSBUNDLE_SUBPATH];
-    if ([NIPRnHotReloadHelper folderExistAtPath:commonBundlePath]) {
-        if (![JSBundleName isEqualToString:COMMON]) {
-            NSString *commonBundleFilePath = [commonBundlePath stringByAppendingPathComponent:@"index.jsbundle"];
-            NSString *commonBundleText = [NSString stringWithContentsOfFile:commonBundleFilePath encoding:NSUTF8StringEncoding error:nil];
-            NSString *increBundlePath = [srcBundlePath stringByAppendingPathComponent:@"index.jsbundle"];
-            NSString *increBundleText = [NSString stringWithContentsOfFile:increBundlePath encoding:NSUTF8StringEncoding error:nil];
-            
-            DiffMatchPatch *patch = [[DiffMatchPatch alloc] init];
-            NSError *error = nil;
-            NSMutableArray *patches = [patch patch_fromText:increBundleText error:&error];
-            if (!error) {
-                NSArray *result = [patch patch_apply:patches toString:commonBundleText];
-                if (result.count) {
-                    NSString *content = result[0];
-                    NSData *data = [content dataUsingEncoding: NSUTF8StringEncoding];
-                    BOOL success = [[NSFileManager defaultManager] createFileAtPath:increBundlePath
-                                                                           contents:data
-                                                                         attributes:nil];
-                    if (success) {
-                        BOOL bundleCopySuccess = [NIPRnHotReloadHelper copyFolderAtPath:srcBundlePath toPath:dstBundlePath];
-                        
-                        if (bundleCopySuccess) {
-                            [self updateLocalJSBundleInfoWithName:JSBundleName];
-                        }
-                    }
-                }
-            }
-        }
-    } else {
-        BOOL bundleCopySuccess = [NIPRnHotReloadHelper copyFolderAtPath:srcBundlePath toPath:dstBundlePath];
-        
-        if (bundleCopySuccess) {
-            [self updateLocalJSBundleInfoWithName:JSBundleName];
-        }
-    }
-}
-
-/**
- * 加载JSBundle
- */
-- (void)loadJSBundleWithNames:(NSArray *)JSBundleNameArray {
+- (RCTBridge *)getBridgeForJSBundleWithName:(NSString *)JSBundleName {
+    RCTBridge *bridge = nil;
     if (self.useJSServer) {
         NSURL *bundelPath = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:@"index"];
-        RCTBridge *bridge = [[RCTBridge alloc] initWithBundleURL:bundelPath
-                                                  moduleProvider:nil
-                                                   launchOptions:nil];
-        if (JSBundleNameArray.count) {
-            for (NSString *JSBundleName in JSBundleNameArray) {
-                [self.JSBundleDictionay setObject:bridge forKey:JSBundleName];
-            }
+        bridge = [[RCTBridge alloc] initWithBundleURL:bundelPath
+                                       moduleProvider:nil
+                                        launchOptions:nil];
+        if (noEmptyString(JSBundleName)) {
+            [self.JSBundleDictionay setObject:bridge forKey:JSBundleName];
         } else {
             [self.JSBundleDictionay setObject:bridge forKey:@"index"];
         }
     } else {
-        for (NSString *JSBundleName in JSBundleNameArray) {
-            if (![JSBundleName isEqualToString:COMMON]) {
-                NSURL *JSBundelURL = [self getJSBundleURL:JSBundleName];
-                RCTBridge *bridge = [[RCTBridge alloc] initWithBundleURL:JSBundelURL
-                                                          moduleProvider:nil
-                                                           launchOptions:nil];
-                [self.JSBundleDictionay setObject:bridge forKey:JSBundleName];
-            }
+        if (noEmptyString(JSBundleName) && ![JSBundleName isEqualToString:COMMON]) {
+            NSURL *JSBundelURL = [self getJSBundleURL:JSBundleName];
+            bridge = [[RCTBridge alloc] initWithBundleURL:JSBundelURL
+                                           moduleProvider:nil
+                                            launchOptions:nil];
+            [self.JSBundleDictionay setObject:bridge forKey:JSBundleName];
         }
     }
+    return bridge;
 }
 
 /**
@@ -249,7 +192,6 @@ RCT_EXPORT_MODULE()
     if (self.useHotUpdate) {
         // 优先使用沙盒中存储的JSBundle包
         NSString *JSBundlePath = [NSString stringWithFormat:@"%@/%@/index.%@", self.localJSBundleRootPath, JSBundleName, JSBUNDLE];
-        
         if (![NIPRnHotReloadHelper fileExistAtPath:JSBundlePath]) {
             JSBundlePath = [[NSBundle mainBundle] pathForResource:@"index"
                                                            ofType:JSBUNDLE
@@ -279,31 +221,6 @@ RCT_EXPORT_MODULE()
     return [self.JSBundleDictionay objectForKey:JSBundleName];
 }
 
-/**
- * 热更新完成后，加载存放在Document目录下的被更新的bundle文件
- */
-- (void)loadALLJSBundleInDocumentDirectory {
-    NSMutableArray *JSBunleNameArray = [NSMutableArray arrayWithCapacity:10];
-    
-    NSError *err;
-    NSArray *allJSBundleNameArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.localJSBundleRootPath error:&err];
-    if (!err) {
-        for (NSString *JSBundleName in allJSBundleNameArray) {
-            if (![JSBundleName isEqualToString:COMMON]) {
-                [JSBunleNameArray addObject:JSBundleName];
-            }
-        }
-    }
-    [self loadJSBundleWithNames:JSBunleNameArray];
-}
-
-/**
- * 热更新完成后，加载存放在Document目录下指定名字的bundle文件
- */
-- (void)loadALLJSBundleInDocumentDirectoryWithName:(NSString *)JSBundleName {
-     [self loadJSBundleWithNames:@[JSBundleName]];
-}
-
 
 #pragma mark - 加载rn controller
 
@@ -327,6 +244,7 @@ RCT_EXPORT_MODULE()
  */
 - (NIPRnController *)loadRNControllerWithJSBridgeName:(NSString *)JSBundleName
                                         andModuleName:(NSString *)moduleName {
+    [self loadJSBundleWithName:JSBundleName];
     NIPRnController *controller = [[NIPRnController alloc] initWithBundleName:JSBundleName
                                                                    moduleName:moduleName];
     return controller;
@@ -350,11 +268,12 @@ RCT_EXPORT_MODULE()
 }
 
 /**
- * 解压JSBundleZip文件
+ * 加载热更新JSBundle
+ * @param JSBundleName 包名
  */
-- (void)unzipJSBundleWithName:(NSString *)JSBundleName {
+- (void)loadNewHotUpdatedJSBundleWithName:(NSString *)JSBundleName {
     NIPRnUpdateService *service = [NIPRnUpdateService sharedService];
-    [service unzipJSBundleWithName:JSBundleName];
+    [service loadHotUpdatedJSBundleWithName:JSBundleName];
 }
 
 
@@ -367,5 +286,24 @@ RCT_EXPORT_MODULE()
     return _updateService;
 }
 
+- (void)setRemoteJSBundleRootPath:(NSString *)remoteJSBundleRootPath {
+    _remoteJSBundleRootPath = remoteJSBundleRootPath;
+    self.updateService.remoteJSBundleRootPath = remoteJSBundleRootPath;
+}
+
+- (void)setLocalJSBundleRootPath:(NSString *)localJSBundleRootPath {
+    _localJSBundleRootPath = localJSBundleRootPath;
+    self.updateService.localJSBundleRootPath = localJSBundleRootPath;
+}
+
+- (void)setLocalJSBundleZipRootPath:(NSString *)localJSBundleZipRootPath {
+    _localJSBundleZipRootPath = localJSBundleZipRootPath;
+    self.updateService.localJSBundleZipRootPath = localJSBundleZipRootPath;
+}
+
+- (void)setLocalJSBundleConfigRootPath:(NSString *)localJSBundleConfigRootPath {
+    _localJSBundleConfigRootPath = localJSBundleConfigRootPath;
+    self.updateService.localJSBundleConfigRootPath = localJSBundleConfigRootPath;
+}
 
 @end
