@@ -178,9 +178,15 @@ distributionUrl=https\://services.gradle.org/distributions/gradle-3.3-all.zip</c
 				</ol>
 				<pre><code>&lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;</code></pre>
 				<ol start="6" type="1">
+					<li>初始化
+						<code>ReactManager</code>
+					</li>
+				</ol>
+				<pre><code>ReactManager.getInstance().init(getApplication(), "index", "index.jsbundle", "https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/");</code></pre>
+				<ol start="7" type="1">
 					<li>生成
 						<code>ReactRootView</code>时，需要使用ReactManager中生成的
-						<code>RnInstanceManager</code>，设置相应的参数如下：
+						<code>RnInstanceManager</code>
 					</li>
 				</ol>
 				<pre><code>String businessName = "";
@@ -188,30 +194,24 @@ if (mReactRootView == null) {
 	mReactRootView = new ReactRootView(this);
 	if (mReactInstanceManager == null) {
 		if (ReactManager.getInstance().getRnInstanceManager() == null) {
-			// 设置react native启动文件的名称
-			ReactManager.getInstance().setJsMainModuleName("index");
-			// 设置加载的文件名
-			ReactManager.getInstance().setBundleName("index.jsbundle");
-			// 设置热更新路径
-			ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/increment/");
 			List<ReactPackage> reactPackages = new ArrayList<>();
 			// 添加额外的package
 			reactPackages.add(new HotUpdatePackage());
-			ReactManager.getInstance().init(getApplication(), reactPackages, BuildConfig.DEBUG, businessName);
+			ReactManager.getInstance().loadBundle(reactPackages, BuildConfig.DEBUG, "");
 		}
 		mReactInstanceManager = ReactManager.getInstance().getRnInstanceManager();
 	}
 	mReactRootView.startReactApplication(mReactInstanceManager, "hotUpdate", null);
 	setContentView(mReactRootView);
 }</code></pre>
-				<ol start="7" type="1">
+				<ol start="8" type="1">
 					<li>调用热更新代码（也可js端调用）</li>
 				</ol>
 				<pre><code>String businessName = "";
 SuccessListener sucListener;// 一般是activity实现了该接口，可以为null，为null时表示不交给用户处理，而是内部默认解压加载
 FailListener failListener;	// 一般是activity实现了该接口，可以为null
 ReactManager.getInstance().loadBundleBehind(businessName, sucListener, failListenr);</code></pre>
-				<ol start="8" type="1">
+				<ol start="9" type="1">
 					<li>处理结果通知</li>
 				</ol>
 				<ul>

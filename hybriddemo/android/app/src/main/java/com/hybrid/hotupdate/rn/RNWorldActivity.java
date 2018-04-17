@@ -12,11 +12,15 @@ import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 
 import com.facebook.react.ReactInstanceManager;
+import com.facebook.react.ReactPackage;
 import com.facebook.react.ReactRootView;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
+import com.fego.android.service.HotUpdatePackage;
 import com.fego.android.service.ReactManager;
 import com.hybrid.hotupdate.BuildConfig;
-import com.hybrid.hotupdate.utils.ConfigUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sxiaoxia on 2018/3/12.
@@ -42,7 +46,10 @@ public class RNWorldActivity extends Activity implements DefaultHardwareBackBtnH
         businessName = "World";
         Bundle bundle = getIntent().getExtras();
         moduleName = bundle.getString("moduleName", "First");
-        ConfigUtil.getInstance().initReactManager(getApplication(), "index", "index.jsbundle", businessName);
+        List<ReactPackage> reactPackages = new ArrayList<>();
+        // 添加额外的package
+        reactPackages.add(new HotUpdatePackage());
+        ReactManager.getInstance().loadBundle(reactPackages, BuildConfig.DEBUG, businessName);
     }
 
     /**

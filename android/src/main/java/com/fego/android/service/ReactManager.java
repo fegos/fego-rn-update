@@ -94,26 +94,24 @@ public class ReactManager {
     }
 
     /**
-     * 启动application时需要初始化reactInstance
+     * 数据初始化
      *
-     * @param <T>           the type parameter
-     * @param application   application
-     * @param reactPackages reactPackages
-     * @param useDevelop    是否开发模式
-     * @param businessName  业务名
+     * @param application
+     * @param jsMainModuleName  主module名字
+     * @param bundleName    bundle名字
+     * @param sourceUrl     下载地址
      */
-    public <T extends ReactPackage> void init(Application application, List<T> reactPackages, boolean useDevelop, String businessName) {
-
+    public void init(Application application, String jsMainModuleName, String bundleName, String sourceUrl) {
         this.application = application;
+        this.jsMainModuleName = jsMainModuleName;
+        this.bundleName = bundleName;
+        this.sourceUrl = sourceUrl;
         ReactPreference.getInstance().setContext(application.getApplicationContext());
-
         //获取app的沙盒目录
         sourceDir = this.application.getFilesDir().getAbsolutePath() + File.separator + "rn" + File.separator;
-        curBusinessName = businessName;
-
-        //添加versionCode的校验，确保每次发的包能够区分开
-        //获取android versioncode
         try {
+            //添加versionCode的校验，确保每次发的包能够区分开
+            //获取android versioncode
             PackageInfo pi = application.getPackageManager().getPackageInfo(application.getPackageName(), 0);
             Log.d(TAG, String.valueOf(pi.versionCode));
             int appVersionCode = pi.versionCode;
@@ -129,6 +127,22 @@ public class ReactManager {
                 //完了后设置本地的appversioncode
                 ReactPreference.getInstance().saveInt(APP_VERSIONCODE, appVersionCode);
             }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 初始化reactInstance，加载bundle
+     *
+     * @param <T>           the type parameter
+     * @param reactPackages reactPackages
+     * @param useDevelop    是否开发模式
+     * @param businessName  业务名
+     */
+    public <T extends ReactPackage> void loadBundle(List<T> reactPackages, boolean useDevelop, String businessName) {
+        curBusinessName = businessName;
+        try {
             if (!businessName.equals("common")) {
                 //rn manager初始化，仅使用位于沙盒目录下的bundle资源
                 ReactInstanceManagerBuilder builder = ReactInstanceManager.builder()
@@ -233,7 +247,12 @@ public class ReactManager {
     public void loadBundleBehind(final String businessName, final SuccessListener sucListener, final FailListener failListener) {
         //请求远程的rn资源最新的配置文件,获取rn最新的对应sdk的数据迭代版本号
         ReactService service = new ReactService();
-        String rnConfigSourceUrl = sourceUrl + "config";
+        String rnConfigSourceUrl;
+        if (TextUtils.isEmpty(businessName)) {
+            rnConfigSourceUrl = sourceUrl + "config";
+        } else {
+            rnConfigSourceUrl = sourceUrl + businessName + "/config";
+        }
         configCall = service.downloadFile(rnConfigSourceUrl, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -353,7 +372,9 @@ public class ReactManager {
      * @param failListener  失败回调
      */
     private void loadRNSource(final String remoteDataVersion, final String businessName, final String localDataVersion, final boolean isAll, final String type, final String md5Value, final SuccessListener sucListener, final FailListener failListener) {
+        String temp = "";
         if (!TextUtils.isEmpty(businessName)) {
+            temp = businessName + '/';
             String tmpDir = application.getFilesDir().getAbsolutePath() + File.separator + businessName + File.separator;
             File tmpFile = new File(tmpDir);
             if (tmpFile.exists()) {
@@ -365,10 +386,10 @@ public class ReactManager {
         String rnZipName = "";                                  // 下载下来的zip包名
         if (isAll) {
             rnZipName = "rn_" + apkVersion + "_" + remoteDataVersion + ".zip";
-            rnSourceUrl = sourceUrl + "all/" + apkVersion + "/" + rnZipName;
+            rnSourceUrl = sourceUrl + temp + "all/" + apkVersion + "/" + rnZipName;
         }else {
             rnZipName = "rn_" + apkVersion + "_" + remoteDataVersion + "_" + localDataVersion + "_" + type + ".zip";
-            rnSourceUrl = sourceUrl + "increment/" + apkVersion + "/" + rnZipName;
+            rnSourceUrl = sourceUrl + temp + "increment/" + apkVersion + "/" + rnZipName;
         }
         bundleCall = service.downloadFile(rnSourceUrl, new Callback<ResponseBody>() {
             @Override

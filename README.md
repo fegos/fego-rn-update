@@ -128,7 +128,12 @@ dependencies {
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 
-6. 生成`ReactRootView`时，需要使用ReactManager中生成的`RnInstanceManager`，设置相应的参数如下：
+6. 初始化`ReactManager`
+```
+ReactManager.getInstance().init(getApplication(), "index", "index.jsbundle", "https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/");
+```
+
+7. 生成`ReactRootView`时，需要使用ReactManager中生成的`RnInstanceManager`：
 
 ```
 // 业务名
@@ -137,16 +142,10 @@ if (mReactRootView == null) {
     mReactRootView = new ReactRootView(this);
     if (mReactInstanceManager == null) {
         if (ReactManager.getInstance().getRnInstanceManager() == null) {
-            // 设置react native启动文件的名称
-            ReactManager.getInstance().setJsMainModuleName("index");
-            // 设置加载的文件名
-            ReactManager.getInstance().setBundleName("index.jsbundle");
-            // 设置热更新路径
-            ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/increment/");
             List<ReactPackage> reactPackages = new ArrayList<>();
             // 添加额外的package
             reactPackages.add(new HotUpdatePackage());
-            ReactManager.getInstance().init(getApplication(), reactPackages, BuildConfig.DEBUG, businessName);
+            ReactManager.getInstance().loadBundle(reactPackages, BuildConfig.DEBUG, "");
         }
 		mReactInstanceManager = ReactManager.getInstance().getRnInstanceManager();
 	}
@@ -155,7 +154,7 @@ if (mReactRootView == null) {
 }
 ```
 
-7、调用热更新代码（也可js端调用）
+8、调用热更新代码（也可js端调用）
 
 ```
 String businessName = "";
@@ -163,7 +162,7 @@ SuccessListener sucListener;// 一般是activity实现了该接口，可以为nu
 FailListener failListener;	// 一般是activity实现了该接口，可以为null
 ReactManager.getInstance().loadBundleBehind(businessName, sucListener, failListenr);
 ```
-8、处理结果通知
+9、处理结果通知
 
 + 默认全部更新，不需做任何其他处理
 

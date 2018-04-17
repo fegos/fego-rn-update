@@ -1,17 +1,19 @@
 package com.hybrid.hotupdate;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.react.ReactPackage;
+import com.fego.android.service.HotUpdatePackage;
 import com.fego.android.service.ReactManager;
 import com.hybrid.hotupdate.rn.RNHelloActivity;
 import com.hybrid.hotupdate.rn.RNWorldActivity;
-import com.hybrid.hotupdate.utils.ConfigUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -27,11 +29,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-//        ReactManager.getInstance().loadBundleBehind();
     }
 
     private void updateData () {
-        ConfigUtil.getInstance().initReactManager(getApplication(), "index","index.jsbundle","common");
+        String sourceUrl = "https://raw.githubusercontent.com/fegos/fego-rn-update/master/hybriddemo/rn/bao/android/";
+        ReactManager.getInstance().init(getApplication(), "index", "index.jsbundle", sourceUrl);
+        List<ReactPackage> reactPackages = new ArrayList<>();
+        reactPackages.add(new HotUpdatePackage());
+        ReactManager.getInstance().loadBundle(reactPackages, BuildConfig.DEBUG, "common");
     }
 
     private void initViews() {
