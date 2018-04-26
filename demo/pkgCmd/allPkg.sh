@@ -106,20 +106,20 @@ fi
 if [ $businessName = 'no' ]; then
 	if [ $isexist = 0 ]; then
 		echo 'first pack'
-		if [ $platform = 'android' ]; then
-			mkdir -p $currentPath/../android/app/src/main/assets/rn/
-			cp -rf deploy/ $currentPath/../android/app/src/main/assets/rn/
-		fi
+		# if [ $platform = 'android' ]; then
+		# 	mkdir -p $currentPath/../android/app/src/main/assets/rn/
+		# 	cp -rf deploy/ $currentPath/../android/app/src/main/assets/rn/
+		# fi
 	fi
 	cd deploy	
 else 
 	cd deploy
 	if [ $isexist = 0 ]; then
 		echo 'first pack'
-		if [ $platform = 'android' ]; then
-			mkdir -p $currentPath/../android/app/src/main/assets/rn/$businessName/
-			cp -rf $businessName/ $currentPath/../android/app/src/main/assets/rn/$businessName/
-		fi
+		# if [ $platform = 'android' ]; then
+		# 	mkdir -p $currentPath/../android/app/src/main/assets/rn/$businessName/
+		# 	cp -rf $businessName/ $currentPath/../android/app/src/main/assets/rn/$businessName/
+		# fi
 	fi
 	cd $businessName
 fi
