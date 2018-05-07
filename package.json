@@ -21,6 +21,6 @@
 	},
 	"peerDependencies": {
 		"react": ">=16.0 <=16.2",
-		"react-native": ">=0.47 <0.54"
+		"react-native": "0.55"
 	}
 }
