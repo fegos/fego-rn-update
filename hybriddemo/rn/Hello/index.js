@@ -7,7 +7,6 @@ export default class Hello extends Component {
 		return (
 			<View style={[Style.container, { alignItems: 'center', justifyContent: 'center' }]}>
 				<Text>第一个rn页面</Text>
-				<Text>我要更新了</Text>
 			</View>
 		)
 	}

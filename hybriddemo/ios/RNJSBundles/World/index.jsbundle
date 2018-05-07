@@ -1,43 +1,43 @@
-@@ -14351,13 +14351,13 @@
+@@ -13952,15 +13952,15 @@
  n(e,
 -l
 +t
  ,r,
--t
-+l
+-t,a
++l,n
  )%7BOb
-@@ -14376,17 +14376,17 @@
+@@ -13979,17 +13979,17 @@
  roperty(
 -t
 +l
  ,%22__esMo
-@@ -14406,36 +14406,23 @@
+@@ -14009,38 +14009,25 @@
  !0%7D)
--,t.Style=void 0
- ;var 
--a=l
-+n=t
- (12)
+-,t.Style=void 0;var u=l(a
++;var a=t(n
+ %5B0%5D)
 -;
-+,a=
++,o=
  babe
-@@ -14456,30 +14456,37 @@
+@@ -14061,34 +14061,42 @@
  ult(
--a);l(24);var 
-+n),o=t(24),
- u=
--l
-+t
- (275),
-+s=t(277),
- i=ba
-@@ -14522,28 +14522,755 @@
- ult(
--u);t.Style=i.default
-+s),c=function(e)%7Bfunction t()%7Breturn babelHelpers.classCallCheck(this,t),babelHelpers.possibleConstructorReturn(this,(t.__proto__%7C%7CObject.getPrototypeOf(t)).apply(this,arguments))%7Dreturn babelHelpers.inherits(t,e),babelHelpers.createClass(t,%5B%7Bkey:%22render%22,value:function()%7Breturn a.default.createElement(o.View,%7Bstyle:%5Bu.Style.container,%7BalignItems:%22center%22,justifyContent:%22center%22%7D%5D%7D,a.default.createElement(o.Text,null,%22%5Cu7b2c%5Cu4e8c%5Cu4e2arn%5Cu9875%5Cu9762%22),a.default.createElement(o.TouchableHighlight,%7BunderlayColor:%22transparent%22,onPress:function()%7Bi.default.hotReload(%22World%22)%7D%7D,a.default.createElement(o.Text,null,%22%5Cu70ed%5Cu66f4%5Cu65b0%5Cu6d4b%5Cu8bd5%22)))%7D%7D%5D),t%7D(n.Component);l.default=c,o.AppRegistry.registerComponent(%22Second%22,function()%7Breturn c%7D)
- %7D,0)
-@@ -557816,158 +557816,672 @@
+-u);l(a%5B1%5D);var i=l(a%5B2
++a),u=t(n%5B1%5D),s=t(n%5B2%5D),i=t(n%5B3
+ %5D),
+-o
++c
+ =bab
+@@ -14133,26 +14133,755 @@
+ t(i)
+-;t.Style=o.default
++,p=(function(e)%7Bfunction t()%7Breturn babelHelpers.classCallCheck(this,t),babelHelpers.possibleConstructorReturn(this,(t.__proto__%7C%7CObject.getPrototypeOf(t)).apply(this,arguments))%7Dreturn babelHelpers.inherits(t,e),babelHelpers.createClass(t,%5B%7Bkey:%22render%22,value:function()%7Breturn o.default.createElement(u.View,%7Bstyle:%5Bs.Style.container,%7BalignItems:'center',justifyContent:'center'%7D%5D%7D,o.default.createElement(u.Text,null,%22%5Cu7b2c%5Cu4e8c%5Cu4e2arn%5Cu9875%5Cu9762%22),o.default.createElement(u.TouchableHighlight,%7BunderlayColor:%22transparent%22,onPress:function()%7Bc.default.hotReload(%22World%22)%7D%7D,o.default.createElement(u.Text,null,%22%5Cu70ed%5Cu66f4%5Cu65b0%5Cu6d4b%5Cu8bd5%22)))%7D%7D%5D),t%7D)(a.Component);l.default=p,u.AppRegistry.registerComponent('Second',function()%7Breturn p%7D)
+ %7D,11
+@@ -14891,16 +14891,20 @@
+ 2,17,307
++,309
+ %5D);%0A__d(
+@@ -529538,162 +529538,702 @@
  n(e,
--t,o,r)%7BObject.defineProperty(r,%22__esModule%22,%7Bvalue:!0%7D);var a=t(24);r.default=a.StyleSheet.create(%7Bcontainer:%7Bflex:1,backgroundColor:%22#EFEFEF%22%7D%7D)%7D,275
-+l,r,t)%7BObject.defineProperty(t,%22__esModule%22,%7Bvalue:!0%7D),t.Style=void 0;var a=l(12);babelHelpers.interopRequireDefault(a);l(24);var u=l(276),i=babelHelpers.interopRequireDefault(u);t.Style=i.default%7D,275);%0A__d(function(e,t,o,r)%7BObject.defineProperty(r,%22__esModule%22,%7Bvalue:!0%7D);var a=t(24);r.default=a.StyleSheet.create(%7Bcontainer:%7Bflex:1,backgroundColor:%22#EFEFEF%22%7D%7D)%7D,276);%0A__d(function(e,l,a,t)%7BObject.defineProperty(t,%22__esModule%22,%7Bvalue:!0%7D);var n=l(24),o=n.NativeModules.FegoRnUpdate,u=function()%7Bfunction e()%7BbabelHelpers.classCallCheck(this,e)%7Dreturn babelHelpers.createClass(e,null,%5B%7Bkey:%22hotReload%22,value:function(e)%7Bo.hotReload(e)%7D%7D%5D),e%7D();t.default=u%7D,277
- );%0A;
+-t,o,r,a)%7BObject.defineProperty(r,%22__esModule%22,%7Bvalue:!0%7D);var l=t(a%5B0%5D);r.default=l.StyleSheet.create(%7Bcontainer:%7Bflex:1,backgroundColor:'#EFEFEF'%7D%7D)%7D,307
++l,r,t,a)%7BObject.defineProperty(t,%22__esModule%22,%7Bvalue:!0%7D),t.Style=void 0;var u=l(a%5B0%5D);babelHelpers.interopRequireDefault(u);l(a%5B1%5D);var i=l(a%5B2%5D),o=babelHelpers.interopRequireDefault(i);t.Style=o.default%7D,307,%5B12,17,308%5D);%0A__d(function(e,t,o,r,a)%7BObject.defineProperty(r,%22__esModule%22,%7Bvalue:!0%7D);var l=t(a%5B0%5D);r.default=l.StyleSheet.create(%7Bcontainer:%7Bflex:1,backgroundColor:'#EFEFEF'%7D%7D)%7D,308,%5B17%5D);%0A__d(function(e,l,a,t,n)%7BObject.defineProperty(t,%22__esModule%22,%7Bvalue:!0%7D);var o=l(n%5B0%5D).NativeModules.FegoRnUpdate,u=(function()%7Bfunction e()%7BbabelHelpers.classCallCheck(this,e)%7Dreturn babelHelpers.createClass(e,null,%5B%7Bkey:%22hotReload%22,value:function(e)%7Bo.hotReload(e)%7D%7D%5D),e%7D)();t.default=u%7D,309
+ ,%5B17
