@@ -266,8 +266,6 @@
 				07C4D195207C658600A7995A /* Sources */,
 				07C4D196207C658600A7995A /* Frameworks */,
 				07C4D197207C658600A7995A /* Resources */,
-				92B589E1CD97523D0546A59A /* [CP] Embed Pods Frameworks */,
-				C1A432C50F7159B28727C1CC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -286,8 +284,6 @@
 				07C4D1AD207C658600A7995A /* Sources */,
 				07C4D1AE207C658600A7995A /* Frameworks */,
 				07C4D1AF207C658600A7995A /* Resources */,
-				C3CD09DD8F68347430FB14FB /* [CP] Embed Pods Frameworks */,
-				55DA5032E4211EB3B58B1786 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -359,36 +355,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		55DA5032E4211EB3B58B1786 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FEGORNUpdateTests/Pods-FEGORNUpdateTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		92B589E1CD97523D0546A59A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FEGORNUpdate/Pods-FEGORNUpdate-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		C1A3CB3670FF3EE416BF7C93 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -405,36 +371,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C1A432C50F7159B28727C1CC /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FEGORNUpdate/Pods-FEGORNUpdate-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C3CD09DD8F68347430FB14FB /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FEGORNUpdateTests/Pods-FEGORNUpdateTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F7BC8F6A975BAD46C31B137D /* [CP] Check Pods Manifest.lock */ = {

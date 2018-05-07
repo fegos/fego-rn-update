@@ -55,10 +55,7 @@ version = package['version']
   #  profile URL.
   #
 
-  s.author             = { "荆博" => "bjjingbo@corp.netease.com" }
-  # Or just: s.author    = "荆博"
-  # s.authors            = { "荆博" => "bjjingbo@corp.netease.com" }
-  # s.social_media_url   = "http://twitter.com/荆博"
+  s.author             = { "马腾" => "tengma@corp.netease.com" }
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #

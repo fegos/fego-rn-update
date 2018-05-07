@@ -11,7 +11,6 @@ target 'hotUpdate' do
   pod 'ZipArchive',               '~> 1.4.0'
   pod 'React’, :path => ‘../node_modules/react-native’, :subspecs => [
     'Core',
-    'BatchedBridge',
     'DevSupport', # Include this to enable In-App Devmenu if RN >= 0.43
     'RCTActionSheet',
     'RCTText',
@@ -21,13 +20,14 @@ target 'hotUpdate' do
     'RCTAnimation',
     'RCTLinkingIOS',
     'ART',
-    'jschelpers_legacy',
-    'cxxreact_legacy',
+    'jschelpers',
+    'cxxreact',
+    'CxxBridge'
     # needed for debugging
     # Add any other subspecs you want to use in your project
     ]
   # 如果你的RN版本 >= 0.42.0，则加入下面这行
-  pod "Yoga", :path => "../node_modules/react-native/ReactCommon/yoga"
+  pod "yoga", :path => "../node_modules/react-native/ReactCommon/yoga"
 
   pod 'FegoRnUpdate', :path => ‘../../‘
 
