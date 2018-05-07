@@ -472,7 +472,9 @@ public class ReactManager {
             FileUtils.upZipFile(file, rnDir);
             //b、type为"0"，bundle合并；否则继续
             File increFile = new File(rnDir + "increment.jsbundle");
+            boolean isIncreExist = false;
             if (increFile.exists()) {
+                isIncreExist = true;
                 String patchStr = getJsBundle(rnDir + "increment.jsbundle", false);
                 String assetsBundle = getJsBundle(rnDir + bundleName, false);
                 merge(patchStr, assetsBundle, rnDir);
@@ -481,7 +483,7 @@ public class ReactManager {
             //c、解析assetsConfig.txt，获取到需要删除的资源文件，进而删除
             File assetsFile = new File(rnDir + "assetsConfig.txt");
             if (assetsFile.exists()) {
-                if (!increFile.exists() && !TextUtils.isEmpty(businessName)) {
+                if (!isIncreExist && !TextUtils.isEmpty(businessName)) {
                     String patchStr = getJsBundle(rnDir + bundleName, false);
                     String assetsBundle = getJsBundle(sourceDir + "common/" + bundleName, false);
                     merge(patchStr, assetsBundle, rnDir);
