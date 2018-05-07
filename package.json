@@ -1,6 +1,6 @@
 {
 	"name": "fego-rn-update",
-	"version": "0.0.10",
+	"version": "0.0.11",
 	"description": "fego-rn官方热更新方案",
 	"keywords": [
 		"fego",
