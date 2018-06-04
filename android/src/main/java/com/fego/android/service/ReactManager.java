@@ -249,9 +249,9 @@ public class ReactManager {
         ReactService service = new ReactService();
         String rnConfigSourceUrl;
         if (TextUtils.isEmpty(businessName)) {
-            rnConfigSourceUrl = sourceUrl + "config";
+            rnConfigSourceUrl = sourceUrl + apkVersion + "_config";
         } else {
-            rnConfigSourceUrl = sourceUrl + businessName + "/config";
+            rnConfigSourceUrl = sourceUrl + businessName + "/"+ apkVersion + "_config";
         }
         configCall = service.downloadFile(rnConfigSourceUrl, new Callback<ResponseBody>() {
             @Override
