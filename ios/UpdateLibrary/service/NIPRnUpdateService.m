@@ -307,10 +307,12 @@
 - (void)downloadRemoteJSBundleConfigFileWithName:(NSString *)JSBundleName {
     __weak __typeof(self) weakSelf = self;
     NSString *remoteConfigPath = nil;
+	NSDictionary *localJSBundleInfo = self.localJSBundleInfoDic[JSBundleName];
+	NSString *localAppVersion = localJSBundleInfo[RN_APP_VERSION];
     if ([JSBundleName isEqualToString:RN_DEFAULT_BUNDLE_NAME]) {
-        remoteConfigPath = [NSString stringWithFormat:@"%@config", self.remoteJSBundleRootPath];
+        remoteConfigPath = [NSString stringWithFormat:@"%@%@_config", self.remoteJSBundleRootPath, localAppVersion];
     } else {
-        remoteConfigPath = [NSString stringWithFormat:@"%@%@/config", self.remoteJSBundleRootPath, JSBundleName];
+        remoteConfigPath = [NSString stringWithFormat:@"%@%@/%@_config", self.remoteJSBundleRootPath, JSBundleName, localAppVersion];
     }
     NSURL *URL = [NSURL URLWithString:remoteConfigPath];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
