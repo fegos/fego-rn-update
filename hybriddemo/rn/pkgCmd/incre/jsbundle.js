@@ -143,8 +143,8 @@ module.exports = function (oldVer, newVer, apkVer, platform, businessName, commo
 						let md5Value = Utils.generateFileMd5(zipPath + '.zip');
 						console.log("ZIP EXCELLENT!");
 						Utils.deleteFolder(zipPath);
-						fs.appendFileSync(incrementPathPrefix + '/config', apkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement + '_' + md5Value + ',');
-						fs.writeFileSync(pathPrefix + '/config', fs.readFileSync(incrementPathPrefix + 'config'))
+						fs.appendFileSync(incrementPathPrefix + apkVer + '/config', apkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement + '_' + md5Value + ',');
+						fs.writeFileSync(pathPrefix + '/' + apkVer + '_config', fs.readFileSync(incrementPathPrefix + apkVer + '/config'))
 					} else {
 						console.log("ZIP FAIL!");
 					}

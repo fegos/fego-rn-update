@@ -53,8 +53,8 @@ function unzipAll() {
 	allPathPrefix = pathPrefix + '/all/';
 
 	// 看增量config是否存在，如果存在，则删除
-	if (fs.existsSync(incrementPathPrefix + '/config')) {
-		fs.unlinkSync(incrementPathPrefix + '/config')
+	if (fs.existsSync(incrementPathPrefix + apkVer + '/config')) {
+		fs.unlinkSync(incrementPathPrefix + apkVer + '/config')
 	}
 
 	// 看全量包中是否有包存在（打包脚本在第一次使用时会自动生成unzipVer文件，如果没有该文件，说明没有包存在）
