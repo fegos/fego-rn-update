@@ -38,15 +38,17 @@ path=`sed -n "/$user/s/[^\']*$user:[^\']*\'\([^\']*\)'.*/\1/p" pkgCmd/config.js`
 echo $path
 apkVer=`sed -n "/apkVer/s/[^\']*apkVer:[^\']*\'\([^\']*\)'.*/\1/p" pkgCmd/config.js`
 echo $apkVer
+bundleName=`sed -n "/bundleName/s/[^\']*bundleName:[^\']*\'\([^\']*\)'.*/\1/p" pkgCmd/config.js`
+echo $bundleName
 
 if [ $type = 'test' ]; then
 	# 主执行脚本
 	if [ $platform = 'no' ]; then
 		# 全量包生成
-		sh ./pkgCmd/allPkg.sh android $path $apkVer $businessName
+		sh ./pkgCmd/allPkg.sh android $path $apkVer $businessName $bundleName
 		# 增量包生成
 		node ./pkgCmd/incregen.js android $businessName
-		sh ./pkgCmd/allPkg.sh ios $path $apkVer $businessName
+		sh ./pkgCmd/allPkg.sh ios $path $apkVer $businessName $bundleName
 		node ./pkgCmd/incregen.js ios $businessName
 	else 
 		sh ./pkgCmd/allPkg.sh $platform $path $apkVer $businessName

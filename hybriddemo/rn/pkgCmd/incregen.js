@@ -34,7 +34,7 @@ var incrementPathPrefix = '';
 // 全量包路径前缀：
 var allPathPrefix = '';
 //全量包bundle的名字
-const bundleName = 'index.jsbundle';
+const bundleName = configs.bundleName;
 //增量包里bundle的名字
 const incrementBundleName = 'increment.jsbundle';
 

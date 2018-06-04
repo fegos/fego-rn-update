@@ -14,6 +14,7 @@ let os = require('os');
 let username = os.userInfo().username;
 console.log(map[username]);
 module.exports = {
-	path: map[username],
-	apkVer: '1.0'
+	path: map[username],			// 在此处可以直接更改为自己要生成包的位置
+	apkVer: '1.0',					// 需跟apk版本保持一致
+	bundleName: 'index.jsbundle'	// 需跟原生中保持一致
 }

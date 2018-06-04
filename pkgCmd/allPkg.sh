@@ -5,10 +5,12 @@ platform=$1
 path=$2
 apkVer=$3
 businessName=$4
+bundleName=$5
 echo $platform
 echo $path
 echo $apkVer
 echo $businessName
+echo $bundleName
 
 # 创建生成包目录
 if [ $businessName = 'no' ]; then
@@ -45,18 +47,18 @@ if [ $businessName = 'no' ]; then
 	rm -rf deploy
 	mkdir -p deploy
 	#rn资源打包
-	react-native bundle --entry-file index.js --platform $platform --dev false --bundle-output deploy/index.jsbundle --assets-dest deploy
+	react-native bundle --entry-file index.js --platform $platform --dev false --bundle-output deploy/$bundleName --assets-dest deploy
 else 
 	#删除deploy目录下的所有文件
 	rm -rf deploy
 	mkdir -p deploy/common
 	mkdir -p deploy/$businessName
 	#rn资源打包
-	react-native bundle --entry-file $businessName/index.js --platform $platform --dev false --bundle-output deploy/$businessName/index.jsbundle --assets-dest deploy/$businessName
+	react-native bundle --entry-file $businessName/index.js --platform $platform --dev false --bundle-output deploy/$businessName/$bundleName --assets-dest deploy/$businessName
 	if [ $businessName = "common" ]; then
 		echo 'COMMON'
 	else 
-		react-native bundle --entry-file common/index.js --platform $platform --dev false --bundle-output deploy/common/index.jsbundle --assets-dest deploy/common
+		react-native bundle --entry-file common/index.js --platform $platform --dev false --bundle-output deploy/common/$bundleName --assets-dest deploy/common
 	fi
 fi
 

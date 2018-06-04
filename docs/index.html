@@ -383,8 +383,9 @@ manager.noJsServer = YES;
 				<ol start="3" type="1">
 					<li>修改配置文件
 						<code>config.js</code>中的
-						<code>path</code>和
-						<code>apkVer</code>（config.js文件位于pkgCmd/下）
+						<code>path</code>、
+						<code>apkVer</code>（config.js文件位于pkgCmd/下）以及
+						<code>bundleName</code>
 					</li>
 					<p>path：生成包存储路径 sdk：跟apk版本号一致</p>
 				</ol>
@@ -404,8 +405,9 @@ let os = require(&#39;os&#39;);
 let username = os.userInfo().username;
 console.log(map[username]);
 module.exports = {
-	path: map[username],//在此处可以直接更改为自己要生成包的位置
-	apkVer: &#39;1.0&#39;//需跟apk版本保持一致
+	path: map[username], // 在此处可以直接更改为自己要生成包的位置
+	apkVer: &#39;1.0&#39;, // 需跟apk版本保持一致
+	bundleName: &#39;index.jsbundle&#39; // 需跟原生中保持一致
 }</code></pre>
 				<ol start="4" type="1">
 					<li>更新字体文件</li>

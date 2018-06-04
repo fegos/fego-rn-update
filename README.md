@@ -324,10 +324,11 @@ manager.noJsServer = YES;
         └── increment       # 存放增量包
             └── README.md
 ```
-3. 修改配置文件`config.js`中的`path`和`apkVer`（config.js文件位于pkgCmd/下）
+3. 修改配置文件`config.js`中的`path`、`apkVer`（config.js文件位于pkgCmd/下）以及`bundleName`
 
 	path：生成包存储路径
 	apkVer：apk版本号
+	bundleName：打包bundle文件名
 
 ```
 // 写个用户名跟路径对应的字典，这个方便一个工程多个人维护使用，支持mac
@@ -347,7 +348,8 @@ let username = os.userInfo().username;
 console.log(map[username]);
 module.exports = {
 	path: map[username],//在此处可以直接更改为自己要生成包的位置
-	apkVer: '1.0'//需跟apk版本保持一致
+	apkVer: '1.0',//需跟apk版本保持一致
+	bundleName: 'index.jsbundle'//需跟原生中保持一致
 }
 ```
 4. 更新字体文件
@@ -387,7 +389,7 @@ sh pkg.sh platform type businessName
 **注意**：
 
 	+ android和ios需要统一启动文件名称，均为index.js，否则需要修改全量打包脚本；
-	+ bundle名字也需要两端统一为index.jsbundle，否则需要修改增量更新打包脚本
+	+ bundle名字也需要两端统一为index.jsbundle，原生和js端均可配置，一致即可
 
 7. js端调用
 
