@@ -23,8 +23,6 @@
 @property (nonatomic, strong) NSString *bundleName;
 @property (nonatomic, strong) NSString *moduleName;
 
-@property (nonatomic,  strong) UIView *loadingView;
-
 @end
 
 @implementation NIPRnController
@@ -154,15 +152,10 @@
 - (UIView *)loadingView {
     if (!_loadingView) {
         CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-        _loadingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenSize.width, screenSize.height)];
-        _loadingView.backgroundColor = [UIColor whiteColor];
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 298, 139)];
-        imageView.image = [UIImage imageNamed:@"default_logo"];
-        imageView.contentMode = UIViewContentModeScaleAspectFit;
-        [_loadingView addSubview:imageView];
-        CGPoint center = _loadingView.center;
-        center.y -= 31;
-        imageView.center = center;
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, screenSize.width, screenSize.height)];
+        imageView.image = [UIImage imageNamed:@"rn_loading"];
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        _loadingView = imageView;
     }
     return _loadingView;
 }
