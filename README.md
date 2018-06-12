@@ -4,7 +4,7 @@
 
 # 项目介绍
 
-+ 基于React Native(0.47~0.53)的热更新库
++ 基于React Native(0.47~0.55)的热更新库
 + 提供android和ios两端的支持
 + 支持全量、增量更新，配置简单，部署方便，一键打包
 + 支持字体文件更新
@@ -324,11 +324,12 @@ manager.noJsServer = YES;
         └── increment       # 存放增量包
             └── README.md
 ```
-3. 修改配置文件`config.js`中的`path`、`apkVer`（config.js文件位于pkgCmd/下）以及`bundleName`
+3. 修改配置文件`config.js`中的`path`、`apkVer`、`bundleName`及`maxGenNum`（config.js文件位于pkgCmd/下）
 
 	path：生成包存储路径
 	apkVer：apk版本号
 	bundleName：打包bundle文件名
+	maxGenNum：增量包生成最大数量
 
 ```
 // 写个用户名跟路径对应的字典，这个方便一个工程多个人维护使用，支持mac
@@ -349,7 +350,8 @@ console.log(map[username]);
 module.exports = {
 	path: map[username],//在此处可以直接更改为自己要生成包的位置
 	apkVer: '1.0',//需跟apk版本保持一致
-	bundleName: 'index.jsbundle'//需跟原生中保持一致
+	bundleName: 'index.jsbundle', //需跟原生中保持一致
+	maxGenNum: 2, // 增量包生成最大数量
 }
 ```
 4. 更新字体文件

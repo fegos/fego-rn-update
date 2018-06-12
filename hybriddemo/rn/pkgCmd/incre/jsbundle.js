@@ -39,6 +39,8 @@ module.exports = function (oldVer, newVer, apkVer, platform, businessName, commo
 	var allPathPrefix = pathPrefix + '/all/temp/';
 	// 全量包bundle的名字
 	const bundleName = configs.bundleName;
+	// 最大的增量版本生成个数
+	const maxVerNum = configs.maxGenNum;
 	// 增量包里bundle的名字
 	const incrementBundleName = 'increment.jsbundle';
 	// 全量包zip名字
@@ -143,7 +145,15 @@ module.exports = function (oldVer, newVer, apkVer, platform, businessName, commo
 						let md5Value = Utils.generateFileMd5(zipPath + '.zip');
 						console.log("ZIP EXCELLENT!");
 						Utils.deleteFolder(zipPath);
-						fs.appendFileSync(incrementPathPrefix + apkVer + '/config', apkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement + '_' + md5Value + ',');
+						if (!fs.existsSync(incrementPathPrefix + apkVer + '/config')) {
+							fs.appendFileSync(incrementPathPrefix + apkVer + '/config', apkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement + '_' + md5Value);
+						} else {
+							fs.appendFileSync(incrementPathPrefix + apkVer + '/config', ',' + apkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement + '_' + md5Value);
+						}
+						let configContent = fs.readFileSync(incrementPathPrefix + apkVer + '/config').toString();
+						if (configContent.split(',').length >= maxVerNum) {
+							fs.appendFileSync(incrementPathPrefix + apkVer + '/config', ',' + fs.readFileSync(pathPrefix + '/all/' + apkVer + '/config'));
+						}
 						fs.writeFileSync(pathPrefix + '/' + apkVer + '_config', fs.readFileSync(incrementPathPrefix + apkVer + '/config'))
 					} else {
 						console.log("ZIP FAIL!");

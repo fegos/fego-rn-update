@@ -15,5 +15,6 @@ console.log(map[username]);
 module.exports = {
 	path: map[username],
 	apkVer: '1.0',
-	bundleName: 'index.jsbundle'
+	bundleName: 'index.jsbundle',
+	maxGenNum: 2,
 }

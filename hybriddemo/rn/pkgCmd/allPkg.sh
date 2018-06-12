@@ -1,17 +1,12 @@
 # 使用方式
 # 在终端中执行脚本 sh pack.android.sh platform
 # platform可选，ios/android，默认情况下为android
+echo '*******************全量打包开始*****************'
 platform=$1
 path=$2
 apkVer=$3
 businessName=$4
 bundleName=$5
-echo $platform
-echo $path
-echo $apkVer
-echo $businessName
-echo $bundleName
-
 # 创建生成包目录
 if [ $businessName = 'no' ]; then
 	echo 'not unpack'
@@ -40,8 +35,7 @@ if [ ! -e "$configPath" ]; then
 else
 	 isexist=1
 fi 
-echo $isexist
-
+echo '*******bundle打包开始*******'
 # 打包到临时目录
 if [ $businessName = 'no' ]; then
 	rm -rf deploy
@@ -61,7 +55,9 @@ else
 		react-native bundle --entry-file common/index.js --platform $platform --dev false --bundle-output deploy/common/$bundleName --assets-dest deploy/common
 	fi
 fi
+echo '*******bundle打包结束*******'
 
+echo '*******config文件读取*******'
 #读取config文件的内容，确认当前应该生成的最新版本号
 for line in  `cat $configPath`
 do
@@ -75,7 +71,6 @@ if [ $isexist = 1 ]; then
 fi
 content=$apkVer"_"$newVer
 currentPath=`pwd`
-echo $currentPath
 if [ $businessName = 'no' ]; then
 	echo 'NOT UNPACK'
 elif [ $businessName = "common" ]; then
@@ -83,11 +78,9 @@ elif [ $businessName = "common" ]; then
 else 
 	node pkgCmd/unpack.js $businessName $currentPath/deploy/
 fi
-
 #压缩包的名字
 zipName="rn_"$apkVer"_"$newVer".zip"
-echo $newVer
-echo $zipName
+echo '*******打包字体文件*******'
 #拷贝字体文件到打包文件夹中
 if [ $businessName = 'no' ]; then
 	if [ ! -e "resource/" ]; then 
@@ -125,7 +118,7 @@ else
 	fi
 	cd $businessName
 fi
-
+echo '*******压缩包放于指定目录*******'
 #生成压缩包放于deploy/businessName下
 zip -r $zipName *
 if [ $businessName = 'no' ]; then
@@ -135,4 +128,7 @@ else
 	cd ../../
 	cp deploy/$businessName/$zipName $configDir
 fi
+echo '*******全量包config生成*******'
 node ./pkgCmd/md5.js $hotConfigDir $apkVer $zipName $content
+
+echo '*******************全量打包结束*****************'

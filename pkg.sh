@@ -30,16 +30,16 @@ elif [ $# = 3 ]; then
 	type=$2
 	businessName=$3
 fi
-echo $platform
-echo $type
+echo 'platform: '$platform
+echo 'type: '$type
 user=`who am i | awk '{print $1}'`
-echo $user
+echo 'user: '$user
 path=`sed -n "/$user/s/[^\']*$user:[^\']*\'\([^\']*\)'.*/\1/p" pkgCmd/config.js`
-echo $path
+echo 'path: '$path
 apkVer=`sed -n "/apkVer/s/[^\']*apkVer:[^\']*\'\([^\']*\)'.*/\1/p" pkgCmd/config.js`
-echo $apkVer
+echo 'apkVer: '$apkVer
 bundleName=`sed -n "/bundleName/s/[^\']*bundleName:[^\']*\'\([^\']*\)'.*/\1/p" pkgCmd/config.js`
-echo $bundleName
+echo 'bundleName: '$bundleName
 
 if [ $type = 'test' ]; then
 	# 主执行脚本
@@ -51,7 +51,7 @@ if [ $type = 'test' ]; then
 		sh ./pkgCmd/allPkg.sh ios $path $apkVer $businessName $bundleName
 		node ./pkgCmd/incregen.js ios $businessName
 	else 
-		sh ./pkgCmd/allPkg.sh $platform $path $apkVer $businessName
+		sh ./pkgCmd/allPkg.sh $platform $path $apkVer $businessName $bundleName
 		node ./pkgCmd/incregen.js $platform $businessName
 	fi
 else 

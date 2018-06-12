@@ -3,10 +3,10 @@
  */
 var configs = require('./config');
 var jsbundle = require('./incre/jsbundle');
-var assets = require('./incre/assets');
 var fs = require('fs');
 var zipper = require("zip-local");
 
+console.log('*******************增量开始******************');
 /******************** 变量说明 *******************/
 // sdk版本
 var apkVer = configs.apkVer;
@@ -25,17 +25,19 @@ if (process.argv.length === 3) {
 	platform = process.argv[2];
 	businessName = process.argv[3];
 }
-console.log(platform);
-console.log(businessName);
+console.log('platform: ' + platform);
+console.log('businessName: ' + businessName);
 // 包路径前缀
 var pathPrefix = '';
 // 增量包路径前缀；
 var incrementPathPrefix = '';
 // 全量包路径前缀：
 var allPathPrefix = '';
-//全量包bundle的名字
+// 全量包bundle的名字
 const bundleName = configs.bundleName;
-//增量包里bundle的名字
+// 最大的增量版本生成个数
+let maxVerNum = configs.maxGenNum;
+// 增量包里bundle的名字
 const incrementBundleName = 'increment.jsbundle';
 
 /******************** 生成步骤 *******************/
@@ -66,7 +68,7 @@ function unzipAll() {
 
 	// 读取全量包中unzipVer文件，获取最新版本号
 	let unzipVer = fs.readFileSync(allPathPrefix + apkVer + '/unzipVer');
-	console.log(unzipVer + '**************');
+	console.log('最新版本号:', unzipVer.toString());
 	newVer = Number.parseInt(unzipVer);
 	if (newVer === 0) {// 如果取到的值为0，则说明这是首次生成增量包，需要将最新版本更改为1
 		newVer = 1;
@@ -125,8 +127,9 @@ function generateIncrement() {
 		}
 		commonText = fs.readFileSync(commonAllPath + 'temp/' + apkVer + '/' + zipName + '/' + bundleName);
 	}
-	for (let i = newVer - 1; i >= 0; i--) {
-		new jsbundle(i, newVer, apkVer, platform, businessName, commonText);
+	maxVerNum = newVer - maxVerNum < 0 ? 0 : newVer - maxVerNum;
+	for (let i = newVer - 1; i >= maxVerNum; i--) {
+		new jsbundle(i, newVer, apkVer, platform, businessName, commonText, newVer - maxVerNum);
 	}
 }
 
