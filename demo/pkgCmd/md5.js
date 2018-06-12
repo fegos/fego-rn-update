@@ -1,5 +1,4 @@
 var fs = require('fs');
-var crypto = require('crypto');
 let Utils = require('./Utils');
 
 filepath = process.argv[2];

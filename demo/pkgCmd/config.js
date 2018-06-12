@@ -5,7 +5,7 @@ let map = {
 	 * 1、username为电脑用户名；
 	 * 2、path为包存储位置，末尾需要加“/”，否则会报路径错误
 	 */
-	sxiaoxia: '/Users/sxiaoxia/Desktop/work/kaiyuan/fego-rn-update/demo/increment/',
+	sxiaoxia: '/Users/sxiaoxia/Desktop/work/AllProjects/kaiyuan/fego-rn-update/demo/increment/',
 }
 // 获取系统信息
 let os = require('os');
@@ -15,5 +15,6 @@ console.log(map[username]);
 module.exports = {
 	path: map[username],
 	apkVer: '1.0',
-	bundleName: 'index.jsbundle'
+	bundleName: 'index.jsbundle',
+	maxGenNum: 2,
 }
