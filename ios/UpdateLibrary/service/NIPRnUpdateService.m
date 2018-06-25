@@ -257,8 +257,9 @@
             }
         }
     }
-    if (!needDownload && localJSBundleZipInfo) { // 存在已经下载完成的JSBundle压缩包
-        if ([self.curJSBundleName isEqualToString:JSBundleName] && self.successBlock) {
+    if (!needDownload) { // 存在已经下载完成的JSBundle压缩包
+        NSArray *files = [NIPRnHotReloadHelper filenameArrayOfType:@"zip" inDirectory:[self.localJSBundleZipRootPath stringByAppendingPathComponent:JSBundleName]];
+        if (files.count && [self.curJSBundleName isEqualToString:JSBundleName] && self.successBlock) {
             self.successBlock(JSBundleName);
         }
     }
