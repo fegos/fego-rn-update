@@ -27,6 +27,7 @@
 		07D3C565207F89DF004294A6 /* NIPRnUpdateService.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C559207F89DF004294A6 /* NIPRnUpdateService.m */; };
 		07D3C566207F89DF004294A6 /* NIPRnHotReloadHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C55B207F89DF004294A6 /* NIPRnHotReloadHelper.m */; };
 		18A98A7AEF30C6DC0F8B4C95 /* libPods-FEGORNUpdate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA6D1A5CCA9DABC5D83F5EFC /* libPods-FEGORNUpdate.a */; };
+		B04D9DA020E0FA6D005AAF24 /* NIPModules.m in Sources */ = {isa = PBXBuildFile; fileRef = B04D9D9E20E0FA6C005AAF24 /* NIPModules.m */; };
 		D47B9845BF2E1D72C497ADFC /* libPods-FEGORNUpdateTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 315E6AC83C7B73CAA1EE4BFC /* libPods-FEGORNUpdateTests.a */; };
 /* End PBXBuildFile section */
 
@@ -83,6 +84,8 @@
 		315E6AC83C7B73CAA1EE4BFC /* libPods-FEGORNUpdateTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FEGORNUpdateTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		94EB730046F23CB08136E17A /* Pods-FEGORNUpdateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FEGORNUpdateTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FEGORNUpdateTests/Pods-FEGORNUpdateTests.debug.xcconfig"; sourceTree = "<group>"; };
 		AA6D1A5CCA9DABC5D83F5EFC /* libPods-FEGORNUpdate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FEGORNUpdate.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B04D9D9E20E0FA6C005AAF24 /* NIPModules.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPModules.m; sourceTree = "<group>"; };
+		B04D9D9F20E0FA6C005AAF24 /* NIPModules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPModules.h; sourceTree = "<group>"; };
 		D6E867EAD4F2CACAB4952025 /* Pods-FEGORNUpdateTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FEGORNUpdateTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FEGORNUpdateTests/Pods-FEGORNUpdateTests.release.xcconfig"; sourceTree = "<group>"; };
 		E6046F578653012A8C9FC324 /* Pods-FEGORNUpdate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FEGORNUpdate.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FEGORNUpdate/Pods-FEGORNUpdate.debug.xcconfig"; sourceTree = "<group>"; };
 		F87B8AA51B9173FDEC9521DC /* Pods-FEGORNUpdate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FEGORNUpdate.release.xcconfig"; path = "Pods/Target Support Files/Pods-FEGORNUpdate/Pods-FEGORNUpdate.release.xcconfig"; sourceTree = "<group>"; };
@@ -159,6 +162,7 @@
 		07D3C53E207F89DF004294A6 /* UpdateLibrary */ = {
 			isa = PBXGroup;
 			children = (
+				B04D9D9D20E0FA6C005AAF24 /* modules */,
 				07D3C53F207F89DF004294A6 /* diff */,
 				07D3C54F207F89DF004294A6 /* controller */,
 				07D3C552207F89DF004294A6 /* manager */,
@@ -245,6 +249,16 @@
 			);
 			name = Pods;
 			sourceTree = "<group>";
+		};
+		B04D9D9D20E0FA6C005AAF24 /* modules */ = {
+			isa = PBXGroup;
+			children = (
+				B04D9D9F20E0FA6C005AAF24 /* NIPModules.h */,
+				B04D9D9E20E0FA6C005AAF24 /* NIPModules.m */,
+			);
+			name = modules;
+			path = UpdateLibrary/modules;
+			sourceTree = SOURCE_ROOT;
 		};
 		B5855ABA7121D683C98D7DD0 /* Frameworks */ = {
 			isa = PBXGroup;
@@ -405,6 +419,7 @@
 				07D3C564207F89DF004294A6 /* NIPRnManager.m in Sources */,
 				07C4D1AC207C658600A7995A /* main.m in Sources */,
 				07D3C563207F89DF004294A6 /* NIPRnController.m in Sources */,
+				B04D9DA020E0FA6D005AAF24 /* NIPModules.m in Sources */,
 				07D3C562207F89DF004294A6 /* NSMutableDictionary+DMPExtensions.m in Sources */,
 				07C4D19E207C658600A7995A /* AppDelegate.m in Sources */,
 				07D3C55D207F89DF004294A6 /* DiffMatchPatchCFUtilities.c in Sources */,
