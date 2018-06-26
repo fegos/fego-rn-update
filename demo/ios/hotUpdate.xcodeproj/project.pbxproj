@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* hotUpdateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* hotUpdateTests.m */; };
+		0745BE6520E2B0210095E845 /* RNJSBundles in Resources */ = {isa = PBXBuildFile; fileRef = 0745BE6420E2B0210095E845 /* RNJSBundles */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -15,7 +16,6 @@
 		2613080089230965D560DDA8 /* libPods-hotUpdateTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 044BAAE5B14AF38688CC245D /* libPods-hotUpdateTests.a */; };
 		60DAC0356F29E5D1643176D4 /* libPods-hotUpdate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B84E6176BC2CCAEE113B4C /* libPods-hotUpdate.a */; };
 		B05FBC9B200F5E5400FDEDDC /* ip.txt in Resources */ = {isa = PBXBuildFile; fileRef = B05FBC9A200F5E5400FDEDDC /* ip.txt */; };
-		B0C830641FDFC1C0002E1E9F /* index.jsbundle.meta in Resources */ = {isa = PBXBuildFile; fileRef = B0C830621FDFC1C0002E1E9F /* index.jsbundle.meta */; };
 		B0C830651FDFC1C0002E1E9F /* index.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = B0C830631FDFC1C0002E1E9F /* index.jsbundle */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +34,7 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* hotUpdateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = hotUpdateTests.m; sourceTree = "<group>"; };
 		044BAAE5B14AF38688CC245D /* libPods-hotUpdateTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hotUpdateTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0745BE6420E2B0210095E845 /* RNJSBundles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = RNJSBundles; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* hotUpdate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hotUpdate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = hotUpdate/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = hotUpdate/AppDelegate.m; sourceTree = "<group>"; };
@@ -48,7 +49,6 @@
 		AFB0102A1FDA917600E10C87 /* libNIPCommonUtilities.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libNIPCommonUtilities.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFB0102C1FDA917D00E10C87 /* libZipArchive.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libZipArchive.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B05FBC9A200F5E5400FDEDDC /* ip.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ip.txt; sourceTree = "<group>"; };
-		B0C830621FDFC1C0002E1E9F /* index.jsbundle.meta */ = {isa = PBXFileReference; lastKnownFileType = text; path = index.jsbundle.meta; sourceTree = "<group>"; };
 		B0C830631FDFC1C0002E1E9F /* index.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = index.jsbundle; sourceTree = "<group>"; };
 		B5D2947A3E97F49948E4C0AC /* Pods-hotUpdateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hotUpdateTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-hotUpdateTests/Pods-hotUpdateTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FDE7E326F5FCC292F60A4615 /* Pods-hotUpdate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hotUpdate.debug.xcconfig"; path = "Pods/Target Support Files/Pods-hotUpdate/Pods-hotUpdate.debug.xcconfig"; sourceTree = "<group>"; };
@@ -129,6 +129,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				0745BE6420E2B0210095E845 /* RNJSBundles */,
 				B05FBC9A200F5E5400FDEDDC /* ip.txt */,
 				13B07FAE1A68108700A75B9A /* hotUpdate */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -155,7 +156,6 @@
 			isa = PBXGroup;
 			children = (
 				B0C830631FDFC1C0002E1E9F /* index.jsbundle */,
-				B0C830621FDFC1C0002E1E9F /* index.jsbundle.meta */,
 			);
 			name = rn;
 			path = hotUpdate/rn;
@@ -183,8 +183,6 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				AE400D42F68142A60EEEDF64 /* [CP] Embed Pods Frameworks */,
-				1C5603988A3DBF3EC8C2E7B7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -200,13 +198,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "hotUpdate" */;
 			buildPhases = (
-				B02EB8D41FFC79C900307CC3 /* Set IP */,
 				0195797E13EF1DF3E65932E8 /* [CP] Check Pods Manifest.lock */,
+				B02EB8D41FFC79C900307CC3 /* Set IP */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
-				027E3552409DD2187A137945 /* [CP] Embed Pods Frameworks */,
-				AA9583B9C493BDD3A5337C66 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -268,9 +264,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B05FBC9B200F5E5400FDEDDC /* ip.txt in Resources */,
-				B0C830641FDFC1C0002E1E9F /* index.jsbundle.meta in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				0745BE6520E2B0210095E845 /* RNJSBundles in Resources */,
 				B0C830651FDFC1C0002E1E9F /* index.jsbundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -293,37 +289,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		027E3552409DD2187A137945 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-hotUpdate/Pods-hotUpdate-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		1C5603988A3DBF3EC8C2E7B7 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-hotUpdateTests/Pods-hotUpdateTests-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A4315F9ECFFA744C67E1B8D9 /* [CP] Check Pods Manifest.lock */ = {
@@ -341,37 +307,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		AA9583B9C493BDD3A5337C66 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-hotUpdate/Pods-hotUpdate-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		AE400D42F68142A60EEEDF64 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-hotUpdateTests/Pods-hotUpdateTests-frameworks.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B02EB8D41FFC79C900307CC3 /* Set IP */ = {
