@@ -28,12 +28,12 @@ typedef NS_ENUM(NSInteger, NIPHotUpdateStatus) {
 
 
 /**
- * 热更新成功回调
+ 资源下载成功回调
  */
 typedef void (^NIPRNUpdateSuccessBlock)(NSString *JSBundleName);
 
 /**
- * 热更新失败回调
+ 资源下载失败回调
  */
 typedef void (^NIPRNUpdateFailureBlock)(NSString *JSBundleName, NIPHotUpdateStatus failStatus);
 
