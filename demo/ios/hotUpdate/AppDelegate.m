@@ -18,55 +18,51 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  NIPRnManager *manager = [NIPRnManager sharedManager];
-  manager.remoteJSBundleRootPath = @"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/";
-  manager.useHotUpdate = YES;
-  manager.useJSServer = NO;
-  
-  [self loadDefaultKeyWindow];
-  
-  return YES;
+    [self loadDefaultKeyWindow];
+
+    return YES;
 }
 
 - (void)loadDefaultKeyWindow {
-  self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-  [self loadRnController];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [self loadRnController];
 }
 
 - (void)loadRnController {
-  NIPRnController *controller = [[NIPRnManager sharedManager] loadRNControllerWithModule:@"hotUpdate"];
-  
+    NIPRnManager *manager = [NIPRnManager sharedManager];
+    manager.remoteJSBundleRootPath = @"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/";
+    manager.useHotUpdate = NO;
+    manager.useJSServer = YES;
+    manager.jsServerPath = @"index";
+    //    NIPRnController *controller = [[NIPRnManager managerWithRemoteJSBundleRoot:@"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/"
+    //                                                                  useHotUpdate:NO
+    //                                                                andUseJSServer:YES]
+    //        loadRNControllerWithModule:@"hotUpdate"];
+    NIPRnController *controller = [manager loadRNControllerWithModule:@"hotUpdate"];
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-pointer-types"
-  self.window.rootViewController = controller;
+    self.window.rootViewController = controller;
 #pragma clang diagnostic pop
-  
-  [self.window makeKeyAndVisible];
+
+    [self.window makeKeyAndVisible];
 }
 
-
-- (void)failedHandlerWithStatus:(NIPHotUpdateStatus)status{
-  switch (status) {
-    case NIPHotUpdateStatusReadConfigFailed:
-    {
-      NSLog(@"NIPReadConfigFailed");
+- (void)failedHandlerWithStatus:(NIPHotUpdateStatus)status {
+    switch (status) {
+        case NIPHotUpdateStatusReadConfigFailed: {
+            NSLog(@"NIPReadConfigFailed");
+        } break;
+        case NIPHotUpdateStatusDownloadBundleFailed: {
+            NSLog(@"NIPDownloadBundleFailed");
+        } break;
+        case NIPHotUpdateStatusCheckMD5Failed: {
+            NSLog(@"NIPMD5CheckFailed");
+        } break;
+        default:
+            break;
     }
-      break;
-    case NIPHotUpdateStatusDownloadBundleFailed:
-    {
-      NSLog(@"NIPDownloadBundleFailed");
-    }
-      break;
-    case NIPHotUpdateStatusCheckMD5Failed:
-    {
-      NSLog(@"NIPMD5CheckFailed");
-    }
-      break;
-    default:
-      break;
-  }
 }
-
-
 
 @end
+

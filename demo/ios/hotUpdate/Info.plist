@@ -51,7 +51,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>SERVER_IP</key>
-	<string>10.235.2.8</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>song.ttf</string>
+	</array>
 </dict>
 </plist>

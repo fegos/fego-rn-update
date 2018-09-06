@@ -51,6 +51,11 @@ typedef void (^NIPRNUpdateFailureBlock)(NSString *JSBundleName, NIPHotUpdateStat
 @property (nonatomic, assign) BOOL useJSServer;
 
 /**
+ * JSServer的根路径
+ */
+@property (nonatomic, copy) NSString* jsServerPath;
+
+/**
  * 本地JSBundle根目录
  */
 @property (nonatomic, strong) NSString *localJSBundleRootPath;

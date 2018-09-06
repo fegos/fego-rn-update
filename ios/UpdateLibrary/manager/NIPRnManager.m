@@ -13,7 +13,7 @@
 #import "NIPRnHotReloadHelper.h"
 #import "DiffMatchPatch.h"
 
-#if __has_include(<React/RCTAssert.h>)
+#if __has_include(<React / RCTAssert.h>)
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #else
@@ -32,9 +32,7 @@
 
 @end
 
-
 @implementation NIPRnManager
-
 
 #pragma mark - JS Bridge
 
@@ -122,7 +120,7 @@ RCT_EXPORT_MODULE()
  */
 - (NSDictionary *)loadJSBundlesWithNames:(NSArray *)JSBundleNameArray {
     NSMutableDictionary *bridgeDic = [NSMutableDictionary dictionaryWithCapacity:JSBundleNameArray.count];
-    [JSBundleNameArray enumerateObjectsUsingBlock:^(NSString*  _Nonnull JSBundleName, NSUInteger idx, BOOL * _Nonnull stop) {
+    [JSBundleNameArray enumerateObjectsUsingBlock:^(NSString *_Nonnull JSBundleName, NSUInteger idx, BOOL *_Nonnull stop) {
         RCTBridge *bridge = [self loadJSBundleWithName:JSBundleName];
         bridgeDic[JSBundleName] = bridge;
     }];
@@ -139,14 +137,13 @@ RCT_EXPORT_MODULE()
     return [self loadJSBundlesWithNames:allJSBundleNameArray];
 }
 
-
 /**
  * 获取所有bundle名
  */
 - (NSArray *)getAllJSBundleNameArray {
     NSArray *bundlePathArray = [[NSBundle mainBundle] pathsForResourcesOfType:nil inDirectory:RN_JSBUNDLE_SUBPATH];
     NSMutableArray *bundleNameArray = [NSMutableArray arrayWithCapacity:bundlePathArray.count];
-    [bundlePathArray enumerateObjectsUsingBlock:^(NSString*  _Nonnull bundlePath, NSUInteger idx, BOOL * _Nonnull stop) {
+    [bundlePathArray enumerateObjectsUsingBlock:^(NSString *_Nonnull bundlePath, NSUInteger idx, BOOL *_Nonnull stop) {
         NSString *bundleName = [bundlePath lastPathComponent];
         if (bundleName) {
             [bundleNameArray addObject:bundleName];
@@ -161,7 +158,11 @@ RCT_EXPORT_MODULE()
 - (RCTBridge *)getBridgeForJSBundleWithName:(NSString *)JSBundleName {
     RCTBridge *bridge = nil;
     if (self.useJSServer) {
-        NSURL *bundelPath = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:@"index"];
+        NSString *bundleRoot = self.jsServerPath;
+        if (bundleRoot == nil || bundleRoot.length < 1) {
+            bundleRoot = @"index";
+        }
+        NSURL *bundelPath = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:bundleRoot fallbackResource:@"index"];
         bridge = [[RCTBridge alloc] initWithBundleURL:bundelPath
                                        moduleProvider:nil
                                         launchOptions:nil];
@@ -185,8 +186,7 @@ RCT_EXPORT_MODULE()
 /**
  * 获取JSBundlePath
  */
-- (NSURL *)getJSBundleURL:(NSString *)JSBundleName
-{
+- (NSURL *)getJSBundleURL:(NSString *)JSBundleName {
     NSURL *JSBundleURL = nil;
     NSString *subDir = [NSString stringWithFormat:@"%@/%@", RN_JSBUNDLE_SUBPATH, JSBundleName];
     if (self.useHotUpdate) {
@@ -202,11 +202,9 @@ RCT_EXPORT_MODULE()
         JSBundleURL = [[NSBundle mainBundle] URLForResource:@"index"
                                               withExtension:JSBUNDLE
                                                subdirectory:subDir];
-        
     }
     return JSBundleURL;
 }
-
 
 #pragma mark - 根据业务获取bundle
 
@@ -220,7 +218,6 @@ RCT_EXPORT_MODULE()
 - (RCTBridge *)getBridgeWithJSBundleName:(NSString *)JSBundleName {
     return [self.JSBundleDictionay objectForKey:JSBundleName];
 }
-
 
 #pragma mark - 加载rn controller
 
@@ -275,7 +272,6 @@ RCT_EXPORT_MODULE()
     NIPRnUpdateService *service = [NIPRnUpdateService sharedService];
     [service loadHotUpdatedJSBundleWithName:JSBundleName];
 }
-
 
 #pragma mark - Getters && Setters
 
