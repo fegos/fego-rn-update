@@ -12,7 +12,6 @@
 
 #if __has_include(<React/RCTAssert.h>)
 #import <React/RCTRootView.h>
-#import <React/RCTNavigator.h>
 #else
 #import "RCTRootView.h"
 #import "RCTNavigator.h"
@@ -118,17 +117,17 @@
 /*
  * 找到目标view下的RCTNavigator，并设置。
  */
-- (void)findAndSetNavigator:(UIView *)view {
-    for (UIView *subview in view.subviews) {
-        if ([subview isKindOfClass:[RCTNavigator class]]) {
-            self.navigator = (RCTNavigator *)subview;
-            break;
-        }
-        else{
-            [self findAndSetNavigator:subview];
-        }
-    }
-}
+//- (void)findAndSetNavigator:(UIView *)view {
+//    for (UIView *subview in view.subviews) {
+//        if ([subview isKindOfClass:[RCTNavigator class]]) {
+//            self.navigator = (RCTNavigator *)subview;
+//            break;
+//        }
+//        else{
+//            [self findAndSetNavigator:subview];
+//        }
+//    }
+//}
 
 
 #pragma mark - Setters && Getters
@@ -141,13 +140,13 @@
     }
 }
 
-- (RCTNavigator *)navigator {
-    if (!_navigator) {
-        UIView *rootContentView = [self.rctRootView valueForKey:@"contentView"];
-        [self findAndSetNavigator:rootContentView];
-    }
-    return _navigator;
-}
+//- (RCTNavigator *)navigator {
+//    if (!_navigator) {
+//        UIView *rootContentView = [self.rctRootView valueForKey:@"contentView"];
+//        [self findAndSetNavigator:rootContentView];
+//    }
+//    return _navigator;
+//}
 
 - (UIView *)loadingView {
     if (!_loadingView) {
