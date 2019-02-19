@@ -30,9 +30,9 @@
 
 - (void)loadRnController {
     NIPRnManager *manager = [NIPRnManager sharedManager];
-    manager.remoteJSBundleRootPath = @"https://raw.githubusercontent.com/fegos/fego-rn-update/0.58.4/demo/increment/ios/";
-    manager.useHotUpdate = YES;
-    manager.useJSServer = NO;
+    manager.remoteJSBundleRootPath = @"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/";
+    manager.useHotUpdate = NO;
+    manager.useJSServer = YES;
     manager.jsServerPath = @"index";
     //    NIPRnController *controller = [[NIPRnManager managerWithRemoteJSBundleRoot:@"https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/ios/"
     //                                                                  useHotUpdate:NO
