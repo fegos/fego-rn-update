@@ -32,6 +32,7 @@ export default class App extends Component {
         <Text style={styles.welcome}>Welcome to FegoRNUpdate!</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>升级React Native到0.58.4更新测试</Text>
+        <Text style={styles.instructions}>更新成功</Text>
         <Text style={styles.instructions}>
           {instructions}
         </Text>
