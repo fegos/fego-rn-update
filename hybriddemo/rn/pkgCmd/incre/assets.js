@@ -7,16 +7,17 @@ var rd = require('../third/file_list');
 var diff = require('../third/diff_match_patch_uncompressed');
 var dmp = new diff.diff_match_patch();
 var crypto = require('crypto');
+let Utils = require('../Utils');
 
 /**
  * 资源增量生成
  * @param {*} oldVer bundle老版本号
  * @param {*} newVer bundle新版本号
- * @param {*} sdkVer sdk版本号
+ * @param {*} apkVer sdk版本号
  * @param {*} platform 平台，android/ios
  * @param {*} isIncrement 是否增量
  */
-module.exports = function (oldVer, newVer, sdkVer, platform, isIncrement) {
+module.exports = function (oldVer, newVer, apkVer, platform, isIncrement, businessName) {
 
 	var resultOld = [];//旧版本下的所有文件数组
 	var resultNew = [];//新版本下所有的文件数组
@@ -28,40 +29,47 @@ module.exports = function (oldVer, newVer, sdkVer, platform, isIncrement) {
 	var addArray = [];//增加的文件数组
 
 	//包路径前缀
-	var pathPrefix = configs.path + platform;
+	var pathPrefix = '';
+	if (businessName === 'no') {
+		pathPrefix = configs.path + platform;
+	} else {
+		pathPrefix = configs.path + platform + '/' + businessName;
+	}
 	//增量包路径前缀；
 	var incrementPathPrefix = pathPrefix + '/increment/';
 	//全量包路径前缀：
 	var allPathPrefix = pathPrefix + '/all/temp/';
 	//全量包zip名字
-	var zipName = 'rn_' + sdkVer;
+	var zipName = 'rn_' + apkVer;
 	var oldZipName = zipName + '_' + oldVer;
 	var newZipName = zipName + '_' + newVer;
 	// //是否是增量包，'0'表示是增量包，'1'表示全量包
 	// var isIncrement = '0';
 	//增量包zip名字
-	var incrementName = 'rn_' + sdkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement;
+	var incrementName = 'rn_' + apkVer + '_' + newVer + '_' + oldVer + '_' + isIncrement;
 
 	/**
 	 * 读取指定目录下的所有文件
 	 */
 	function readFileList() {
 		var dir = platform === 'android' ? '' : '/assets'
-		if (!fs.existsSync(allPathPrefix + sdkVer + '/' + newZipName + dir)) {
+		if (!fs.existsSync(allPathPrefix + apkVer + '/' + newZipName + dir)) {
 			return;
 		}
-		if (!fs.existsSync(allPathPrefix + sdkVer + '/' + oldZipName + dir)) {
+		let max;
+		if (!fs.existsSync(allPathPrefix + apkVer + '/' + oldZipName + dir)) {
 			// 此时应让将最新的包中的资源放到增量包中
-			resultNew = rd.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + dir); max = resultNew.length;
+			resultNew = rd.readFileSync(allPathPrefix + apkVer + '/' + newZipName + dir);
+			max = resultNew.length;
 			for (let i = 0; i < max; i++) {
 				if (platform === 'android' && resultNew[i].search('drawable-') !== -1) {
 					resultNew[i] = resultNew[i].substring(resultNew[i].indexOf('drawable-'));
 					mkDir(resultNew[i]);
-					fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]));
+					fs.writeFileSync(incrementPathPrefix + apkVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + apkVer + '/' + newZipName + '/' + resultNew[i]));
 				} else if (platform === 'ios' && resultNew[i].search('assets') !== -1) {
 					resultNew[i] = resultNew[i].substring(resultNew[i].indexOf('assets'));
 					mkDir(resultNew[i]);
-					fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]));
+					fs.writeFileSync(incrementPathPrefix + apkVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + apkVer + '/' + newZipName + '/' + resultNew[i]));
 				} else {
 					//删除不是drawable下的文件
 					resultNew.splice(i, 1);
@@ -72,9 +80,9 @@ module.exports = function (oldVer, newVer, sdkVer, platform, isIncrement) {
 			resultNew = [];
 			return;
 		}
-		resultOld = rd.readFileSync(allPathPrefix + sdkVer + '/' + oldZipName + dir);
-		resultNew = rd.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + dir);
-		let max = resultOld.length;
+		resultOld = rd.readFileSync(allPathPrefix + apkVer + '/' + oldZipName + dir);
+		resultNew = rd.readFileSync(allPathPrefix + apkVer + '/' + newZipName + dir);
+		max = resultOld.length;
 		for (let i = 0; i < max; i++) {
 			if (platform === 'android' && resultOld[i].search('drawable-') !== -1) {
 				resultOld[i] = resultOld[i].substring(resultOld[i].indexOf('drawable-'))
@@ -108,25 +116,13 @@ module.exports = function (oldVer, newVer, sdkVer, platform, isIncrement) {
 
 	function mkDir(newPath) {
 		let path = newPath.split('/');
-		let sumPath = incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/';
+		let sumPath = incrementPathPrefix + apkVer + '/' + incrementName + '/';
 		for (let i = 0; i < path.length - 1; i++) {
 			if (!fs.existsSync(sumPath + path[i])) {
 				fs.mkdirSync(sumPath + path[i]);
 			}
 			sumPath = sumPath + path[i] + '/';
 		}
-	}
-
-	/**
-	 * 生成文件md5值
-	 * @param {*} filepath 
-	 */
-	function generateFileMd5(filepath) {
-		var buffer = fs.readFileSync(filepath);
-		var fsHash = crypto.createHash('md5');
-		fsHash.update(buffer);
-		var md5 = fsHash.digest('hex');
-		return md5;
 	}
 
 	/**
@@ -138,21 +134,21 @@ module.exports = function (oldVer, newVer, sdkVer, platform, isIncrement) {
 		for (let i = 0, max = resultNew.length; i < max; i++) {
 			if (typeof hashOld[resultNew[i]] !== "undefined") {
 				// 相同元素,比较两个文件大小进一步判断
-				let oldMd5 = generateFileMd5(allPathPrefix + sdkVer + '/' + oldZipName + '/' + resultNew[i]);
-				let newMd5 = generateFileMd5(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]);
+				let oldMd5 = Utils.generateFileMd5(allPathPrefix + apkVer + '/' + oldZipName + '/' + resultNew[i]);
+				let newMd5 = Utils.generateFileMd5(allPathPrefix + apkVer + '/' + newZipName + '/' + resultNew[i]);
 				if (oldMd5 !== newMd5) {
-					console.log(allPathPrefix + sdkVer + '/' + oldZipName + '/' + resultNew[i]);
-					console.log(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]);
+					console.log(allPathPrefix + apkVer + '/' + oldZipName + '/' + resultNew[i]);
+					console.log(allPathPrefix + apkVer + '/' + newZipName + '/' + resultNew[i]);
 					addArray.push(resultNew[i]);
 					mkDir(resultNew[i]);
-					fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]));
+					fs.writeFileSync(incrementPathPrefix + apkVer + '/' + incrementName + '/' + resultNew[i], fs.readFileSync(allPathPrefix + apkVer + '/' + newZipName + '/' + resultNew[i]));
 				}
 			} else {
 				// 不同元素    
 				addArray.push(resultNew[i])
 				mkDir(resultNew[i]);
-				let tmp = fs.readFileSync(allPathPrefix + sdkVer + '/' + newZipName + '/' + resultNew[i]);
-				fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/' + resultNew[i], tmp);
+				let tmp = fs.readFileSync(allPathPrefix + apkVer + '/' + newZipName + '/' + resultNew[i]);
+				fs.writeFileSync(incrementPathPrefix + apkVer + '/' + incrementName + '/' + resultNew[i], tmp);
 			}
 		}
 		for (let i = 0, max = resultOld.length; i < max; i++) {
@@ -178,7 +174,7 @@ module.exports = function (oldVer, newVer, sdkVer, platform, isIncrement) {
 				fileString = fileString + delArray[i] + ',';
 			}
 		}
-		fs.writeFileSync(incrementPathPrefix + sdkVer + '/' + newVer + '/' + incrementName + '/assetsConfig.txt', fileString);
+		fs.writeFileSync(incrementPathPrefix + apkVer + '/' + incrementName + '/assetsConfig.txt', fileString);
 	}
 
 	generateIncrement();

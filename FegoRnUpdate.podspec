@@ -55,10 +55,7 @@ version = package['version']
   #  profile URL.
   #
 
-  s.author             = { "荆博" => "bjjingbo@corp.netease.com" }
-  # Or just: s.author    = "荆博"
-  # s.authors            = { "荆博" => "bjjingbo@corp.netease.com" }
-  # s.social_media_url   = "http://twitter.com/荆博"
+  s.author             = { "马腾" => "tengma@corp.netease.com" }
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -136,14 +133,14 @@ version = package['version']
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # s.dependency "JSONKit", "~> 1.4"
-  s.source_files = 'ios/*'
-  s.public_header_files = 'ios/*.h'
+  s.source_files = 'ios/UpdateLibrary/**/*'
+  s.public_header_files = 'ios/UpdateLibrary/**/*.h'
   s.dependency 'AFNetworking', '~> 3.1.0'
   s.dependency 'ZipArchive', '~> 1.4.0'
   s.dependency 'React'
 
   s.subspec 'diff' do |diff|
-      diff.source_files = 'ios/diff/*'
-      diff.public_header_files = 'ios/diff/*.h'
+      diff.source_files = 'ios/UpdateLibrary/diff/*'
+      diff.public_header_files = 'ios/UpdateLibrary/diff/*.h'
   end
 end

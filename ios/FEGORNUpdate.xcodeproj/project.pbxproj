@@ -1,0 +1,671 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		07C4D19E207C658600A7995A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D19D207C658600A7995A /* AppDelegate.m */; };
+		07C4D1A1207C658600A7995A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1A0207C658600A7995A /* ViewController.m */; };
+		07C4D1A4207C658600A7995A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07C4D1A2207C658600A7995A /* Main.storyboard */; };
+		07C4D1A6207C658600A7995A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07C4D1A5207C658600A7995A /* Assets.xcassets */; };
+		07C4D1A9207C658600A7995A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07C4D1A7207C658600A7995A /* LaunchScreen.storyboard */; };
+		07C4D1AC207C658600A7995A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1AB207C658600A7995A /* main.m */; };
+		07C4D1B6207C658600A7995A /* FEGORNUpdateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1B5207C658600A7995A /* FEGORNUpdateTests.m */; };
+		07C4D1C1207C660E00A7995A /* FEGORNUpdateHelpersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1C0207C660E00A7995A /* FEGORNUpdateHelpersTests.m */; };
+		07C4D1C3207C663100A7995A /* FEGORNUpdateServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 07C4D1C2207C663100A7995A /* FEGORNUpdateServiceTests.m */; };
+		07D3C55D207F89DF004294A6 /* DiffMatchPatchCFUtilities.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C541207F89DF004294A6 /* DiffMatchPatchCFUtilities.c */; };
+		07D3C55E207F89DF004294A6 /* NSString+UnicharUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C546207F89DF004294A6 /* NSString+UnicharUtilities.m */; };
+		07D3C55F207F89DF004294A6 /* DiffMatchPatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C549207F89DF004294A6 /* DiffMatchPatch.m */; };
+		07D3C560207F89DF004294A6 /* NSString+JavaSubstring.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C54A207F89DF004294A6 /* NSString+JavaSubstring.m */; };
+		07D3C561207F89DF004294A6 /* NSString+UriCompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C54B207F89DF004294A6 /* NSString+UriCompatibility.m */; };
+		07D3C562207F89DF004294A6 /* NSMutableDictionary+DMPExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C54E207F89DF004294A6 /* NSMutableDictionary+DMPExtensions.m */; };
+		07D3C563207F89DF004294A6 /* NIPRnController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C551207F89DF004294A6 /* NIPRnController.m */; };
+		07D3C564207F89DF004294A6 /* NIPRnManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C554207F89DF004294A6 /* NIPRnManager.m */; };
+		07D3C565207F89DF004294A6 /* NIPRnUpdateService.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C559207F89DF004294A6 /* NIPRnUpdateService.m */; };
+		07D3C566207F89DF004294A6 /* NIPRnHotReloadHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C55B207F89DF004294A6 /* NIPRnHotReloadHelper.m */; };
+		18A98A7AEF30C6DC0F8B4C95 /* libPods-FEGORNUpdate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA6D1A5CCA9DABC5D83F5EFC /* libPods-FEGORNUpdate.a */; };
+		B04D9DA020E0FA6D005AAF24 /* NIPModules.m in Sources */ = {isa = PBXBuildFile; fileRef = B04D9D9E20E0FA6C005AAF24 /* NIPModules.m */; };
+		D47B9845BF2E1D72C497ADFC /* libPods-FEGORNUpdateTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 315E6AC83C7B73CAA1EE4BFC /* libPods-FEGORNUpdateTests.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		07C4D1B2207C658600A7995A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 07C4D191207C658600A7995A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 07C4D198207C658600A7995A;
+			remoteInfo = FEGORNUpdate;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		07C4D199207C658600A7995A /* FEGORNUpdate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FEGORNUpdate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		07C4D19C207C658600A7995A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		07C4D19D207C658600A7995A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		07C4D19F207C658600A7995A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		07C4D1A0207C658600A7995A /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		07C4D1A3207C658600A7995A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		07C4D1A5207C658600A7995A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		07C4D1A8207C658600A7995A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		07C4D1AA207C658600A7995A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		07C4D1AB207C658600A7995A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		07C4D1B1207C658600A7995A /* FEGORNUpdateTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FEGORNUpdateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		07C4D1B5207C658600A7995A /* FEGORNUpdateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FEGORNUpdateTests.m; sourceTree = "<group>"; };
+		07C4D1B7207C658600A7995A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		07C4D1C0207C660E00A7995A /* FEGORNUpdateHelpersTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FEGORNUpdateHelpersTests.m; sourceTree = "<group>"; };
+		07C4D1C2207C663100A7995A /* FEGORNUpdateServiceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FEGORNUpdateServiceTests.m; sourceTree = "<group>"; };
+		07D3C540207F89DF004294A6 /* DiffMatchPatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiffMatchPatch.h; sourceTree = "<group>"; };
+		07D3C541207F89DF004294A6 /* DiffMatchPatchCFUtilities.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = DiffMatchPatchCFUtilities.c; sourceTree = "<group>"; };
+		07D3C542207F89DF004294A6 /* JXArcCompatibilityMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JXArcCompatibilityMacros.h; sourceTree = "<group>"; };
+		07D3C543207F89DF004294A6 /* NSString+UriCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+UriCompatibility.h"; sourceTree = "<group>"; };
+		07D3C544207F89DF004294A6 /* NSString+JavaSubstring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JavaSubstring.h"; sourceTree = "<group>"; };
+		07D3C545207F89DF004294A6 /* NSMutableDictionary+DMPExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+DMPExtensions.h"; sourceTree = "<group>"; };
+		07D3C546207F89DF004294A6 /* NSString+UnicharUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+UnicharUtilities.m"; sourceTree = "<group>"; };
+		07D3C547207F89DF004294A6 /* DiffMatchPatchCFUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiffMatchPatchCFUtilities.h; sourceTree = "<group>"; };
+		07D3C548207F89DF004294A6 /* nip_rn_utils_diff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nip_rn_utils_diff.h; sourceTree = "<group>"; };
+		07D3C549207F89DF004294A6 /* DiffMatchPatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiffMatchPatch.m; sourceTree = "<group>"; };
+		07D3C54A207F89DF004294A6 /* NSString+JavaSubstring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JavaSubstring.m"; sourceTree = "<group>"; };
+		07D3C54B207F89DF004294A6 /* NSString+UriCompatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+UriCompatibility.m"; sourceTree = "<group>"; };
+		07D3C54C207F89DF004294A6 /* NSString+UnicharUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+UnicharUtilities.h"; sourceTree = "<group>"; };
+		07D3C54D207F89DF004294A6 /* MinMaxMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinMaxMacros.h; sourceTree = "<group>"; };
+		07D3C54E207F89DF004294A6 /* NSMutableDictionary+DMPExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+DMPExtensions.m"; sourceTree = "<group>"; };
+		07D3C550207F89DF004294A6 /* NIPRnController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPRnController.h; sourceTree = "<group>"; };
+		07D3C551207F89DF004294A6 /* NIPRnController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPRnController.m; sourceTree = "<group>"; };
+		07D3C553207F89DF004294A6 /* NIPRnManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPRnManager.h; sourceTree = "<group>"; };
+		07D3C554207F89DF004294A6 /* NIPRnManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPRnManager.m; sourceTree = "<group>"; };
+		07D3C556207F89DF004294A6 /* NIPRnDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPRnDefines.h; sourceTree = "<group>"; };
+		07D3C558207F89DF004294A6 /* NIPRnUpdateService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPRnUpdateService.h; sourceTree = "<group>"; };
+		07D3C559207F89DF004294A6 /* NIPRnUpdateService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPRnUpdateService.m; sourceTree = "<group>"; };
+		07D3C55B207F89DF004294A6 /* NIPRnHotReloadHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPRnHotReloadHelper.m; sourceTree = "<group>"; };
+		07D3C55C207F89DF004294A6 /* NIPRnHotReloadHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPRnHotReloadHelper.h; sourceTree = "<group>"; };
+		315E6AC83C7B73CAA1EE4BFC /* libPods-FEGORNUpdateTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FEGORNUpdateTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		94EB730046F23CB08136E17A /* Pods-FEGORNUpdateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FEGORNUpdateTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FEGORNUpdateTests/Pods-FEGORNUpdateTests.debug.xcconfig"; sourceTree = "<group>"; };
+		AA6D1A5CCA9DABC5D83F5EFC /* libPods-FEGORNUpdate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FEGORNUpdate.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B04D9D9E20E0FA6C005AAF24 /* NIPModules.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIPModules.m; sourceTree = "<group>"; };
+		B04D9D9F20E0FA6C005AAF24 /* NIPModules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NIPModules.h; sourceTree = "<group>"; };
+		D6E867EAD4F2CACAB4952025 /* Pods-FEGORNUpdateTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FEGORNUpdateTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FEGORNUpdateTests/Pods-FEGORNUpdateTests.release.xcconfig"; sourceTree = "<group>"; };
+		E6046F578653012A8C9FC324 /* Pods-FEGORNUpdate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FEGORNUpdate.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FEGORNUpdate/Pods-FEGORNUpdate.debug.xcconfig"; sourceTree = "<group>"; };
+		F87B8AA51B9173FDEC9521DC /* Pods-FEGORNUpdate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FEGORNUpdate.release.xcconfig"; path = "Pods/Target Support Files/Pods-FEGORNUpdate/Pods-FEGORNUpdate.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		07C4D196207C658600A7995A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18A98A7AEF30C6DC0F8B4C95 /* libPods-FEGORNUpdate.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07C4D1AE207C658600A7995A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D47B9845BF2E1D72C497ADFC /* libPods-FEGORNUpdateTests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		07C4D190207C658600A7995A = {
+			isa = PBXGroup;
+			children = (
+				07D3C53E207F89DF004294A6 /* UpdateLibrary */,
+				07C4D19B207C658600A7995A /* FEGORNUpdate */,
+				07C4D1B4207C658600A7995A /* FEGORNUpdateTests */,
+				07C4D19A207C658600A7995A /* Products */,
+				992508DAE8FE5162B123B687 /* Pods */,
+				B5855ABA7121D683C98D7DD0 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		07C4D19A207C658600A7995A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				07C4D199207C658600A7995A /* FEGORNUpdate.app */,
+				07C4D1B1207C658600A7995A /* FEGORNUpdateTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		07C4D19B207C658600A7995A /* FEGORNUpdate */ = {
+			isa = PBXGroup;
+			children = (
+				07C4D19C207C658600A7995A /* AppDelegate.h */,
+				07C4D19D207C658600A7995A /* AppDelegate.m */,
+				07C4D19F207C658600A7995A /* ViewController.h */,
+				07C4D1A0207C658600A7995A /* ViewController.m */,
+				07C4D1A2207C658600A7995A /* Main.storyboard */,
+				07C4D1A5207C658600A7995A /* Assets.xcassets */,
+				07C4D1A7207C658600A7995A /* LaunchScreen.storyboard */,
+				07C4D1AA207C658600A7995A /* Info.plist */,
+				07C4D1AB207C658600A7995A /* main.m */,
+			);
+			path = FEGORNUpdate;
+			sourceTree = "<group>";
+		};
+		07C4D1B4207C658600A7995A /* FEGORNUpdateTests */ = {
+			isa = PBXGroup;
+			children = (
+				07C4D1B5207C658600A7995A /* FEGORNUpdateTests.m */,
+				07C4D1C0207C660E00A7995A /* FEGORNUpdateHelpersTests.m */,
+				07C4D1C2207C663100A7995A /* FEGORNUpdateServiceTests.m */,
+				07C4D1B7207C658600A7995A /* Info.plist */,
+			);
+			path = FEGORNUpdateTests;
+			sourceTree = "<group>";
+		};
+		07D3C53E207F89DF004294A6 /* UpdateLibrary */ = {
+			isa = PBXGroup;
+			children = (
+				B04D9D9D20E0FA6C005AAF24 /* modules */,
+				07D3C53F207F89DF004294A6 /* diff */,
+				07D3C54F207F89DF004294A6 /* controller */,
+				07D3C552207F89DF004294A6 /* manager */,
+				07D3C555207F89DF004294A6 /* macros */,
+				07D3C557207F89DF004294A6 /* service */,
+				07D3C55A207F89DF004294A6 /* helpers */,
+			);
+			path = UpdateLibrary;
+			sourceTree = "<group>";
+		};
+		07D3C53F207F89DF004294A6 /* diff */ = {
+			isa = PBXGroup;
+			children = (
+				07D3C540207F89DF004294A6 /* DiffMatchPatch.h */,
+				07D3C541207F89DF004294A6 /* DiffMatchPatchCFUtilities.c */,
+				07D3C542207F89DF004294A6 /* JXArcCompatibilityMacros.h */,
+				07D3C543207F89DF004294A6 /* NSString+UriCompatibility.h */,
+				07D3C544207F89DF004294A6 /* NSString+JavaSubstring.h */,
+				07D3C545207F89DF004294A6 /* NSMutableDictionary+DMPExtensions.h */,
+				07D3C546207F89DF004294A6 /* NSString+UnicharUtilities.m */,
+				07D3C547207F89DF004294A6 /* DiffMatchPatchCFUtilities.h */,
+				07D3C548207F89DF004294A6 /* nip_rn_utils_diff.h */,
+				07D3C549207F89DF004294A6 /* DiffMatchPatch.m */,
+				07D3C54A207F89DF004294A6 /* NSString+JavaSubstring.m */,
+				07D3C54B207F89DF004294A6 /* NSString+UriCompatibility.m */,
+				07D3C54C207F89DF004294A6 /* NSString+UnicharUtilities.h */,
+				07D3C54D207F89DF004294A6 /* MinMaxMacros.h */,
+				07D3C54E207F89DF004294A6 /* NSMutableDictionary+DMPExtensions.m */,
+			);
+			path = diff;
+			sourceTree = "<group>";
+		};
+		07D3C54F207F89DF004294A6 /* controller */ = {
+			isa = PBXGroup;
+			children = (
+				07D3C550207F89DF004294A6 /* NIPRnController.h */,
+				07D3C551207F89DF004294A6 /* NIPRnController.m */,
+			);
+			path = controller;
+			sourceTree = "<group>";
+		};
+		07D3C552207F89DF004294A6 /* manager */ = {
+			isa = PBXGroup;
+			children = (
+				07D3C553207F89DF004294A6 /* NIPRnManager.h */,
+				07D3C554207F89DF004294A6 /* NIPRnManager.m */,
+			);
+			path = manager;
+			sourceTree = "<group>";
+		};
+		07D3C555207F89DF004294A6 /* macros */ = {
+			isa = PBXGroup;
+			children = (
+				07D3C556207F89DF004294A6 /* NIPRnDefines.h */,
+			);
+			path = macros;
+			sourceTree = "<group>";
+		};
+		07D3C557207F89DF004294A6 /* service */ = {
+			isa = PBXGroup;
+			children = (
+				07D3C558207F89DF004294A6 /* NIPRnUpdateService.h */,
+				07D3C559207F89DF004294A6 /* NIPRnUpdateService.m */,
+			);
+			path = service;
+			sourceTree = "<group>";
+		};
+		07D3C55A207F89DF004294A6 /* helpers */ = {
+			isa = PBXGroup;
+			children = (
+				07D3C55B207F89DF004294A6 /* NIPRnHotReloadHelper.m */,
+				07D3C55C207F89DF004294A6 /* NIPRnHotReloadHelper.h */,
+			);
+			path = helpers;
+			sourceTree = "<group>";
+		};
+		992508DAE8FE5162B123B687 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E6046F578653012A8C9FC324 /* Pods-FEGORNUpdate.debug.xcconfig */,
+				F87B8AA51B9173FDEC9521DC /* Pods-FEGORNUpdate.release.xcconfig */,
+				94EB730046F23CB08136E17A /* Pods-FEGORNUpdateTests.debug.xcconfig */,
+				D6E867EAD4F2CACAB4952025 /* Pods-FEGORNUpdateTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		B04D9D9D20E0FA6C005AAF24 /* modules */ = {
+			isa = PBXGroup;
+			children = (
+				B04D9D9F20E0FA6C005AAF24 /* NIPModules.h */,
+				B04D9D9E20E0FA6C005AAF24 /* NIPModules.m */,
+			);
+			name = modules;
+			path = UpdateLibrary/modules;
+			sourceTree = SOURCE_ROOT;
+		};
+		B5855ABA7121D683C98D7DD0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AA6D1A5CCA9DABC5D83F5EFC /* libPods-FEGORNUpdate.a */,
+				315E6AC83C7B73CAA1EE4BFC /* libPods-FEGORNUpdateTests.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		07C4D198207C658600A7995A /* FEGORNUpdate */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07C4D1BA207C658600A7995A /* Build configuration list for PBXNativeTarget "FEGORNUpdate" */;
+			buildPhases = (
+				C1A3CB3670FF3EE416BF7C93 /* [CP] Check Pods Manifest.lock */,
+				07C4D195207C658600A7995A /* Sources */,
+				07C4D196207C658600A7995A /* Frameworks */,
+				07C4D197207C658600A7995A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FEGORNUpdate;
+			productName = FEGORNUpdate;
+			productReference = 07C4D199207C658600A7995A /* FEGORNUpdate.app */;
+			productType = "com.apple.product-type.application";
+		};
+		07C4D1B0207C658600A7995A /* FEGORNUpdateTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07C4D1BD207C658600A7995A /* Build configuration list for PBXNativeTarget "FEGORNUpdateTests" */;
+			buildPhases = (
+				F7BC8F6A975BAD46C31B137D /* [CP] Check Pods Manifest.lock */,
+				07C4D1AD207C658600A7995A /* Sources */,
+				07C4D1AE207C658600A7995A /* Frameworks */,
+				07C4D1AF207C658600A7995A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				07C4D1B3207C658600A7995A /* PBXTargetDependency */,
+			);
+			name = FEGORNUpdateTests;
+			productName = FEGORNUpdateTests;
+			productReference = 07C4D1B1207C658600A7995A /* FEGORNUpdateTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		07C4D191207C658600A7995A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = Eric;
+				TargetAttributes = {
+					07C4D198207C658600A7995A = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
+					07C4D1B0207C658600A7995A = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 07C4D198207C658600A7995A;
+					};
+				};
+			};
+			buildConfigurationList = 07C4D194207C658600A7995A /* Build configuration list for PBXProject "FEGORNUpdate" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 07C4D190207C658600A7995A;
+			productRefGroup = 07C4D19A207C658600A7995A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				07C4D198207C658600A7995A /* FEGORNUpdate */,
+				07C4D1B0207C658600A7995A /* FEGORNUpdateTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		07C4D197207C658600A7995A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07C4D1A9207C658600A7995A /* LaunchScreen.storyboard in Resources */,
+				07C4D1A6207C658600A7995A /* Assets.xcassets in Resources */,
+				07C4D1A4207C658600A7995A /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07C4D1AF207C658600A7995A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C1A3CB3670FF3EE416BF7C93 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FEGORNUpdate-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F7BC8F6A975BAD46C31B137D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FEGORNUpdateTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		07C4D195207C658600A7995A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07C4D1A1207C658600A7995A /* ViewController.m in Sources */,
+				07D3C560207F89DF004294A6 /* NSString+JavaSubstring.m in Sources */,
+				07D3C55E207F89DF004294A6 /* NSString+UnicharUtilities.m in Sources */,
+				07D3C561207F89DF004294A6 /* NSString+UriCompatibility.m in Sources */,
+				07D3C564207F89DF004294A6 /* NIPRnManager.m in Sources */,
+				07C4D1AC207C658600A7995A /* main.m in Sources */,
+				07D3C563207F89DF004294A6 /* NIPRnController.m in Sources */,
+				B04D9DA020E0FA6D005AAF24 /* NIPModules.m in Sources */,
+				07D3C562207F89DF004294A6 /* NSMutableDictionary+DMPExtensions.m in Sources */,
+				07C4D19E207C658600A7995A /* AppDelegate.m in Sources */,
+				07D3C55D207F89DF004294A6 /* DiffMatchPatchCFUtilities.c in Sources */,
+				07D3C565207F89DF004294A6 /* NIPRnUpdateService.m in Sources */,
+				07D3C55F207F89DF004294A6 /* DiffMatchPatch.m in Sources */,
+				07D3C566207F89DF004294A6 /* NIPRnHotReloadHelper.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07C4D1AD207C658600A7995A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07C4D1B6207C658600A7995A /* FEGORNUpdateTests.m in Sources */,
+				07C4D1C1207C660E00A7995A /* FEGORNUpdateHelpersTests.m in Sources */,
+				07C4D1C3207C663100A7995A /* FEGORNUpdateServiceTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		07C4D1B3207C658600A7995A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 07C4D198207C658600A7995A /* FEGORNUpdate */;
+			targetProxy = 07C4D1B2207C658600A7995A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		07C4D1A2207C658600A7995A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07C4D1A3207C658600A7995A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		07C4D1A7207C658600A7995A /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				07C4D1A8207C658600A7995A /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		07C4D1B8207C658600A7995A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		07C4D1B9207C658600A7995A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		07C4D1BB207C658600A7995A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E6046F578653012A8C9FC324 /* Pods-FEGORNUpdate.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 46GT6USSP9;
+				INFOPLIST_FILE = FEGORNUpdate/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lede.FEGORNUpdate;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		07C4D1BC207C658600A7995A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F87B8AA51B9173FDEC9521DC /* Pods-FEGORNUpdate.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 46GT6USSP9;
+				INFOPLIST_FILE = FEGORNUpdate/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lede.FEGORNUpdate;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		07C4D1BE207C658600A7995A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 94EB730046F23CB08136E17A /* Pods-FEGORNUpdateTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 46GT6USSP9;
+				INFOPLIST_FILE = FEGORNUpdateTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lede.FEGORNUpdateTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FEGORNUpdate.app/FEGORNUpdate";
+			};
+			name = Debug;
+		};
+		07C4D1BF207C658600A7995A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D6E867EAD4F2CACAB4952025 /* Pods-FEGORNUpdateTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 46GT6USSP9;
+				INFOPLIST_FILE = FEGORNUpdateTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lede.FEGORNUpdateTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FEGORNUpdate.app/FEGORNUpdate";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		07C4D194207C658600A7995A /* Build configuration list for PBXProject "FEGORNUpdate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07C4D1B8207C658600A7995A /* Debug */,
+				07C4D1B9207C658600A7995A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		07C4D1BA207C658600A7995A /* Build configuration list for PBXNativeTarget "FEGORNUpdate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07C4D1BB207C658600A7995A /* Debug */,
+				07C4D1BC207C658600A7995A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		07C4D1BD207C658600A7995A /* Build configuration list for PBXNativeTarget "FEGORNUpdateTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07C4D1BE207C658600A7995A /* Debug */,
+				07C4D1BF207C658600A7995A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 07C4D191207C658600A7995A /* Project object */;
+}

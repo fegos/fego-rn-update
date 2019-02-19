@@ -1,15 +1,17 @@
 {
-	"name": "hotUpdate",
-	"version": "0.0.1",
-	"private": true,
-	"scripts": {
-		"start": "node node_modules/react-native/local-cli/cli.js start",
-		"test": "jest"
-	},
-	"dependencies": {
-		"fego-rn-update": "file:../",
-		"react": "16.0.0-alpha.12",
-		"react-native": "0.47.2",
-		"zip-local": "^0.3.4"
-	}
+  "name": "hotupdate",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "init": "yarn install --no-optional -s --registry=https://registry.npm.taobao.org && && cd demo/ios && pod install",
+    "update": "yarn && cd demo/ios && pod update",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "fego-rn-update": "file:../",
+    "react": "16.6.3",
+    "react-native": "0.58.4",
+    "zip-local": "^0.3.4"
+  }
 }

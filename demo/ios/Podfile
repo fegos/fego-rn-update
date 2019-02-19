@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+platform :ios, '9.0'
 source 'https://github.com/CocoaPods/Specs.git'
 
 target 'hotUpdate' do
@@ -11,7 +11,6 @@ target 'hotUpdate' do
   pod 'ZipArchive',               '~> 1.4.0'
   pod 'React’, :path => ‘../node_modules/react-native’, :subspecs => [
     'Core',
-    'BatchedBridge',
     'DevSupport', # Include this to enable In-App Devmenu if RN >= 0.43
     'RCTActionSheet',
     'RCTText',
@@ -21,15 +20,19 @@ target 'hotUpdate' do
     'RCTAnimation',
     'RCTLinkingIOS',
     'ART',
-    'jschelpers_legacy',
-    'cxxreact_legacy',
+    # 'jschelpers',
+    'cxxreact',
+    'CxxBridge'
     # needed for debugging
     # Add any other subspecs you want to use in your project
     ]
   # 如果你的RN版本 >= 0.42.0，则加入下面这行
-  pod "Yoga", :path => "../node_modules/react-native/ReactCommon/yoga"
+  pod "yoga", :path => "../node_modules/react-native/ReactCommon/yoga"
 
   pod 'FegoRnUpdate', :path => ‘../../‘
+  pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
+  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   target 'hotUpdateTests' do
     inherit! :search_paths

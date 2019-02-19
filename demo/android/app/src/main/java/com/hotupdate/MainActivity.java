@@ -39,20 +39,14 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
      * 更新reactview
      */
     private void updateReactView() {
+        ReactManager.getInstance().init(getApplication(), "index", "index.jsbundle", "https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/");
         if (mReactRootView == null) {
             if (mReactInstanceManager == null) {
                 if (ReactManager.getInstance().getRnInstanceManager() == null) {
-                    // 设置react native启动文件的名称
-                    ReactManager.getInstance().setJsMainModuleName("index");
-                    // 设置加载的文件名
-                    ReactManager.getInstance().setBundleName("index.jsbundle");
-                    // 设置热更新路径
-                    ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/");
-                    ReactManager.getInstance().setSuccessListener(this);
                     List<ReactPackage> reactPackages = new ArrayList<>();
                     // 添加额外的package
                     reactPackages.add(new HotUpdatePackage());
-                    ReactManager.getInstance().init(getApplication(), reactPackages, BuildConfig.DEBUG);
+                    ReactManager.getInstance().loadBundle(reactPackages, BuildConfig.DEBUG, "");
                 }
                 mReactInstanceManager = ReactManager.getInstance().getRnInstanceManager();
             }
@@ -199,8 +193,8 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ReactManager.getInstance().unzipBundle();
-                        ReactManager.getInstance().doReloadBundle();
+                        ReactManager.getInstance().unzipBundle("");
+                        ReactManager.getInstance().doReloadBundle("");
                         // 下次启动应用时更新
                         // ReactManager.getInstance().unzipBundle();
                     }

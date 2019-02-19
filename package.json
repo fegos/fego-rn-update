@@ -1,26 +1,25 @@
 {
-	"name": "fego-rn-update",
-	"version": "0.0.9",
-	"description": "fego-rn官方热更新方案",
-	"keywords": [
-		"fego",
-		"react",
-		"react native",
-		"hot update"
-	],
-	"repository": {
-		"type": "git",
-		"url": "http://github.com/fegos/fego-rn-update"
-	},
-	"bugs": {
-		"url": "http://github.com/fegos/fego-rn-update/issues"
-	},
-	"license": "MIT",
-	"dependencies": {
-		"zip-local": "^0.3.4"
-	},
-	"peerDependencies": {
-		"react": ">=16.0 <=16.2",
-		"react-native" : ">=0.47 <0.54"
-	}
+  "name": "fego-rn-update",
+  "version": "0.0.14",
+  "description": "fego-rn官方热更新方案",
+  "keywords": [
+    "fego",
+    "react",
+    "react native",
+    "hot update"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/fegos/fego-rn-update"
+  },
+  "bugs": {
+    "url": "http://github.com/fegos/fego-rn-update/issues"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "zip-local": "^0.3.4"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.47 <=0.58"
+  }
 }

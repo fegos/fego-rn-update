@@ -1,5 +1,7 @@
 package com.fego.android.module;
 
+import android.app.Activity;
+
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -11,6 +13,7 @@ import com.fego.android.service.ReactManager;
  */
 public class HotUpdateModule extends ReactContextBaseJavaModule {
 
+    ReactApplicationContext context;
     /**
      * Instantiates a new Hot update module.
      *
@@ -18,6 +21,7 @@ public class HotUpdateModule extends ReactContextBaseJavaModule {
      */
     public HotUpdateModule(ReactApplicationContext reactContext) {
         super(reactContext);
+        context = reactContext;
     }
 
     /**
@@ -34,7 +38,16 @@ public class HotUpdateModule extends ReactContextBaseJavaModule {
      * Hot reload.
      */
     @ReactMethod
-    public void hotReload() {
-        ReactManager.getInstance().loadBundleBehind();
+    public void hotReload(String businessName) {
+        ReactManager.SuccessListener sucListener = null;
+        ReactManager.FailListener failListener = null;
+        Activity activity = getCurrentActivity();
+        if (activity != null && activity instanceof ReactManager.SuccessListener) {
+            sucListener = (ReactManager.SuccessListener)activity;
+        }
+        if (activity != null && activity instanceof ReactManager.FailListener) {
+            failListener = (ReactManager.FailListener)activity;
+        }
+        ReactManager.getInstance().loadBundleBehind(businessName, sucListener, failListener);
     }
 }

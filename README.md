@@ -4,10 +4,13 @@
 
 # 项目介绍
 
-+ 基于React Native(0.47~0.53)的热更新库
++ 基于React Native(0.47~0.58)的热更新库
 + 提供android和ios两端的支持
-+ 支持热更新、增量更新，配置简单，部署方便，一键打包
++ 支持全量、增量更新，配置简单，部署方便，一键打包
 + 支持字体文件更新
++ 支持拆包下的全量、增量更新
++ 针对apk版本进行更新，支持非强制更新模式
++ 支持设置增量包最大生成数量，限制包生成个数
 
 # 支持平台
 
@@ -25,6 +28,7 @@
 
 + ios和android两端使用同一套脚本
 + 打全量包和增量包只需要执行一个脚本即可
++ 无论拆包还是非拆包，统一使用一套脚本
 
 # 目录结构
 
@@ -32,40 +36,48 @@
 
 ```
 .
-├── FegoRnUpdate.podspec    # ios pod库的描述文件
-├── android                 # android原生源码
-├── demo                    # demo示例
-│   ├── App.js              # js主代码
-│   ├── android             # android工程
-│   ├── increment           # 增量包、全量包存储路径
-│   ├── index.js            # js入口文件
-│   ├── ios                 # ios工程
-│   ├── pkg.sh              # 主打包脚本文件
-│   ├── pkgCmd              # 辅助脚本文件夹
-│   └── resource            # 存放字体文件
-├── increment               # 包生成目录
-├── index.js                # js源码
-├── ios                     # ios源码
-├── package.json            # 项目描述文件
-├── pkg.sh                  # 打包文件
-└── pkgCmd                  # 辅助脚本文件夹
+├── FegoRnUpdate.podspec      # ios pod库的描述文件
+├── android                   # android原生源码
+├── demo                      # demo示例
+│   ├── App.js                # js主代码
+│   ├── android               # android工程
+│   ├── increment             # 增量包、全量包存储路径
+│   ├── index.js              # js入口文件
+│   ├── ios                   # ios工程
+│   ├── pkg.sh                # 主打包脚本文件
+│   ├── pkgCmd                # 辅助脚本文件夹
+│   └── resource              # 存放字体文件
+├── docs                      # api文档
+├── hybriddemo                # 拆包demo
+│   ├── android               # android工程
+│   ├── ios                   # ios工程
+│   └── rn                    # js相关代码
+├── increment                 # 包生成目录
+├── index.js                  # js源码
+├── ios                       # ios源码
+├── package.json              # 项目描述文件
+├── pkg.sh                    # 打包文件
+└── pkgCmd                    # 辅助脚本文件夹
 ```
 + 打包脚本目录
 
 ```
 .
-├── pkg.sh                  # 整体打包文件，包含全量打包和增量打包，主执行脚本文件
-└── pkgCmd                  # 辅助脚本文件夹
-    ├── config.js           # 配置文件，主要配置生成包的存储位置
-    ├── incre               # bundle和assets增量生成脚本
-    │   ├── assets.js       # 资源assets增量生成脚本
-    │   └── jsbundle.js     # bundle增量生成脚本
-    ├── incregen.js         # 增量包生成脚本
-	├── md5.js				# 生成全量更新config
-    ├── pack.sh             # 全量包打包脚本
-    └── third               # 依赖的第三方脚本
-        ├── diff_match_patch_uncompressed.js    # 文件差异生成脚本
-        └── file_list.js    # 列出目录下所有的文件
+├── pkg.sh                    # 整体打包文件，包含全量打包和增量打包，主执行脚本文件
+└── pkgCmd                    # 辅助脚本文件夹
+    ├── allPkg.sh             # 全量包打包脚本
+    ├── bundleDiff.js         # 拆包时bundle的diff
+    ├── config.js             # 配置文件，主要配置生成包的存储位置
+    ├── incre                 # bundle和assets增量生成脚本
+    │   ├── assets.js         # 资源assets增量生成脚本
+    │   └── jsbundle.js       # bundle增量生成脚本
+    ├── incregen.js           # 增量包生成脚本
+    ├── md5.js                # 生成全量更新config
+    ├── third                 # 依赖的第三方脚本
+    │   ├── diff_match_patch_uncompressed.js      # 文件差异生成脚本
+    │   └── file_list.js      # 列出目录下所有的文件
+    ├── unpack.js             # 拆包
+    └── Utils                 # 公共方法
 ```
 
 # 安装
@@ -118,37 +130,41 @@ dependencies {
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 
-6. 生成`ReactRootView`时，需要使用ReactManager中生成的`RnInstanceManager`，设置相应的参数如下：
+6. 初始化`ReactManager`
+```
+ReactManager.getInstance().init(getApplication(), "index", "index.jsbundle", "https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/");
+```
+
+7. 生成`ReactRootView`时，需要使用ReactManager中生成的`RnInstanceManager`：
 
 ```
+// 业务名
+String businessName = "";
 if (mReactRootView == null) {
     mReactRootView = new ReactRootView(this);
     if (mReactInstanceManager == null) {
         if (ReactManager.getInstance().getRnInstanceManager() == null) {
-            // 设置react native启动文件的名称
-            ReactManager.getInstance().setJsMainModuleName("index");
-            // 设置加载的文件名
-            ReactManager.getInstance().setBundleName("index.jsbundle");
-            // 设置热更新路径
-            ReactManager.getInstance().setSourceUrl("https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/increment/");
             List<ReactPackage> reactPackages = new ArrayList<>();
             // 添加额外的package
             reactPackages.add(new HotUpdatePackage());
-            ReactManager.getInstance().init(getApplication(), reactPackages, BuildConfig.DEBUG);
+            ReactManager.getInstance().loadBundle(reactPackages, BuildConfig.DEBUG, "");
         }
-        mReactInstanceManager = ReactManager.getInstance().getRnInstanceManager();
+		mReactInstanceManager = ReactManager.getInstance().getRnInstanceManager();
 	}
     mReactRootView.startReactApplication(mReactInstanceManager, "hotUpdate", null);
     setContentView(mReactRootView);
 }
 ```
 
-7、调用热更新代码（也可js端调用）
+8、调用热更新代码（也可js端调用）
 
 ```
-ReactManager.getInstance().loadBundleBehind();
+String businessName = "";
+SuccessListener sucListener;// 一般是activity实现了该接口，可以为null，为null时表示不交给用户处理，而是内部默认解压加载
+FailListener failListener;	// 一般是activity实现了该接口，可以为null
+ReactManager.getInstance().loadBundleBehind(businessName, sucListener, failListenr);
 ```
-8、处理结果通知
+9、处理结果通知
 
 + 默认全部更新，不需做任何其他处理
 
@@ -198,10 +214,11 @@ public void onFail(ReactManager.NPReactManagerTask task) {
 
 如果实现了SuccessListener，则不会解压新包，也不会自动加载最新bundle，所有成功后的操作需要自行实现，可以调用下面的方法进行重新加载
 ```
+String businessName = "";
 // 仅解压包，不执行下面的操作时下次启动自动更新
-ReactManager.getInstance().unzipBundle();
+ReactManager.getInstance().unzipBundle(businessName);
 // 加载新bundle
-ReactManager.getInstance().doReloadBundle();
+ReactManager.getInstance().doReloadBundle(businessName);
 ```
 ### IOS
 1. pod库引入热更新库，Podfile中添加：
@@ -287,65 +304,34 @@ manager.noJsServer = YES;
 
 2. 在想要生成包的地方创建包存储目录
 
-存储目录可以参考`node_modules/fego-rn-update/`下的`increment文件夹`
+存储目录可以参考`node_modules/fego-rn-update/`下的`increment文件夹`（其内部是android和ios目录均是自动生成的）
 
 ```
 .
 ├── React-Native 热更新目录
-├── android             # 存放android生成的包
-│   ├── all             # 存放全量包
-│   │   └── README.md   
-│   │   └── temp		# 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
-│	├── config			# 最终的config，该文件会自动生成，默认为增量
-│   └── increment       # 存放增量包
-│       └── README.md
-└── ios                 # 存放ios生成的包
-    ├── all             # 存放全量包
-    │   └── README.md
-	│   └── temp		# 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
-	├── config			# 最终的config，该文件会自动生成，默认为增量
-    └── increment       # 存放增量包
-        └── README.md
+├── android                 # 存放android生成的包
+│   └── businessName        # 如果是拆包的情况，会多这一级目录，非拆包的情况，不存在这一级目录
+│   	├── all             # 存放全量包
+│       │   ├── README.md   
+│       │   └── temp        # 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
+│    	├── config          # 最终的config，该文件会自动生成，默认为增量
+│       └── increment       # 存放增量包
+│           └── README.md
+└── ios                     # 存放ios生成的包
+	└── businessName
+        ├── all             # 存放全量包
+        │   └── README.md
+        │   └── temp        # 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
+        ├── config          # 最终的config，该文件会自动生成，默认为增量
+        └── increment       # 存放增量包
+            └── README.md
 ```
-```
-├── android
-│   ├── all
-│   │   ├── 1.0
-│   │   │   ├── config
-│   │   │   ├── rn_1.0_0.zip
-│   │   │   └── rn_1.0_1.zip
-│   │   ├── README.md
-│   │   ├── config
-│   │   └── temp
-│   │       └── 1.0
-│   │           ├── rn_1.0_0
-│   │           │   ├── index.jsbundle
-│   │           │   └── index.jsbundle.meta
-│   │           ├── rn_1.0_1
-│   │           │   ├── index.jsbundle
-│   │           │   └── index.jsbundle.meta
-│   │           └── rn_1.0_2
-│   │               ├── index.jsbundle
-│   │               └── index.jsbundle.meta
-│   ├── config
-│   └── increment
-│       ├── 1.0
-│       │   ├── 1
-│       │   │   └── rn_1.0_1_0_0.zip
-│       │   └── 2
-│       ├── README.md
-│       └── config
-└── ios
-    ├── all
-    │   └── README.md
-    └── increment
-        └── README.md
-```
-
-3. 修改配置文件`config.js`中的`path`和`sdk`（config.js文件位于pkgCmd/下）
+3. 修改配置文件`config.js`中的`path`、`apkVer`、`bundleName`及`maxGenNum`（config.js文件位于pkgCmd/下）
 
 	path：生成包存储路径
-	sdk：跟apk版本号一致
+	apkVer：apk版本号
+	bundleName：打包bundle文件名
+	maxGenNum：增量包生成最大数量
 
 ```
 // 写个用户名跟路径对应的字典，这个方便一个工程多个人维护使用，支持mac
@@ -365,20 +351,26 @@ let username = os.userInfo().username;
 console.log(map[username]);
 module.exports = {
 	path: map[username],//在此处可以直接更改为自己要生成包的位置
-	sdkVer: '1.0'//需跟apk版本保持一致
+	apkVer: '1.0',//需跟apk版本保持一致
+	bundleName: 'index.jsbundle', //需跟原生中保持一致
+	maxGenNum: 2, // 增量包生成最大数量
 }
 ```
 4. 更新字体文件
 
-需在`pkg.sh`同级目录下创建resource，并将ttf文件存放于该目录下
+需在`pkg.sh`同级目录下创建resource，并将ttf文件存放于该目录下，如果有businessName，则需要多创建一层businessName目录，再将相应的ttf文件放置相应的文件夹中
+
+**注意**
+
+	不同的业务的ttf命名需不同
 
 5. 在`node_modules同级目录`下执行脚本`pkg.sh`
 
 ```
-sh pkg.sh 				// 默认是android平台下进行增量更新
-sh pkg.sh platform  	// 其中platform为android/ios，进行生成包工作，默认使用增量更新
-sh pkg.sh type			// 其中type为increment（增量）、all（全量），设置该参数时，只会进行增量和全量选择操作，不会进行包生成
-sh pkg.sh platform type	// 选在平台上的更新方式
+# platform 平台 ，android或ios，不设置则默认两端都进行生成包操作
+# type 更新类型，increment或all，默认为increment，如果type设置了，则说明要更换更新类型，否则默认是去生成包；该属性默认是在生成完好包之后再进行该操作
+# businessName 业务名为no，标明不区分业务模块，否则即拆包模式，根据业务名去生成包
+sh pkg.sh platform type businessName
 ```
 **注意**：
 
@@ -401,7 +393,7 @@ sh pkg.sh platform type	// 选在平台上的更新方式
 **注意**：
 
 	+ android和ios需要统一启动文件名称，均为index.js，否则需要修改全量打包脚本；
-	+ bundle名字也需要两端统一为index.jsbundle，否则需要修改增量更新打包脚本
+	+ bundle名字也需要两端统一为index.jsbundle，原生和js端均可配置，一致即可
 
 7. js端调用
 
@@ -415,7 +407,7 @@ class App extends Component {
 				<TouchableHighlight
 					underlayColor="transparent"
 					onPress={() => {
-						FegoRNUpdate.hotReload();
+						FegoRNUpdate.hotReload(businessName);
 					}}>
 					<Text style={styles.btnText}>热更新测试</Text>
 				</TouchableHighlight>

@@ -1,3 +1,0 @@
-存放生成的ios增量包
-
-根据sdkVer/newVer创建文件夹，区分不同sdkVer、newVer下生成的增量包
