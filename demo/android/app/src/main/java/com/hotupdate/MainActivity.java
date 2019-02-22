@@ -39,7 +39,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
      * 更新reactview
      */
     private void updateReactView() {
-        ReactManager.getInstance().init(getApplication(), "index", "index.jsbundle", "https://raw.githubusercontent.com/fegos/fego-rn-update/master/demo/increment/android/");
+        ReactManager.getInstance().init(getApplication(), "index", "index.jsbundle", "https://raw.githubusercontent.com/fegos/fego-rn-update/develop/demo/increment/android/");
         if (mReactRootView == null) {
             if (mReactInstanceManager == null) {
                 if (ReactManager.getInstance().getRnInstanceManager() == null) {
