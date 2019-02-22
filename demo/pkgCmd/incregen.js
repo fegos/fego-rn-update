@@ -92,7 +92,7 @@ function unzipAll() {
 function generateIncrement() {
   maxVerNum = newVer - maxVerNum < 0 ? 0 : newVer - maxVerNum;
   for (let i = newVer - 1; i >= maxVerNum; i--) {
-    new jsbundle(i, newVer, apkVer, platform, businessName);
+    new jsbundle(i, newVer, apkVer, platform);
   }
 }
 

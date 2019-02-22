@@ -14,7 +14,7 @@ let username = os.userInfo().username;
 console.log(map[username]);
 module.exports = {
   path: map[username],
-  apkVer: '2.0',
+  apkVer: '2.1',
   bundleName: 'index.jsbundle',
   maxGenNum: 5,
 }
