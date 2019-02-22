@@ -38,7 +38,7 @@ public class HotUpdateModule extends ReactContextBaseJavaModule {
      * Hot reload.
      */
     @ReactMethod
-    public void hotReload(String businessName) {
+    public void hotReload() {
         ReactManager.SuccessListener sucListener = null;
         ReactManager.FailListener failListener = null;
         Activity activity = getCurrentActivity();
@@ -48,6 +48,6 @@ public class HotUpdateModule extends ReactContextBaseJavaModule {
         if (activity != null && activity instanceof ReactManager.FailListener) {
             failListener = (ReactManager.FailListener)activity;
         }
-        ReactManager.getInstance().loadBundleBehind(businessName, sucListener, failListener);
+        ReactManager.getInstance().loadBundleBehind(sucListener, failListener);
     }
 }

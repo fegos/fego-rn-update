@@ -46,7 +46,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
                     List<ReactPackage> reactPackages = new ArrayList<>();
                     // 添加额外的package
                     reactPackages.add(new HotUpdatePackage());
-                    ReactManager.getInstance().loadBundle(reactPackages, BuildConfig.DEBUG, "");
+                    ReactManager.getInstance().loadBundle(reactPackages, BuildConfig.DEBUG);
                 }
                 mReactInstanceManager = ReactManager.getInstance().getRnInstanceManager();
             }
@@ -193,8 +193,8 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ReactManager.getInstance().unzipBundle("");
-                        ReactManager.getInstance().doReloadBundle("");
+                        ReactManager.getInstance().unzipBundle();
+                        ReactManager.getInstance().doReloadBundle();
                         // 下次启动应用时更新
                         // ReactManager.getInstance().unzipBundle();
                     }
