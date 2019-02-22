@@ -40,7 +40,7 @@ export default class App extends Component {
         <TouchableHighlight
           underlayColor="transparent"
           onPress={() => {
-            FegoRNUpdate.hotReload("");
+            FegoRNUpdate.hotReload();
           }}>
           <Text style={styles.btnText}>热更新测试</Text>
         </TouchableHighlight>
