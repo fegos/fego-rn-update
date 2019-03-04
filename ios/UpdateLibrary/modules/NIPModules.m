@@ -15,7 +15,8 @@
 
 RCT_EXPORT_MODULE(FegoRnUpdate)
 
-RCT_EXPORT_METHOD(hotReload:(NSString *)bundleName) {
+RCT_EXPORT_METHOD(hotReload) {
+  NSString *bundleName = @"";
   if (bundleName.length < 1) {
     bundleName = RN_DEFAULT_BUNDLE_NAME;
   }
