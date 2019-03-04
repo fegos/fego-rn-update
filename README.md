@@ -8,7 +8,6 @@
 + 提供android和ios两端的支持
 + 支持全量、增量更新，配置简单，部署方便，一键打包
 + 支持字体文件更新
-+ 支持拆包下的全量、增量更新
 + 针对apk版本进行更新，支持非强制更新模式
 + 支持设置增量包最大生成数量，限制包生成个数
 
@@ -28,7 +27,6 @@
 
 + ios和android两端使用同一套脚本
 + 打全量包和增量包只需要执行一个脚本即可
-+ 无论拆包还是非拆包，统一使用一套脚本
 
 # 目录结构
 
@@ -48,10 +46,6 @@
 │   ├── pkgCmd                # 辅助脚本文件夹
 │   └── resource              # 存放字体文件
 ├── docs                      # api文档
-├── hybriddemo                # 拆包demo
-│   ├── android               # android工程
-│   ├── ios                   # ios工程
-│   └── rn                    # js相关代码
 ├── increment                 # 包生成目录
 ├── index.js                  # js源码
 ├── ios                       # ios源码
@@ -66,7 +60,6 @@
 ├── pkg.sh                    # 整体打包文件，包含全量打包和增量打包，主执行脚本文件
 └── pkgCmd                    # 辅助脚本文件夹
     ├── allPkg.sh             # 全量包打包脚本
-    ├── bundleDiff.js         # 拆包时bundle的diff
     ├── config.js             # 配置文件，主要配置生成包的存储位置
     ├── incre                 # bundle和assets增量生成脚本
     │   ├── assets.js         # 资源assets增量生成脚本
@@ -76,7 +69,6 @@
     ├── third                 # 依赖的第三方脚本
     │   ├── diff_match_patch_uncompressed.js      # 文件差异生成脚本
     │   └── file_list.js      # 列出目录下所有的文件
-    ├── unpack.js             # 拆包
     └── Utils                 # 公共方法
 ```
 
@@ -91,9 +83,9 @@ $ npm install fego-rn-update --save
 1. 把下面几行添加到 `android/setting.gradle`
 
 ```
-include ':fego'
+include ':fego-rn-update'
 
-project(':fego').projectDir = new File(rootProject.projectDir, '../node_modules/fego-rn-update/android')
+project(':fego-rn-update').projectDir = new File(rootProject.projectDir, '../node_modules/fego-rn-update/android')
 ```
 2. 在`android/build.gradle`中更新build工具版本为`2.2+`
 
@@ -117,8 +109,8 @@ distributionUrl=https\://services.gradle.org/distributions/gradle-3.3-all.zip
 
 ```
 dependencies {
-    compile project(':fego')
-	// 需要添加以下依赖项
+    compile project(':fego-rn-update')
+    // 需要添加以下依赖项
     compile "com.squareup.retrofit2:retrofit:2.1.0"
     compile "com.squareup.retrofit2:converter-gson:2.0.0"
 }
@@ -139,7 +131,6 @@ ReactManager.getInstance().init(getApplication(), "index", "index.jsbundle", "ht
 
 ```
 // 业务名
-String businessName = "";
 if (mReactRootView == null) {
     mReactRootView = new ReactRootView(this);
     if (mReactInstanceManager == null) {
@@ -147,11 +138,11 @@ if (mReactRootView == null) {
             List<ReactPackage> reactPackages = new ArrayList<>();
             // 添加额外的package
             reactPackages.add(new HotUpdatePackage());
-            ReactManager.getInstance().loadBundle(reactPackages, BuildConfig.DEBUG, "");
+            ReactManager.getInstance().loadBundle(reactPackages, BuildConfig.DEBUG);
         }
 		mReactInstanceManager = ReactManager.getInstance().getRnInstanceManager();
-	}
-    mReactRootView.startReactApplication(mReactInstanceManager, "hotUpdate", null);
+	  }
+    mReactRootView = ReactManager.getInstance().getReactViewByModuleName("hotUpdate", this, null);
     setContentView(mReactRootView);
 }
 ```
@@ -159,10 +150,9 @@ if (mReactRootView == null) {
 8、调用热更新代码（也可js端调用）
 
 ```
-String businessName = "";
 SuccessListener sucListener;// 一般是activity实现了该接口，可以为null，为null时表示不交给用户处理，而是内部默认解压加载
 FailListener failListener;	// 一般是activity实现了该接口，可以为null
-ReactManager.getInstance().loadBundleBehind(businessName, sucListener, failListenr);
+ReactManager.getInstance().loadBundleBehind(sucListener, failListenr);
 ```
 9、处理结果通知
 
@@ -214,11 +204,10 @@ public void onFail(ReactManager.NPReactManagerTask task) {
 
 如果实现了SuccessListener，则不会解压新包，也不会自动加载最新bundle，所有成功后的操作需要自行实现，可以调用下面的方法进行重新加载
 ```
-String businessName = "";
 // 仅解压包，不执行下面的操作时下次启动自动更新
-ReactManager.getInstance().unzipBundle(businessName);
+ReactManager.getInstance().unzipBundle();
 // 加载新bundle
-ReactManager.getInstance().doReloadBundle(businessName);
+ReactManager.getInstance().doReloadBundle();
 ```
 ### IOS
 1. pod库引入热更新库，Podfile中添加：
@@ -304,27 +293,25 @@ manager.noJsServer = YES;
 
 2. 在想要生成包的地方创建包存储目录
 
-存储目录可以参考`node_modules/fego-rn-update/`下的`increment文件夹`（其内部是android和ios目录均是自动生成的）
+存储目录可以参考`node_modules/fego-rn-update/`下的`increment文件夹`（其内部是android和ios目录均是自动生成的，只提供生成包最外层目录即可）
 
 ```
 .
 ├── React-Native 热更新目录
 ├── android                 # 存放android生成的包
-│   └── businessName        # 如果是拆包的情况，会多这一级目录，非拆包的情况，不存在这一级目录
 │   	├── all             # 存放全量包
-│       │   ├── README.md   
-│       │   └── temp        # 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
+│     │   ├── README.md   
+│     │   └── temp        # 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
 │    	├── config          # 最终的config，该文件会自动生成，默认为增量
-│       └── increment       # 存放增量包
-│           └── README.md
+│     └── increment       # 存放增量包
+│         └── README.md
 └── ios                     # 存放ios生成的包
-	└── businessName
-        ├── all             # 存放全量包
-        │   └── README.md
-        │   └── temp        # 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
-        ├── config          # 最终的config，该文件会自动生成，默认为增量
-        └── increment       # 存放增量包
-            └── README.md
+      ├── all             # 存放全量包
+      │   └── README.md
+      │   └── temp        # 该目录为自动生成，存放解压后的包，该目录可添加到.gitignore文件中
+      ├── config          # 最终的config，该文件会自动生成，默认为增量
+      └── increment       # 存放增量包
+          └── README.md   
 ```
 3. 修改配置文件`config.js`中的`path`、`apkVer`、`bundleName`及`maxGenNum`（config.js文件位于pkgCmd/下）
 
@@ -358,7 +345,7 @@ module.exports = {
 ```
 4. 更新字体文件
 
-需在`pkg.sh`同级目录下创建resource，并将ttf文件存放于该目录下，如果有businessName，则需要多创建一层businessName目录，再将相应的ttf文件放置相应的文件夹中
+需在`pkg.sh`同级目录下创建resource，并将ttf文件存放于该目录下
 
 **注意**
 
@@ -369,8 +356,7 @@ module.exports = {
 ```
 # platform 平台 ，android或ios，不设置则默认两端都进行生成包操作
 # type 更新类型，increment或all，默认为increment，如果type设置了，则说明要更换更新类型，否则默认是去生成包；该属性默认是在生成完好包之后再进行该操作
-# businessName 业务名为no，标明不区分业务模块，否则即拆包模式，根据业务名去生成包
-sh pkg.sh platform type businessName
+sh pkg.sh platform type
 ```
 **注意**：
 
@@ -407,7 +393,7 @@ class App extends Component {
 				<TouchableHighlight
 					underlayColor="transparent"
 					onPress={() => {
-						FegoRNUpdate.hotReload(businessName);
+						FegoRNUpdate.hotReload();
 					}}>
 					<Text style={styles.btnText}>热更新测试</Text>
 				</TouchableHighlight>

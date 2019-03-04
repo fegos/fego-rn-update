@@ -5,21 +5,13 @@ echo '*******************全量打包开始*****************'
 platform=$1
 path=$2
 apkVer=$3
-businessName=$4
-bundleName=$5
+bundleName=$4
 # 创建生成包目录
-if [ $businessName = 'no' ]; then
-	echo 'not unpack'
-	configDir=$path$platform/all/$apkVer/
-	hotConfigDir=$path$platform/all/
-	incrementDir=$path$platform/increment/$apkVer/
-	tempDir=$path$platform/all/temp/$apkVer/
-else 
-	configDir=$path$platform/$businessName/all/$apkVer/
-	hotConfigDir=$path$platform/$businessName/all/
-	incrementDir=$path$platform/$businessName/increment/$apkVer/
-	tempDir=$path$platform/$businessName/all/temp/$apkVer/
-fi
+configDir=$path$platform/all/$apkVer/
+hotConfigDir=$path$platform/all/
+incrementDir=$path$platform/increment/$apkVer/
+tempDir=$path$platform/all/temp/$apkVer/
+
 mkdir -p $configDir
 mkdir -p $incrementDir
 mkdir -p $tempDir
@@ -37,24 +29,10 @@ else
 fi 
 echo '*******bundle打包开始*******'
 # 打包到临时目录
-if [ $businessName = 'no' ]; then
-	rm -rf deploy
-	mkdir -p deploy
-	#rn资源打包
-	react-native bundle --entry-file index.js --platform $platform --dev false --bundle-output deploy/$bundleName --assets-dest deploy
-else 
-	#删除deploy目录下的所有文件
-	rm -rf deploy
-	mkdir -p deploy/common
-	mkdir -p deploy/$businessName
-	#rn资源打包
-	react-native bundle --entry-file $businessName/index.js --platform $platform --dev false --bundle-output deploy/$businessName/$bundleName --assets-dest deploy/$businessName
-	if [ $businessName = "common" ]; then
-		echo 'COMMON'
-	else 
-		react-native bundle --entry-file common/index.js --platform $platform --dev false --bundle-output deploy/common/$bundleName --assets-dest deploy/common
-	fi
-fi
+rm -rf deploy
+mkdir -p deploy
+#rn资源打包
+react-native bundle --entry-file index.js --platform $platform --dev false --bundle-output deploy/$bundleName --assets-dest deploy
 echo '*******bundle打包结束*******'
 
 echo '*******config文件读取*******'
@@ -71,64 +49,30 @@ if [ $isexist = 1 ]; then
 fi
 content=$apkVer"_"$newVer
 currentPath=`pwd`
-if [ $businessName = 'no' ]; then
-	echo 'NOT UNPACK'
-elif [ $businessName = "common" ]; then
-	echo 'COMMON'
-else 
-	node pkgCmd/unpack.js $businessName $currentPath/deploy/
-fi
 #压缩包的名字
 zipName="rn_"$apkVer"_"$newVer".zip"
 echo '*******打包字体文件*******'
 #拷贝字体文件到打包文件夹中
-if [ $businessName = 'no' ]; then
-	if [ ! -e "resource/" ]; then 
-		echo 'resource not exist'
-	else
-		cp -rf resource/ deploy/
-	fi
-else 
-	ttfDir=resource/$businessName/
-	echo $ttfDir
-	if [ ! -e $ttfDir ]; then 
-		echo 'resource not exist'
-	else
-		cp -rf $ttfDir deploy/
-	fi
+if [ ! -e "resource/" ]; then 
+	echo 'resource not exist'
+else
+	cp -rf resource/ deploy/
 fi
 
-if [ $businessName = 'no' ]; then
-	if [ $isexist = 0 ]; then
-		echo 'first pack'
-		# if [ $platform = 'android' ]; then
-		# 	mkdir -p $currentPath/../android/app/src/main/assets/rn/
-		# 	cp -rf deploy/ $currentPath/../android/app/src/main/assets/rn/
-		# fi
-	fi
-	cd deploy	
-else 
-	cd deploy
-	if [ $isexist = 0 ]; then
-		echo 'first pack'
-		# if [ $platform = 'android' ]; then
-		# 	mkdir -p $currentPath/../android/app/src/main/assets/rn/$businessName/
-		# 	cp -rf $businessName/ $currentPath/../android/app/src/main/assets/rn/$businessName/
-		# fi
-	fi
-	cd $businessName
+if [ $isexist = 0 ]; then
+	echo 'first pack'
+	# if [ $platform = 'android' ]; then
+	# 	mkdir -p $currentPath/../android/app/src/main/assets/rn/
+	# 	cp -rf deploy/ $currentPath/../android/app/src/main/assets/rn/
+	# fi
 fi
+cd deploy
+
 echo '*******压缩包放于指定目录*******'
-#生成压缩包放于deploy/businessName下
+#生成压缩包放于deploy下
 zip -r $zipName *
-if [ $businessName = 'no' ]; then
-	cd ../
-	cp deploy/$zipName $configDir
-else
-	cd ../../
-	cp deploy/$businessName/$zipName $configDir
-fi
+cd ../
+cp deploy/$zipName $configDir
 echo '*******全量包config生成*******'
 node ./pkgCmd/md5.js $hotConfigDir $apkVer $zipName $content
-
 echo '*******************全量打包结束*****************'

@@ -142,7 +142,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation project(':fego')
+    implementation project(':fego-rn-update')
 
     implementation 'com.facebook.react:react-native:+'
     implementation "com.squareup.retrofit2:retrofit:${rootProject.retrofitVersion}"
